@@ -31,10 +31,10 @@ else:
   plotdir = '/home/user1/mceachern/Desktop/plots/' + now() + '/'
 
 # What should the minimum amplitude be? Anything below there is noise. 
-thresh = 0.001 if 'nothresh' in argv else 0.05 if 'THRESH' in argv else 0.01
+thresh = 0.005
 
 # Bin all position plots the same way. 
-pargs = {'dl':1, 'dm':1} if 'sharp' in argv else {'dl':2, 'dm':2, 'lmin':3, 'lmax':7}
+pargs = {'dl':1, 'dm':1} if 'sharp' in argv else {'dl':4, 'dm':2, 'lmin':3, 'lmax':7}
 
 # Make some titles based on arguments from the terminal. This is super kludgey -- sorry! 
 ldiv = notex('Split at ') + ( 'L\\!=\\!L_{PP}' if 'lpp' in argv else 'L\\!=\\!5')
@@ -46,8 +46,8 @@ label = ('_sharp' if 'sharp' in argv else '') + ('_nothresh' if 'nothresh' in ar
 
 def main():
 
-#  # Find an event from the list and plot it. 
-#  return showevent(amp_ge=1)
+  # Find an event from the list and plot it. 
+  return showevent(amp_ge=0.1)
 
 #  # Sketch of the Dungey Cycle. 
 #  dungey(save='-i' in argv)
@@ -56,9 +56,7 @@ def main():
 
 #  return azm(save='-i' in argv)
 
-
-  return paramplot(name='phase', save='-i' in argv, flat=True)
-
+#  return paramplot(name='phase', save='-i' in argv)
 
 #  # Just tell me how many there are of each mode. 
 #  count()
@@ -75,7 +73,7 @@ def main():
 #  modesbyparam(name='f', save='-i' in argv)
 #  modesbyparam(name='phase', save='-i' in argv)
 #  azmplot(storm=None, save='-i' in argv)
-#  doubleplot(save='-i' in argv)
+#  doubleplot(storm=None, save='-i' in argv)
 
 #  # Location of the usable data. 
 #  [ posplot(storm=s, save='-i' in argv) for s in (True, False, None) ]
@@ -124,10 +122,16 @@ def count():
 # Given a histogram of event rates, return an average event rate, weighing each
 # bin by its size. 
 def meanrate(arr):
+  # If there's just one radial bin, no renormalization is necessary. 
+  if arr.shape[0]==1:
+    warr = arr
   # If there are only two bins in the radial direction, they are centered at
   # L=4 and L=6. 
-  if arr.shape[0]==2:
+  elif arr.shape[0]==2:
     warr = arr*np.array( [4, 6] )[:, None]/5.
+  # If there are three bins, they are centered at 2, 4, and 6.
+  elif arr.shape[0]==3:
+    warr = arr*np.array( [2, 4, 6] )[:, None]/4.
   # If there are six bins in the radial direction, they are spaced from 1 to 7.
   elif arr.shape[0]==6:
     warr = arr*np.array( [1.5, 2.5, 3.5, 4.5, 5.5, 6.5] )[:, None]/4.
@@ -270,12 +274,18 @@ def posplot(storm=None, save=False):
   date0, date1 = pos['dates']
   dt = np.sum(z)/48.
   # Create the plot window using the bullseye params helper function. 
+#  PW = plotWindow( fontfactor=1.5, **bep(rate=False) )
   PW = plotWindow( **bep(rate=False) )
 
   status = {True:'Storm ', False:'Quiet ', None:''}[storm]
   title = notex('Distribution of Usable ' + status + 'Data: ' + date0 + ' to ' + date1)
 
-  PW.setParams( title=title, unitlabel=notex('days'), zmax=26, lcorner=notex('Total: ') + format(dt, '.0f') + notex(' days') )
+
+  title = notex('Sampling by L and MLT: ' + date0 + ' to ' + date1)
+
+
+
+  PW.setParams( title=title, unitlabel=notex('days'), zmax=16, lcorner=notex('Total: ') + format(dt, '.0f') + notex(' days') )
   # Add the data to the plot. 
   PW.setMesh( x, y, zmask(z/48.) )
 
@@ -377,8 +387,8 @@ def pcoords(name):
 
   xticklabels[1::2] = ''
   ylabel = notex('Events')
-  ylims = (0, 160)
-  yticks = np.mgrid[0:160:5j]
+  ylims = (0, 140)
+  yticks = np.mgrid[ylims[0]:ylims[1]:5j]
   yticklabels = g2a( '$' + str( int(t) ) + '$' for t in yticks )
   yticklabels[1::2] = ''
   return {'xlabel':xlabel, 'xlims':xlims, 'xticks':xticks, 
@@ -399,8 +409,10 @@ def paramplot(name, save=False, flat=False):
     clabs = ( notex('Odd Poloidal'), notex('Odd Toroidal'), notex('Even Poloidal'), notex('Even Toroidal') )
     PW.setParams(collabels=clabs)
   else:
-    PW = plotWindow(ncols=2, nrows=2, colorbar=None)
+#    PW = plotWindow(ncols=2, nrows=2, colorbar=None, square=True, fontfactor=1.5)
+    PW = plotWindow(ncols=2, nrows=2, colorbar=None, square=True)
     rlabs = ( notex('Odd'), notex('Even') )
+#    rlabs = ( notex('1^{st}'), notex('2^{nd}') )
     clabs = ( notex('Poloidal'), notex('Toroidal') )
     PW.setParams(collabels=clabs, rowlabels=rlabs)
 
@@ -425,7 +437,9 @@ def paramplot(name, save=False, flat=False):
   # The bin width is needed because bins are listed at their center but plotted
   # from the left edge. 
   dx = xy[0][0][1] - xy[0][0][0]
-  [ PW[i].setBars(x - dx/2, y, width=dx) for i, (x, y, s) in enumerate(xy) ]
+
+  [ PW[i].setBars(x - dx/2, y, width=dx, alpha=0.5, error_kw={'ecolor':'k'}, yerr=np.sqrt(y)) for i, (x, y, s) in enumerate(xy) ]
+
   # For the phase, do a Gaussian fit. 
   if name in ('phase', 'fwhm'):
     gfit = [ gaussfit(x, y) for x, y, stats in xy ]
@@ -551,6 +565,7 @@ def allplot(storm=None, save=False):
     return
   x, y, z, hargs = [ pos[key] for key in ('x', 'y', 'z', 'hargs') ]
   # Create a plot window to show different subsets of the events. 
+#  PW = plotWindow(fontfactor=1.5, **bep() )
   PW = plotWindow( **bep() )
   # Title and labels. 
   status = {True:'Storm ', False:'Quiet ', None:''}[storm]
@@ -599,6 +614,7 @@ def modeplot(storm=None, save=False):
   x, y, z, hargs = [ pos[key] for key in ('x', 'y', 'z', 'hargs') ]
 
   # Create a plot window to show different subsets of the events. 
+#  PW = plotWindow( ncols=2, nrows=2, fontfactor=1.5, **bep() )
   PW = plotWindow( ncols=2, nrows=2, **bep() )
   # Title and labels. 
   status = {True:'Storm ', False:'Quiet ', None:''}[storm]
@@ -606,6 +622,7 @@ def modeplot(storm=None, save=False):
   title = notex(status + 'Pc4 Observation Rate by Mode')
   collabels = ( notex('Poloidal'), notex('Toroidal') )
   rowlabels = ( notex('Odd\nHarmonic'), notex('Even\nHarmonic') )
+#  rowlabels = ( notex('1^{st}'), notex('2^{nd}') )
   PW.setParams(collabels=collabels, rowlabels=rowlabels, title=title)
   # Iterate over the filters. 
   mfilt, hfilt = ('P', 'T'), ('1', '2')
@@ -695,39 +712,55 @@ def azmplot(storm=None, save=False, split=0.2):
 # =============================================================== Double Events
 # =============================================================================
 
-def doubleplot(save=False, split=-30.):
+def doubleplot(storm=None, save=False, split=-30.):
   global pargs, plotdir, thresh
-  # Create a plot window to show different subsets of the events. 
-  PW = plotWindow( ncols=2, nrows=2, **bep() )
-  # Title and labels. 
-  title = notex( 'Rate of Double Events by Parity and Storm Index' )
 
-  rlabs = ( notex('Odd'), notex('Even') )
+  if storm is None:
+    PW = plotWindow( ncols=2, nrows=1, **bep() )
+    title = notex( 'Rate of Poloidal + Toroidal Events by Parity' )
+    clabs = ( notex('Odd'), notex('Even') )
+    PW.setParams(collabels=clabs, title=title)
 
-  clabs = ( notex('DST') + ' \\geq ' + znt(split) + notex('nT'), 
-            notex('DST') + ' < ' + znt(split) + notex('nT') )
-
-  PW.setParams(collabels=clabs, rowlabels=rlabs, title=title)
-
-  for col, key in enumerate( ('dst_ge', 'dst_lt') ):
-    # Set up the grid and 2D histogram based on probe position. 
-    pos = getpos( **dict( pargs.items() + {key:split}.items() ) )
+    pos = getpos( **pargs )
     x, y, z, hargs = [ pos[k] for k in ('x', 'y', 'z', 'hargs') ]
 
     # Odd and Even. 
-    for row, harm in enumerate( ('1', '2') ):
-
+    for col, harm in enumerate( ('1', '2') ):
       # Grab a histogram of appropriately-filtered double events. 
-      dh = doublehist(hargs, pmode='P' + harm, tmode='T' + harm, **{key:split})
-
+      dh = doublehist(hargs, pmode='P' + harm, tmode='T' + harm)
       eventcount = np.sum(dh)
       pct = meanrate(dh/z)
       count = znt(eventcount)
-      PW[row, col].setParams(lcorner=count, rcorner=pct)
-
+      PW[col].setParams(lcorner=count, rcorner=pct)
       # Build it into a histogram. Normalize based on sampling. 
       rate = 100*zmask(dh)/z
-      PW[row, col].setMesh(x, y, rate)
+      PW[col].setMesh(x, y, rate)
+
+  else:
+    # Create a plot window to show different subsets of the events. 
+    PW = plotWindow( ncols=2, nrows=2, **bep() )
+    # Title and labels. 
+    title = notex( 'Rate of Double Events by Parity and Storm Index' )
+    rlabs = ( notex('Odd'), notex('Even') )
+    clabs = ( notex('DST') + ' \\geq ' + znt(split) + notex('nT'), 
+              notex('DST') + ' < ' + znt(split) + notex('nT') )
+    PW.setParams(collabels=clabs, rowlabels=rlabs, title=title)
+    for col, key in enumerate( ('dst_ge', 'dst_lt') ):
+      # Set up the grid and 2D histogram based on probe position. 
+      pos = getpos( **dict( pargs.items() + {key:split}.items() ) )
+      x, y, z, hargs = [ pos[k] for k in ('x', 'y', 'z', 'hargs') ]
+      # Odd and Even. 
+      for row, harm in enumerate( ('1', '2') ):
+        # Grab a histogram of appropriately-filtered double events. 
+        dh = doublehist(hargs, pmode='P' + harm, tmode='T' + harm, **{key:split})
+        eventcount = np.sum(dh)
+        pct = meanrate(dh/z)
+        count = znt(eventcount)
+        PW[row, col].setParams(lcorner=count, rcorner=pct)
+        # Build it into a histogram. Normalize based on sampling. 
+        rate = 100*zmask(dh)/z
+        PW[row, col].setMesh(x, y, rate)
+
   # Show or save the plot. 
   if save is True:
     return PW.render(plotdir + 'double_rate' + label + '.pdf')
@@ -935,6 +968,11 @@ def getpos(dl=0.5, dm=1, lmin=None, lmax=None, dst_ge=None, dst_lt=None):
   hargs = { 'range':( (lmin, lmax), (mmin, mmax) ), 'bins':(lbins-1, mbins-1) }
   # Bin bounds in terms of L and MLT. 
   l, m = np.mgrid[lmin:lmax:lbins*1j, mmin:mmax:mbins*1j]
+
+#  if lbins==2:
+#    l, m = np.mgrid[4:lmax:lbins*1j, mmin:mmax:mbins*1j]
+
+
   # Map to GSE coordinates. Put midnight at the bottom. 
   x, y = -l*np.sin(2*pi*m/24.), -l*np.cos(2*pi*m/24.)
   # Sometimes we don't want our radial binning to depend on L, but rather on
@@ -957,7 +995,8 @@ def getpos(dl=0.5, dm=1, lmin=None, lmax=None, dst_ge=None, dst_lt=None):
 def loadevents(mode=None, fwhm_ge=None, fwhm_lt=3., amp_ge=None, amp_lt=None, f_ge=None, f_lt=None, comp_ge=None, comp_lt=None, double=False, llpp_lt=None, llpp_ge=None, dst_lt=None, dst_ge=None, phase=None, antiphase=None):
   global thresh
   # Grab the events file as an array of strings. Skip the header. 
-  events = g2a( line for line in read('events.txt') if 'probe' not in line )
+#  events = g2a( line for line in read('events.txt') if 'probe' not in line )
+  events = g2a( line for line in read('events_new.txt') if 'probe' not in line )
   # Filter for simultaneous events. 
   if double is True:
     events = g2a( line for line in events if 'BIG' in line or 'SMALL' in line )

@@ -600,11 +600,15 @@ class plotWindow:
   # Do we want to specify units for the color bar tick labels? 
   unit = ''
 
+
+  fontfactor = 1.
+
+
   # ---------------------------------------------------------------------------
   # --------------------------------- Initialize Plot Window and Space Out Axes
   # ---------------------------------------------------------------------------
 
-  def __init__(self, ncols=1, nrows=1, cells=None, square=False, joinlabel=None, footlabel=False, landscape=False, **kargs):
+  def __init__(self, ncols=1, nrows=1, cells=None, square=False, joinlabel=None, footlabel=False, landscape=False, fontfactor=1., **kargs):
     # If initialized with an array of cells, this isn't a real Plot Window... 
     # it's a temporary object that allows the access of a slice of cells. 
     if cells is not None:
@@ -614,14 +618,17 @@ class plotWindow:
     # from a previous plot. 
     plt.close('all')
     # Set the font to match LaTeX. 
+
+    self.fontfactor = fontfactor
+
     if not landscape:
       self.landscape = False
       rc('font', **{'family':'sans-serif', 'sans-serif':['Helvetica'], 
-                    'size':'9'})
+                    'size':str(9*self.fontfactor)})
     else:
       self.landscape = True
       rc('font', **{'family':'sans-serif', 'sans-serif':['Helvetica'], 
-                    'size':'12'})
+                    'size':str(12*self.fontfactor)})
     rc('text', usetex=True)
     rc('text.latex', preamble='\usepackage{amsmath}, \usepackage{amssymb}, ' + 
                               '\usepackage{color}')
@@ -635,10 +642,10 @@ class plotWindow:
     # That's the unit we use to specify the relative sizes of plot elements. 
     sideMargin = 40
     cellPadding = 5
-    titleMargin = 15
+    titleMargin = int(15*self.fontfactor)
     headMargin = 1 if ncols<2 and joinlabel is None else 10
     unitMargin = 10
-    footMargin = 30 if footlabel is True else 20
+    footMargin = int( ( 30 if footlabel is True else 20 )*self.fontfactor )
     # The size of each subplot depends on how many columns there are. The total
     # width of the subplot area (including padding) will always be the same.
     # No more than four columns are allowed. 
@@ -773,7 +780,7 @@ class plotWindow:
         targs['horizontalalignment'] = 'center'
       # Accept a string as the window supertitle. 
       elif key=='title':
-        fontsize = 12 if not self.landscape else 24
+        fontsize = ( 12 if not self.landscape else 24 )*self.fontfactor
         self.tax.text(s='$' + val + '$', fontsize=fontsize, **targs)
       # In case we want to put units on the color bar tick labels. 
       elif key=='unit':
