@@ -1,0 +1,1673 @@
+ 
+Icy Required Reading
+===========================================================================
+ 
+   Last revised on 2013 FEB 04 by E. D. Wright (JPL)
+ 
+ 
+Abstract
+--------------------------------------------------------
+ 
+   Icy is the ANSI C based interface between the Interactive Data Language
+   (IDL), a product of Exelis Visual Information Solutions
+   (www.exelisvis.com), and the CSPICE library.
+ 
+ 
+Contact
+ 
+   Developer contact: Ed Wright, Jet Propulsion Laboratory, 1-818-354-0371
+   ed.wright@jpl.nasa.gov.
+ 
+ 
+Mailing List
+ 
+   NAIF provides a mailing list for Icy users. Register with the list at
+   URL:
+ 
+      http://naif.jpl.nasa.gov/mailman/listinfo/icy_discussion
+ 
+ 
+Design Concept
+--------------------------------------------------------
+ 
+   Icy uses the IDL dynamic linked module (DLM) functionality to provide an
+   IDL programmer access to selected CSPICE routines from within the IDL
+   environment. A user need only install the interface files in the
+   appropriate directories to gain use of these functions.
+ 
+   Simplistically, Icy serves as a threshold by which a user can access any
+   available high level SPICE function call from the IDL environment. IDL
+   can then act as an engine for data visualization or numerical analysis
+   involving SPICE ancillary data with science instrument or other data.
+ 
+   Icy interfaces exist for a subset of the CSPICE wrapper routines, those
+   routines with name style "routine_c", with "routine" the name of the
+   CSPICE module. Refer to the CSPICE required reading document
+   (cspice.req) for additional information concerning CSPICE.
+ 
+   Icy passes data from the IDL environment to the CSPICE library, so an
+   Icy interface call performs few operations other than recasting data
+   input from IDL into CSPICE form and recasting CSPICE variables to IDL
+   form for return.
+ 
+   NAIF employs the ANSI C standard when writing IDL/CSPICE interface
+   source code.
+ 
+   For each platform, Icy uses the same binary and text kernels as the C or
+   FORTRAN SPICE Toolkit for that platform.
+ 
+   As of release Icy 1.2 (CSPICE N0059), the kernel pool readers
+   (cspice_ldpool, cspice_furnsh) have the capability to read non
+   platform-native text kernels, i.e. read a DOS native text file on a Unix
+   platform and vice-versa. This capability does not exist in the Fortran
+   toolkit.
+ 
+ 
+Icy Benefits
+ 
+            Ease of use: Icy operates as an extension to the IDL
+            environment.
+ 
+            Icy calls usually correspond to the call format of the
+            underlying CSPICE routine, returning IDL native data types.
+ 
+            Icy has some capability not available in CSPICE such as
+            vectorization.
+ 
+            CSPICE error messages return to IDL in a form usable by the
+            catch error handler construct.
+ 
+ 
+Icy Functionality
+ 
+            Kernel (file): loaders
+ 
+            SPK: readers, writers
+ 
+            Binary PCK: readers
+ 
+            CK: readers, writers
+ 
+            EK: readers, writers
+ 
+            Text Kernel: reader routines
+ 
+            Coordinate systems: translation between rectangular,
+            cylindrical, latitudinal, geodetic, spherical, and right
+            ascension declination systems.
+ 
+            Body name/code translation
+ 
+            Matrix and vector functions
+ 
+            Rotation functions
+ 
+            Euler angle functions
+ 
+            Quaternion functions
+ 
+            Time conversion functions: convert between various time
+            representations
+ 
+            Spacecraft clock functions: convert between spacecraft clock
+            ticks and other time representations
+ 
+            Ellipsoid functions: calculate near points, surface intercepts,
+            normal vectors
+ 
+            Plane geometry functions
+ 
+            Constant functions: standard epochs, radian/degree conversion,
+            speed of light
+ 
+            Set, Cell, and Windows functions
+ 
+            Geometry finder functions
+ 
+ 
+Platforms
+ 
+   NAIF offers Icy for several computing environments. These environments
+   are listed on the NAIF website
+ 
+      http://naif.jpl.nasa.gov/naif/toolkit.html
+ 
+   and in the "intro_to_toolkit" tutorial also available from the NAIF
+   website.
+ 
+ 
+Installation
+===========================================================================
+ 
+   The Icy toolkit comprises the full CSPICE distribution plus the Icy
+   source code, associated build files, and Icy documentation. A user
+   without an IDL installation cannot use the Icy interface.
+ 
+ 
+Distribution
+--------------------------------------------------------
+ 
+   NAIF distributes Icy as a standalone package with compiled libraries and
+   executables.
+ 
+   The Icy toolkit comprises the full CSPICE distribution (source,
+   documentation, libraries, executables) plus the Icy source code,
+   associated build files, and Icy documentation. A user without a IDL
+   installation cannot use the Icy interface.
+ 
+   Note: You do not need a C compiler to use Icy. You need a C compiler to
+   rebuild Icy.
+ 
+ 
+Builds
+--------------------------------------------------------
+ 
+   NAIF distributes the Icy package with all libraries and executables. If
+   you must rebuild the Icy interface, recognize the build requires IDL
+   support files not provided by NAIF. Builds on all platforms need the
+   export.h file; the Windows build also requires linking against stub
+   libraries. Please consult the IDL External Development Guide for
+   information describing compiling and linking dynamically loaded modules.
+   NAIF coded the build scripts supplied with Icy to use the "standard" ITT
+   installation directory structure when including IDL support files.
+ 
+   Once built, the Icy interface consists of two files: a shared object
+   library, icy.so (icy.dll on Windows OS), and a text definition file,
+   icy.dlm. These files must be stored in the same directory for the
+   interface to function.
+ 
+ 
+Build problems
+ 
+   An error occurring during an Icy build is often the result of the user's
+   IDL distribution installed in a location different from the default path
+   coded into Icy's mkprodct build script.
+ 
+   For Unix/Linux users, mkprodct.csh uses an IDL install path:
+ 
+      /usr/local/itt/idlXX
+ 
+   XX indicates the IDL version number.
+ 
+   For Windows, mkprodct.bat uses:
+ 
+      c:\itt\idlXX
+ 
+   Building an Icy distribution requires the user to ensure the mkprodct
+   script (in icy/src/icy) uses the correct path for the IDL system - edit
+   the script if needed to refer to the proper path.
+ 
+   Windows users may need to edit the file:
+ 
+      icy\src\icy\mkprodct.bat
+ 
+   with regards to the IDL installation path.
+ 
+   You should note the mkprodct.bat build file is a DOS batch file executed
+   by the DOS shell. Depending on your version of DOS, it may be necessary
+   to use eight element character strings within the pathnames.
+ 
+   Example:
+ 
+   An IDL installation directory:
+ 
+      c:\Program Files\ITT\idl...
+ 
+   However, you may need to set the path in mkprodct.bat to:
+ 
+      c:\PROGRA~1\ITT\IDL...
+ 
+   Please note:
+ 
+            The IDL 6.3 Windows installation renamed a library required to
+            link external routines (Icy) to IDL. The Icy 1.3 Windows
+            mkprodct.bat script contains the proper library name, but Icy
+            1.2 version and earlier will not build against IDL 6.3 without
+            edits to the mkprodct.bat script.
+ 
+            The IDL 6.4 distribution reflects the acquisition of Research
+            Systems Inc. by ITT Corporation. As a result IDL root
+            directories pre IDL 6.4 with the string "rsi" may now have the
+            string "itt." This situation may require user edits to the
+            mkprodct.csh build scripts.
+ 
+ 
+Directory Structure
+--------------------------------------------------------
+ 
+   An Icy package includes all CSPICE products plus Icy specific items.
+ 
+   The package directory structure matches CSPICE, but with name
+   modifications and the Icy file additions:
+ 
+                                      icy/
+                                       |
+                                       |
+      data/   doc/   etc/   exe/   include/   lib/   src/   makeall
+                |                               |      |
+                |                               |      |
+                |                               |      |
+              html/                             |    icy/ icycook/ ...
+                |                               |
+          index.html  cspice/  icy/ ...         |
+                                                |
+                             cspice.a  csupport.a  icy.so(.dll)  icy.dlm
+ 
+   The file ``makeall'' is a master build script specific to the platform
+   architecture.
+ 
+ 
+Using Icy
+===========================================================================
+ 
+ 
+Preparing the Environment
+--------------------------------------------------------
+ 
+   Use of Icy requires registration of the Icy DLM with IDL to access the
+   interface routines. Several means exist to do so:
+ 
+       1.   On Unix/Linux, start IDL from the directory containing icy.dlm
+            and icy.so
+ 
+       2.   Programmatically from the IDL interpreter (or from a command
+            script), execute the dlm_register command, e.g.
+ 
+      IDL> dlm_register, '/naif/icy/lib/icy.dlm'
+ 
+      IDL> dlm_register, 'c:\naif\icy\lib\icy.dlm'
+ 
+       3.   Copy icy.dlm and icy.so (or icy.dll) to IDL's binary directory
+            {The IDL install directory}/bin/bin.<your_arch>, e.g.:
+ 
+      C:\Program Files\ITT\IDL\IDL81\bin\bin.x86_64\
+ 
+      /usr/local/itt/idl/idl/bin/bin.linux.x86_64
+ 
+      /Applications/itt/idl/idl/bin/bin.darwin.x86_64/
+ 
+       4.   Set the IDL_DLM_PATH environment variable to a directory
+            containing icy.dlm and icy.so (or icy.dll), use the
+            <IDL_DEFAULT> tag when setting the variable to retain the
+            default DLM path, e.g.:
+ 
+      setenv IDL_DLM_PATH '/naif/icy/lib:<IDL_DEFAULT>'
+ 
+   A restriction exists on running IDL from a command line when intending
+   to use Icy. Do not run IDL from the Icy "src" directory
+ 
+      .../icy/src/icy
+ 
+   since this directory contains the "icy.dlm" file but lacks the "icy.so"
+   library.
+ 
+   When a user invokes a call to a DLM routine:
+ 
+         1. IDL calls ...
+            2. the interface routine in the shared object
+               library, linked against ...
+               3. CSPICE, which performs its function and
+                  returns the result ...
+                  4. to IDL ...
+ 
+   A transparent procedure from the user's perspective.
+ 
+ 
+Use of Icy based IDL scripts
+ 
+   A user may need to use IDL scripts that increases the functionality of
+   Icy. Such scripts may define constant expressions (similar to include or
+   header files) or alter the capabilities of an interface routine. As with
+   DLM registration, several means exist to adjust the IDL search path.
+ 
+       1.   Programmatically from the IDL environment (or from a command
+            script), the command:
+ 
+      IDL> pref_set, 'IDL_PATH', '/naif/icy/src/icy:<IDL_DEFAULT>', /COMMIT
+ 
+      IDL> pref_set, 'IDL_PATH', 'c:\naif\icy\src\icy:<IDL_DEFAULT>', $
+                      /COMMIT
+ 
+   extends the search path to include the Icy source directory.
+ 
+       2.   Copy the Icy *.pro files to IDL's library directory {The IDL
+            install directory}/lib e.g.:
+ 
+      C:\Program Files\ITT\IDL\IDL\lib
+ 
+      /usr/local/itt/idl/idl/lib
+ 
+      /Applications/itt/idl/idl/lib
+ 
+       3.   Set the IDL_PATH environment variable to a directory containing
+            the Icy *.pro files; use the <IDL_DEFAULT> tag when setting the
+            variable to retain the default DLM path, e.g.:
+ 
+      setenv IDL_PATH '/path/to/icy/src/icy:<IDL_DEFAULT>'
+ 
+ 
+First Test of Icy Installation
+--------------------------------------------------------
+ 
+   The IDL command:
+ 
+      help, 'icy', /dlm
+ 
+   returns an information string if IDL successfully loaded the dlm
+   package.
+ 
+      ** Icy - IDL interface to CSPICE toolkit from JPL/NAIF
+      (not loaded)
+      Version: x.y, Build Date: year-mon-day,
+      Source: ed.wright@jpl.nasa.gov
+      Path: /path/to/wherever/you/installed/it/icy.so
+ 
+   The IDL command:
+ 
+      print, cspice_tkvrsn( 'TOOLKIT' )
+ 
+   causes IDL to display the string identifier for the CSPICE library
+   version (N00XX) against which Icy linked.
+ 
+   Failure of either command indicates an improper installation of the Icy
+   system.
+ 
+ 
+Documentation
+--------------------------------------------------------
+ 
+   Icy documentation includes an HTML based help facility that links Icy
+   APIs with the corresponding CSPICE APIs.
+ 
+   The index.html file in the
+ 
+      icy/doc/html
+ 
+   or
+ 
+      icy\doc\html
+ 
+   subdirectory is the Icy html documentation "homepage." The page provides
+   links to the CSPICE and Icy API descriptions.
+ 
+ 
+Documentation Conventions
+ 
+   The index page for the Icy HTML Reference Guide follows certain
+   conventions to indicate I/O state and type of argument.
+ 
+      Argument type    Format        Example
+      -------------    ----------    -------------------
+      input            lower case    CSPICE_TSETYR, year
+ 
+      output           uppercase     CSPICE_EKNTAB, N
+ 
+      string           back ticks    CSPICE_FURNSH, `file`
+ 
+      declare an       parentheses   CSPICE_WNFILD, small, (WINDOW)
+        argument        surround
+        before use      argument
+ 
+      vectorized       underscore    CSPICE_STR2ET, _`str`_, _ET_
+        argument
+ 
+      vector of        [N]           CSPICE_MXV, m1[3,3], vin[3], VOUT[3]
+        size N
+ 
+      input or         []            CSPICE_UNORMG, v1[], VOUT[], VMAG
+        return a
+        vector of
+        arbitrary
+        size
+ 
+ 
+The Icy API
+--------------------------------------------------------
+ 
+   In hopes of creating an easy to use product, IDL calls to CSPICE
+   routines closely match the argument form of the native CSPICE routines,
+   with some exceptions. A few CSPICE routines require explicit declaration
+   of memory size for arrays or strings whereas IDL handles many of the
+   memory allocation procedures. So, several Icy calls need not include
+   those parameters.
+ 
+   The IDL language includes a complete set of I/O functions so Icy lacks
+   interfaces to those CSPICE routines that involve direct input or output,
+   e.g. prompt_c. Such functionality is best handled by native IDL
+   functions.
+ 
+   Given a CSPICE wrapper routine "routine_c", the corresponding IDL call
+   is "cspice_routine". The "cspice_" string indicates the source library
+   for the function. If additional libraries are added to Icy, the
+   functions from those libraries will also have a unique identification
+   prefix. This convention prevents symbol name collision.
+ 
+ 
+Path names
+ 
+   Pass file path names through Icy in the form native to the host
+   operating system. The strings pass to the CSPICE library without
+   modification.
+ 
+ 
+API functionality
+ 
+   All Icy APIs share certain characteristics.
+ 
+            The APIs confirm the proper variable type for all inputs:
+            vector to vector, scalar to scalar, matrix to matrix, structure
+            to structure. The API signals an error if the expected and
+            actual input types do not match.
+ 
+            With regards to integers and doubles, Icy performs automatic
+            type conversion when needed (int to double), before a call to a
+            CSPICE routine.
+ 
+            Icy also checks the dimensionality of input vectors and
+            matrices, e.g. an API expecting a double precision 3-vector as
+            input signals an error for any other data type or
+            dimensionality. Most CSPICE vector/matrix routines accept only
+            3-vectors and 3x3 matrices as input arguments.
+ 
+            Consistent with the IDL norm, Icy calls do not explicitly
+            return array dimensions. The user can obtain the dimensionality
+            of an array using the IDL construct:
+ 
+      array_dim      = size ( array, /dimension )
+ 
+      IDL> array = [ [1,2,3], [3,4,5] ]
+ 
+      IDL> help, array
+      ARRAY           INT       = Array[3, 2]
+ 
+      IDL> print, size(array, /dimension)
+                3           2
+ 
+            To obtain the number of elements in an array:
+ 
+      array_size = n_elements ( array )
+ 
+      IDL> print, n_elements(array)
+                6
+ 
+            When processing vectorized input arguments, Icy confirms all
+            vectorized inputs have the same measure of vectorization (all
+            interfaces include a description of the size of inputs if
+            known). Icy signals an error when inputs do not agree with
+            regards to this measure.
+ 
+      IDL> range = [ 1.d, 2.d  , 3.d  ]
+ 
+      IDL> ra    = [ 0.d, 0.75d, 1.5d ]
+ 
+      IDL> dec   = [ 0.d, 0.1d ]
+ 
+      IDL> cspice_radrec, range, ra, dec, rectan
+ 
+      % CSPICE_RADREC: ICY(BADARG): Argument 3 (`dec` = DEC) must have the
+                       same measure of vectorization as `range'. Required
+                       measure 3, argument has measure 2. {VEC}
+ 
+ 
+Use of Vectorized Arguments
+--------------------------------------------------------
+ 
+   The IDL design philosophy includes the option to use a scalar or vector
+   as a function argument, i.e. a particular argument may be a scalar or a
+   vector. Given a scalar input, a routine returns a scalar; given vector
+   input, the same routine returns a vector. This dual use capability goes
+   by the name vectorization. Vectorization provides the means to eliminate
+   the use of explicit loops in IDL by performing the loop operations in
+   interface C code.
+ 
+   Icy version 1.1, (CSPICE N0058) introduced interfaces permitting use of
+   vectorized arguments. The HTML Icy Reference guide signifies vectorized
+   arguments by bounding the arguments with the underscore character "_" as
+   described in the "Documentation Conventions" section of this document.
+ 
+ 
+Vectorizing a scalar.
+ 
+   A vectorizable scalar argument can pass either a scalar or an N-vector.
+ 
+ 
+Vectorizing a vector.
+ 
+   A vectorizable vector argument can pass either an M-vector or an MxN
+   array.
+ 
+   For those situations where the nominal argument is an M-vector, but used
+   in a vectorized fashion, the argument returns as a MxN array.
+ 
+      ;;
+      ;; Create an array of 1000000 ephemeris times starting
+      ;; at et0 and ending at et1.
+      ;;
+      IDL> cspice_str2et, 'Jan 1 2005', et0
+ 
+      IDL> cspice_str2et, 'Jan 1 2025', et1
+ 
+      IDL> step = (et1 - et0)/1000000.d
+ 
+      IDL> et   = et0 + dindgen(1000000L)*step
+ 
+      IDL> help, et
+      ET              DOUBLE    = Array[1000000]
+ 
+      ;;
+      ;; Look-up states corresponding to each element of 'et'.
+      ;;
+      IDL> cspice_spkezr, 'MARS', et, 'J2000', 'LT+S', 'EARTH', $
+                          state , ltime
+ 
+      IDL> help, state
+      STATE           DOUBLE    = Array[6, 1000000]
+ 
+   Note, cspice_spkezr nominally returns 'state' as a 6-vector, but the
+   output corresponding to the 1000000 element 'et' vector returns 'state'
+   as a 6x1000000 array.
+ 
+   To extract the i'th state 6-vector from the 'state' array:
+ 
+      state_i = state[*,i]
+ 
+ 
+Vectorizing a matrix.
+ 
+   A vectorizable matrix argument can pass either an LxM-matrix or an LxMxN
+   array.
+ 
+   For those situations where the nominal argument returns a LxM-matrix,
+   but used in a vectorized fashion, the argument returns as a LxMxN array.
+ 
+      ;;
+      ;; Use the same 'et' vector as in previous example,
+      ;; return an array of transformation matrices from
+      ;; IAU_EARTH to J2000 corresponding to each element
+      ;; of 'et'.
+      ;;
+      IDL> cspice_pxform, 'IAU_EARTH', 'J2000', et, mat
+ 
+      IDL> help, mat
+      MAT             DOUBLE    = Array[3, 3, 1000000]
+ 
+   Note, cspice_pxform nominally returns 'mat' as 3x3 array, but the output
+   corresponding to the 1000000 element 'et' vector returns 'mat' as a
+   3x3x1000000 array.
+ 
+   To extract the i'th 3x3 transformation matrix from the 'mat' array:
+ 
+      matrix_i = mat[*,*,i]
+ 
+ 
+SPICE Windows, Planes, and Ellipses in Icy
+--------------------------------------------------------
+ 
+ 
+SPICE Ellipses in Icy
+ 
+   In most situations, you create CSPICE_ELLIPSE structures by providing
+   the correct input to a routine that converts one representation of an
+   ellipse to a CSPICE_ELLIPSE.
+ 
+   If needed, you can create in IDL code a CSPICE_ELLIPSE structure and
+   populate the structure by direct assignment. Define the structure:
+ 
+      struct  = {CSPICE_ELLIPSE, center:dblarr(3),    $
+                                 semimajor:dblarr(3), $
+                                 semiminor:dblarr(3) }
+ 
+   Note: the structure must have the name 'CSPICE_ELLIPSE', and must
+   include the members 'center', 'semiMajor', and 'semiMinor' dimensioned
+   as double precision 3-vectors.
+ 
+   Create a variable as a CSPICE_ELLIPSE then assign member values:
+ 
+      ellipse           = {CSPICE_ELLIPSE}
+      ellipse.center    = [ cnt1, cnt2, cnt3 ]
+      ellipse.semimajor = [ smj1, smj2, smj3 ]
+      ellipse.semiminor = [ smn1, smn2, smn3 ]
+ 
+ 
+SPICE Planes in Icy
+ 
+   Similarly, you can directly create a CSPICE_PLANE structure. Define the
+   structure:
+ 
+      struct = {CSPICE_PLANE, normal:dblarr(3), $
+                              constant:0.d    }
+ 
+   Note: the structure must have the name 'CSPICE_PLANE', and must include
+   the members 'normal', dimensioned as a double precision 3-vector, and
+   'constant', dimensioned as a double precision scalar.
+ 
+   Create a variable as a CSPICE_PLANE then assign member values:
+ 
+      plane          = {CSPICE_PLANE}
+      plane.normal   = [ n1, n2, n3 ]
+      plane.constant = x
+ 
+ 
+SPICE Cells in Icy
+ 
+   Create a double precision or integer cell where SIZE defines the number
+   of elements available in the cell's data array.
+ 
+   Integer
+ 
+      cell = cspice_celli( SIZE )
+ 
+   Double Precision
+ 
+      cell = cspice_celld( SIZE )
+ 
+   Refer to the headers of cspice_celld and cspice_celli for specific
+   information on the implementation of cells in Icy.
+ 
+ 
+SPICE Windows in Icy
+ 
+   Icy defines windows as double precision cells . Creation of a window
+   begins with a conventional cspice_celld(SIZE) call, after which one uses
+   the cspice_wn* routines to manipulate the window data.
+ 
+   Refer to the Windows Required Reading document, windows.req, for
+   specific information on the implementation of windows in Icy.
+ 
+ 
+Icy Implementation of the SPICE Exception Subsystem
+--------------------------------------------------------
+ 
+   By design, Icy lacks interfaces to the CSPICE exception handling
+   subsystem. The interface code "catches" any CSPICE error, then passes
+   the error description to the IDL interpreter as a IDL error message.
+ 
+   All SPICE errors passed back to IDL have the format: the name of the
+   routine that failed; the SPICE(*) short error message; in brackets, the
+   trace-back of the call sequence that led to the error; the long error
+   message.
+ 
+   Icy signals two error code types: ICY_M_SPICE_ERROR and
+   ICY_M_BAD_IDL_ARGS. Any SPICE error causes an ICY_M_SPICE_ERROR error
+   signal. Any argument error causes and ICY_M_BAD_IDL_ARGS error signal.
+ 
+            The "!error_state.name" variable holds the error code:
+            ICY_M_SPICE_ERROR or ICY_M_BAD_IDL_ARGS.
+ 
+            The "!error_state.msg" variable holds the SPICE short and long
+            error messages (long is an explanation of the short message),
+            plus the SPICE call traceback.
+ 
+ 
+Error Response
+ 
+   SPICE programmers often encounter two errors, regardless of the
+   programming language. Both errors result from the failure to load the
+   needed SPICE kernels prior to an evaluation involving time conversion or
+   a state look-up.
+ 
+ 
+No loaded leapseconds kernel
+ 
+      IDL> cspice_str2et, 'Jan 1, 2000', et
+      % CSPICE_STR2ET: SPICE(NOLEAPSECONDS): [str2et_c->STR2ET->TTRANS]
+                       The variable that points to the leapseconds
+                       (DELTET/DELTA_AT) could not be located in the
+                       kernel pool.  It is likely that the leapseconds
+                       kernel has not been loaded via the routine
+                       FURNSH.
+ 
+ 
+No loaded SPKs
+ 
+      IDL> cspice_spkezr, 'MOON', 0.D, 'J2000', 'NONE', 'EARTH', $
+                           state, ltime
+      % CSPICE_SPKEZR: SPICE(NOLOADEDFILES): [spkezr_c->SPKEZR->SPKEZ
+                       ->SPKSSB->SPKGEO->SPKSFS] At least one SPK file
+                       needs to be loaded by SPKLEF before beginning
+                       a search.
+ 
+ 
+Error Response from Vectorized Routines
+ 
+   NAIF modified the Icy error system to handle vectorized functions.
+   Consider the "Insufficient ephemeris data" error message from a
+   cspice_spkezr call with a scalar 'et':
+ 
+      IDL> cspice_str2et, '2050 JAN 30', et
+ 
+      IDL> cspice_spkezr, 'MOON', et, 'J2000', 'LT+S', 'EARTH', $
+                           state, ltime
+ 
+      % CSPICE_SPKEZR: SPICE(SPKINSUFFDATA): [spkezr_c->SPKEZR->SPKEZ
+                       ->SPKACS->SPKLTC->SPKGEO] Insufficient ephemeris
+                       data has been loaded to compute the state of 399
+                       (EARTH) relative to 0 (SOLAR SYSTEM BARYCENTER)
+                       at the ephemeris epoch 2050 JAN 30 00:01:05.184.
+ 
+   The same error when using a vectorized 'et':
+ 
+      IDL> cspice_str2et, '2049 DEC 30', et0
+ 
+      IDL> et = dindgen(1000000) + et0
+ 
+      IDL> cspice_spkezr, 'MOON', et, 'J2000', 'LT+S', 'EARTH', $
+                           state, ltime
+      % CSPICE_SPKEZR: SPICE(SPKINSUFFDATA): [spkezr_c->SPKEZR->SPKEZ
+                       ->SPKACS->SPKGEO] Insufficient ephemeris data
+                       has been loaded to compute the state of 399 (EARTH)
+                       relative to 0 (SOLAR SYSTEM BARYCENTER) at the
+                       ephemeris epoch 2050 JAN 01 00:01:05.183. Failure
+                       occurred at input vector index 172799.
+ 
+   The "Failure occurred at input..." string appears only when using
+   vectorized arguments. The element value refers to the vector index at
+   which the failure occurred. In this case, the kernel system lacked data
+   to perform the state evaluation at time value et[172799].
+ 
+ 
+Command Format Error
+ 
+   When the Icy system detects an error in the command format, it signals
+   an error and outputs a usage string, displaying the correct format. An
+   example usage response:
+ 
+      %  Usage:  CSPICE_SPKEZR, `target`, epoch, `frame`, `abcorr`,
+                 `observer`, STATE[6], LTIME
+ 
+   This error sets !error_state.name to the IDL error value IDL_M_GENERIC.
+ 
+ 
+Error Handling
+ 
+   CSPICE errors can pass from the CSPICE library to IDL without halting
+   the IDL application via the "catch" mechanism. A simple application of
+   the mechanism wraps a single call:
+ 
+      catch, error
+      if error eq 0 then "function call"
+      catch, /cancel
+ 
+   The variable 'error' has value 0 after the catch command. If Icy signals
+   an error, the value resets to non-zero then program execution continues
+   at the first executable line after the catch, i.e. catch, /cancel.
+ 
+   A more elaborate use of catch traps errors from any of a series of
+   function calls:
+ 
+      ;;
+      ;; Establish an error catch 'error'
+      ;;
+      catch, error
+ 
+      ;;
+      ;; The new error handler 'error' initially
+      ;; has a zero value.
+      ;;
+      if error ne 0 then begin
+ 
+         ;;
+         ;; Cancel the error catch
+         ;;
+         catch, /cancel
+ 
+         ...perhaps output error message to the user, dependent on need...
+         print, !error_state.name
+         print, !error_state.msg
+ 
+         return
+ 
+      endif
+ 
+      ;;
+      ;; Code to execute. If any routine signals an error
+      ;; during execution, the program flow returns to the
+      ;; first line after the catch invocation, i.e.
+      ;;
+      ;;   if error ne 0 then begin
+      ;;
+      ;; since 'error' now has a non-zero value, program
+      ;; execution flows into the if block.
+      ;;
+ 
+      "function call"
+      "function call"
+      "function call"
+ 
+      ;;
+      ;; No error signaled, cancel the error handler.
+      ;;
+      catch, /cancel
+ 
+   Use of 'catch' grants the user control over the error response from the
+   CSPICE routines.
+ 
+   Example:
+ 
+   Attempt to return a state without loading kernels.
+ 
+      ;;
+      ;; Wrap cspice_spkezr in a catch block.
+      ;;
+      catch, error
+      if error eq 0 then $
+         cspice_spkezr, 'Moon',  0.d,   'J2000', 'LT+S', $
+                        'EARTH', state, ltime
+      catch, /cancel
+ 
+      ;;
+      ;; Check for an error response. Print the name and message if
+      ;; found.
+      ;;
+      if error ne 0 then begin
+         print, !error_state.name
+         print, !error_state.msg
+      endif
+ 
+   The output displays for the !error_state.name system variable:
+ 
+      ICY_M_SPICE_ERROR
+ 
+   indicating an error occurred while executing a SPICE routine.
+ 
+   The output displays for the !error_state.msg system variable:
+ 
+      % CSPICE_SPKEZR: SPICE(NOLOADEDFILES): [spkezr_c->SPKEZR->
+                       SPKEZ->SPKSSB->SPKGEO->SPKSFS] At least
+                       one SPK file needs to be loaded by SPKLEF
+                       before beginning a search.
+ 
+ 
+Correlation Between Icy and IDL
+===========================================================================
+ 
+ 
+IDL vs. CSPICE Functionality
+--------------------------------------------------------
+ 
+   Several CSPICE functions equate to intrinsic IDL functions. A user can
+   choose to use an Icy call or a corresponding IDL call to accomplish the
+   same operation.
+ 
+ 
+Equivalent math, matrix, vector operations
+ 
+   All vectors passed from a cspice routine to IDL return as row vectors
+   regardless of the orthodoxy of vector mechanics. In the same sense:
+ 
+   ICY REQUIRES ALL VECTORS PASSED TO CSPICE ROUTINES BE IDL ROW VECTORS.
+ 
+      Icy vs IDL calls         Output object     Type of routine
+      -----------------        -------------     ---------------
+      a = cspice_det(b)        scalar double     Icy
+      a = determ(b)            scalar double     IDL native
+          or
+      a = la_determ(b)         scalar double     IDL native
+ 
+ 
+      cspice_invert, a, b      3x3 matrix        Icy
+      b = invert(a)            3x3 matrix        IDL native
+          or
+      b = la_invert(a)         3x3 matrix        IDL native
+ 
+ 
+      cspice_mxm, a, b, c      3x3 matrix        Icy
+      c = a ## b               3x3 matrix        IDL native
+ 
+ 
+      cspice_mtxm, a, b, c     3x3 matrix        Icy
+      c = transpose(a) ## b    3x3 matrix        IDL native
+ 
+ 
+      cspice_mxv, a, b, c      row-3 vec         Icy
+      c = a ## b               column-3 vec      IDL native
+          or
+      c = transpose(a) # b     row-3 vec         IDL native
+ 
+ 
+      cspice_mtxv, a, b, c     row-3 vec         Icy
+      c = transpose(a) ## b    column-3 vec      IDL native
+          or
+      c = a # b                row-3 vec         IDL native
+ 
+ 
+      cspice_xpose, a, b       3x3 matrix        Icy
+      b = transpose( a )       3x3 matrix        IDL native
+ 
+ 
+      cspice_vpack, a,b,c,v    row-3 vec         Icy
+      v = [a, b, c]            row-3 vec         IDL native
+ 
+ 
+      cspice_vadd , a, b, c    row-3 vec         Icy
+      c = a + b                row-3 vec         IDL native
+ 
+ 
+      cspice_vaddg, a, b, c    row-n vec         Icy
+      c = a + b                row-n vec         IDL native
+ 
+ 
+      cspice_vsub , a, b, c    row-3 vec         Icy
+      c = a - b                row-3 vec         IDL native
+ 
+ 
+      cspice_vsubg, a, b, c    row-n vec         Icy
+      c = a - b                row-n vec         IDL native
+ 
+ 
+      cspice_vcrss, a, b, c    row-3 vec         Icy
+      c = crossp( a, b )       row-3 vec         IDL native
+ 
+ 
+      c = cspice_vdot (a,b)    scalar            Icy
+      c = transpose(a) # b     scalar            IDL native
+          or
+      c = b ## transpose(a)    scalar            IDL native
+          or
+      c = a ## transpose(b)    scalar            IDL native
+ 
+ 
+      c = cspice_vdotg(a,b)    scalar            Icy
+      c = transpose(a) # b     scalar            IDL native
+          or
+      c = b ## transpose(a)    scalar            IDL native
+          or
+      c = a ## transpose(b)    scalar            IDL native
+ 
+ 
+      d = cspice_vtmv(a,b,c)   scalar            Icy
+      d = a ## ( b ## c )      scalar            IDL native
+ 
+ 
+      b = cspice_vnorm(a)      row-3 vec         Icy
+      b = norm(a)              row-3 vec         IDL native
+ 
+ 
+      b = cspice_vnormg(a)     row-n vec         Icy
+      b = norm(a)              row-n vec         IDL native
+ 
+ 
+      b = cspice_trace(a)      scalar            Icy
+      b = trace(a)             scalar            IDL native
+ 
+ 
+      cspice_rquad, a,b,c, $
+                root1, root2   two 2-vectors     Icy
+      fz_roots([c,b,a])        complex 2-vector  IDL native
+ 
+ 
+Equivalent string operations
+ 
+   Assume all string arguments as scalar unless otherwise noted.
+ 
+   cspice_lparse equates to strsplit using the /EXTRACT flag:
+ 
+      cspice_lparse, string, delimin,  n_max, items
+ 
+      items = strsplit ( string, delimin, /EXTRACT )
+ 
+   cspice_ucase equates to strupcase:
+ 
+      cspice_ucase, string, upper
+ 
+      upper = strupcase ( string )
+ 
+   cspice_lcase equates to strlowcase:
+ 
+      cspice_lcase, string, low
+ 
+      low = strlowcase( string )
+ 
+   cspice_eqstr equates to strcmp with the /FOLD_CASE flag:
+ 
+   Note: strcmp accepts vector arguments.
+ 
+      cspice_eqstr( string1, string2 )
+ 
+      strcmp( string1, string2, /FOLD_CASE )
+ 
+   cspice_cmprss equates to two expressions of strcompress with regards to
+   blank space:
+ 
+   Note: strcompress accepts vector arguments.
+ 
+   Remove all instances of blank spaces.
+ 
+      cspice_cmprss, ' ', 0, string, comp
+ 
+      comp = strcompress( string, /REMOVE_ALL )
+ 
+   Remove all instance of consecutive blank spaces, replace with a single
+   space.
+ 
+      cspice_cmprss, ' ', 1, string, comp
+ 
+      comp = strcompress( string )
+ 
+ 
+Matrix Operations
+===========================================================================
+ 
+   A user must understand the details of matrix math and the structure of a
+   matrix as defined by both CSPICE and IDL.
+ 
+ 
+Matrix Properties
+--------------------------------------------------------
+ 
+   Here, we discuss matrix row/column issues between CSPICE and IDL. When
+   told "Matrix X has dimensions 4X2" do you envision a structure of the
+   form:
+ 
+         x(0,0)  x(0,1)
+         x(1,0)  x(1,1)
+         x(2,0)  x(2,1)
+         x(3,0)  x(3,1)
+ 
+   or
+ 
+         x(0,0)  x(1,0)  x(2,0)  x(3,0)
+         x(0,1)  x(1,1)  x(2,1)  x(3,1)
+ 
+   one being the transpose of the other. What does IDL produce? What does C
+   produce?
+ 
+   The IDL Case
+ 
+      mat = dblarr(4,2)
+ 
+   produces a matrix of the form:
+ 
+      mat[0,0]  mat[1,0]  mat[2,0]  mat[3,0]
+      mat[0,1]  mat[1,1]  mat[2,1]  mat[3,1]
+ 
+   But if accessing the elements of mat as a vector, the index represents a
+   row based structure
+ 
+      mat[0]  mat[1]  mat[2]  mat[3]
+      mat[4]  mat[5]  mat[6]  mat[7]
+ 
+      i.e.
+ 
+      mat[0] == mat[0,0], mat[1] == mat[1,0], mat[4] == mat[0,1], etc.
+ 
+   Creation of an IDL matrix via assignment:
+ 
+      IDL> matrix = [ [a, b, c, d ], [e, f, g, h], [i, j, k, l] ]
+ 
+   On output:
+ 
+      IDL> print, matrix
+           a  b  c  d
+           e  f  g  h
+           i  j  k  l
+ 
+   shows the expected form. Recall how IDL indexes matrices, so the
+   components are:
+ 
+         matrix[0,0] == a, matrix[0,1] == e, matrix[0,2] == i, ...,
+         matrix[3,1] == h, etc.
+ 
+   The C Language Case
+ 
+   A native C language matrix (4,2), with four rows, and two columns:
+ 
+         mat[0][0]   mat[0][1]
+         mat[1][0]   mat[1][1]
+         mat[2][0]   mat[2][1]
+         mat[3][0]   mat[3][1}
+ 
+   Matrices returned from CSPICE routines have the standard C matrix form.
+   Please note,
+ 
+             *** THIS IS THE TRANSPOSE OF THE NATIVE IDL FORM! ***
+ 
+   Yet, when displaying a matrix returned from a CSPICE routine with the
+   IDL 'print' command, the output will display the conventional
+   mathematical form, i.e. the row by column form.
+ 
+ 
+Comparison of Icy and IDL matrix operations
+--------------------------------------------------------
+ 
+   Define a simple 3x3 matrix.
+ 
+      IDL> mat = [ [1d,2,3], [ 4,5,6], [7,8,9] ]
+ 
+      IDL> print, mat
+             1.0000000       2.0000000       3.0000000
+             4.0000000       5.0000000       6.0000000
+             7.0000000       8.0000000       9.0000000
+ 
+      IDL> print, mat[*]
+             1.0000000       2.0000000       3.0000000       4.0000000
+             5.0000000       6.0000000       7.0000000       8.0000000
+             9.0000000
+ 
+   Now define a 3-vector. Mathematically, this defines a 3x1 column matrix.
+ 
+      IDL> vec = [ 5.d, 1, 2 ]
+ 
+      IDL> print, vec
+             5.0000000       1.0000000       2.0000000
+ 
+      IDL> help, vec
+      VEC             DOUBLE    = Array[3]
+ 
+   IDL considers this a 3-vector (3 cols x 1 row), though the vector
+   mechanic identification is a 1x3 array (1 row x 3 cols). The "Array"
+   designation indicates an IDL vector.
+ 
+   If you visualize a matrix times vector operation:
+ 
+         | 1.     2.     3. |  | 5. |    | 13. |
+         | 4.     5.     6. |  | 1. | =  | 37. |
+         | 7.     8.     9. |  | 2. |    | 61. |
+ 
+   considering 'vec' as a column vector, the operation creates a column
+   vector.
+ 
+   Perform the operation using the CSPICE routine mxv_c.
+ 
+      IDL> cspice_mxv, mat, vec, vecout1
+ 
+      IDL> print, vecout1
+             13.000000       37.000000       61.000000
+ 
+   The routine returns an IDL row vector with input integer values
+   converted to doubles prior to computation. The computation returns
+   doubles.
+ 
+   Perform the same operation with the IDL native operator:
+ 
+      IDL> vecout2 = mat ## vec
+ 
+      IDL> print, vecout2
+             13.000000
+             37.000000
+             61.000000
+ 
+      IDL> help, vecout2
+ 
+      VECOUT2         DOUBLE    = Array[1, 3]
+ 
+   The operation properly returns a column vector but note the
+   dimensionality of the vector, a 1x3 matrix. This dimensionality is
+   consistent with the IDL matrix notation.
+ 
+   Transpose 'vec', then output.
+ 
+      IDL> vectranspose = transpose( vec)
+ 
+      IDL> print, vectranspose
+             5.0000000
+             1.0000000
+             2.0000000
+ 
+      IDL> help, vectranspose
+      VECTRANSPOSE    DOUBLE    = Array[1, 3]
+ 
+   Now try the vector multiplication.
+ 
+      IDL> vecout4 = mat ## vectranspose
+ 
+      IDL> print, vecout4
+             13.000000
+             37.000000
+             61.000000
+ 
+   As is shown, IDL's native operator
+ 
+      ##
+ 
+   performs the same operation on the transpose of the vector as with the
+   standard row vector.
+ 
+   However, the IDL native operator
+ 
+      #
+ 
+   does not behave in this way.
+ 
+      IDL> print,  mat # vectranspose
+      % Operands of matrix multiply have incompatible dimensions: MAT,
+        VECTRANSPOSE.
+      % Execution halted at: $MAIN$
+ 
+   Perform the calculation with the IDL native operator:
+ 
+      IDL> vecout3 = transpose(mat) # vec
+      IDL> print, vecout3
+             13.000000       37.000000       61.000000
+ 
+   This operation returns a row vector in the standard IDL vector form.
+ 
+   IDL identifies vectranspose as a 1x3 matrix. If passing vectranspose to
+   an Icy interface expecting a vector:
+ 
+      IDL> cspice_mxv, mat, vectranspose, vecout5
+      % CSPICE_MXV: ICY(BADARG): Argument 2 (`vin` = VECTRANSPOSE)
+                    incorrect array dimensions. Argument should have
+                    1 dimension(s), found to have 2. {DIM}
+      % Execution halted at: $MAIN$
+ 
+   Don't assume the above example implies an operation equivalence between
+   the use of the
+ 
+      ## and #
+ 
+   operators, and the Icy vector/matrix routines. The Icy routines promote
+   the input values to double precision and return doubles. The IDL
+   operators preserve the input type, returning the same type (if
+   possible).
+ 
+ 
+Extracting matrix elements
+--------------------------------------------------------
+ 
+   Load a PCK containing target body orientation information.
+ 
+      IDL> cspice_furnsh, '/kernels/gen/pck/pck00008.tpc'
+ 
+   Calculate the matrix to rotate a position vector from J2000 to the
+   Saturn (699) body-fixed frame.
+ 
+      IDL> cspice_pxform, 'J2000', 'IAU_SATURN', 0.d0, TIPM
+ 
+   Print the matrix. The output has the form expected by mathematicians.
+ 
+      IDL> print, TIPM
+           -0.98018926      0.18502086     0.070684507
+           -0.17866837     -0.98000194     0.087600270
+           0.085478832     0.073235758      0.99364475
+ 
+   Extract the direction of the rotation pole of Saturn, the Z axis, from
+   the matrix in the J2000 frame. As the matrix transforms a position
+   3-vector from J2000 to the Saturn-fixed frame, the bottom row of the
+   displayed matrix defines the Z axis in J2000.
+ 
+      IDL> Z = TIPM[ 6:8 ]
+ 
+      IDL> print, Z
+           0.085478832     0.073235758      0.99364475
+ 
+   Another technique to obtain the required data, extract the final
+   elements in each column as displayed above. Recall the IDL indexing
+   convention.
+ 
+      IDL> Z = [ TIPM[*,2 ] ]
+ 
+      IDL> print, Z
+           0.085478832     0.073235758      0.99364475
+ 
+ 
+Direct input of a matrix by elements for use by CSPICE.
+--------------------------------------------------------
+ 
+      IDL> mat = [ [ a,b,c], [d,e,f], [g,h,i] ]
+ 
+      IDL> print, mat
+          a  b  c
+          d  e  f
+          g  h  i
+ 
+      IDL> vec = [ x, y, z ]
+ 
+      IDL> cspice_mxv, mat, vec, out
+ 
+   'out' contains the vector as expected if you consider 'mat' as a
+   standard matrix, namely:
+ 
+         ___
+         out  = | a  b  c | | x |
+                | d  e  f | | y |
+                | g  h  i | | z |
+ 
+   so
+ 
+         ___
+         out  = | a x  +  b y  +  c z |
+                | d x  +  e y  +  f z |
+                | g x  +  h y  +  i z |
+ 
+   or
+ 
+      IDL> out = mat ## vec
+ 
+ 
+Common problems
+===========================================================================
+ 
+ 
+Use of 'lt' as a Variable NAME
+--------------------------------------------------------
+ 
+   CSPICE documentation and source code uniformly uses the variable name
+   'lt' to designate the light-time between an observer and target. IDL
+   uses 'lt' as the less-than numeric comparison operator and so does not
+   allow 'lt' as a variable name. Therefore, Icy documentation uses the
+   name 'ltime' for the light-time value.
+ 
+ 
+Persistence of Kernel Data
+--------------------------------------------------------
+ 
+   A possible irritant exists when loading kernels using the cspice_furnsh
+   function.
+ 
+   The CSPICE design supposes use in a single program run-time environment;
+   the program accomplishes its function, then quits. With respect to Icy,
+   consider the IDL environment as a single program run. Since Icy
+   functions as an extension to IDL, loaded kernels and opened files remain
+   in memory after a script runs unless explicitly unloaded or closed (a
+   script is not the program, IDL is the program).
+ 
+   Consequence: kernel data may be available to one of your scripts even
+   though not intended to be so. You could get incorrect or unexpected
+   results!
+ 
+   Two approaches mitigate this issue. Load all needed SPICE kernels for
+   your IDL session at the beginning of the session, paying careful
+   attention to the files loaded and the loading order (loading order
+   affects precedence).
+ 
+   Or, either unload unneeded kernels with cspice_unload, or clear all
+   loaded kernels and kernel pool variables with cspice_kclear, at the end
+   of the IDL script to avoid both exceeding the maximum number of allowed
+   loaded kernels and providing unintended access to kernel data.
+ 
+ 
+Defining Kernel Names with Relative Paths
+--------------------------------------------------------
+ 
+   Users should understand a subtlety concerning the kernel load action for
+   binary kernels in IDL. A load provides access to the kernel for the IDL
+   process based on the path. If the path is defined relative to the active
+   IDL directory, changing the active directory after a load may (probably)
+   cause an error signal from the CSPICE library. The signal, likely an
+   IOSTAT=2 error, occurs because the kernel subsystem maintains a list of
+   kernel names as passed to cspice_furnsh. Changing the active directory
+   changes the resolved name for a kernel name defined with a relative path
+   so any operation on such a kernel may fail after active directory
+   changes. This behavior is specific to kernels defined with relative
+   paths. Use of absolute paths in a kernel name prevents this problem.
+ 
+   Prevent this problem by:
+ 
+            Define all kernels to load using absolute paths. NAIF
+            recommends this practice.
+ 
+            Do not alter your active directory after loading kernels,
+            regardless of whether a direct load with @FURNSH or by a meta
+            kernel.
+ 
+ 
+Floating Underflow
+--------------------------------------------------------
+ 
+   A user may occasionally encounter an IDL math exception:
+ 
+      % Program caused arithmetic error: Floating underflow
+ 
+   This warning occurs most often as a consequence of CSPICE math
+   operations.
+ 
+   In all known cases, the SIGFPE exceptions caused by CSPICE can be
+   ignored. CSPICE assumes numeric underflow as zero. A user can adjust
+   IDL's response to math exceptions by setting the !EXCEPT variable:
+ 
+            !EXCEPT = 0 suppresses the SIGFPE messages, and even more (e.g.
+            a fatal error).
+ 
+            !EXCEPT = 1, the default, reports math exceptions on return to
+            the interactive prompt. NAIF recommends this be used.
+ 
+            !EXCEPT = 2 reports exceptions immediately after executing the
+            command.
+ 
+ 
+Null pointer error
+--------------------------------------------------------
+ 
+   As an interface to IDL, Icy's functioning depends on the way IDL passes
+   argument lists to a shared library. An IDL distribution includes a file,
+   export.h, that defines the various macros and variables needed to pass
+   data. Always compile Icy (icy.so/icy.dll) against the export.h file
+   included with the IDL application that calls the Icy shared library,
+   i.e. if using Icy with IDL X.1, compile Icy with the external.h header
+   distributed with IDL X.1.
+ 
+   The most common symptom of an Icy/IDL mismatch is an error signal from
+   Icy when attempting to pass strings to a CSPICE routine.
+ 
+   Example:
+ 
+      % CSPICE_FURNSH: Pointer "file" is null; a non-null
+        pointer is required.
+      % Execution halted at:  $MAIN$  7 /path/to/procedure
+ 
+   A recompile of the Icy source in icy/src/icy should correct the problem.
+   The build script in the Icy source directory expects the external
+   directory to exist in the default location; ensure the build script uses
+   the correct path name for the directory.
+ 
+   This problem usually occurs when using Icy after an IDL upgrade.
+ 
+   Example:
+ 
+   Given two 'external' directories
+ 
+      /usr/local/itt/idl/external
+ 
+         and
+ 
+      /usr/local/itt/idl_x.y/external
+ 
+   Edit the build script (mkprodct) in icy/src/icy to use the correct
+   'external' path for the IDL executable you run.
+ 
+ 
+IDL Script Compile Errors
+--------------------------------------------------------
+ 
+   IDL may signal a syntax error for no understandable reason during
+   compiles of IDL code that include Icy calls. Example:
+ 
+      lon_arr[i] = lon * cspice_dpr()
+                                     ^
+      % Syntax error.
+ 
+   The statement seems reasonable, yet a "% Syntax error" occurred. This
+   results from compiling the code with Icy calls before loading the Icy
+   dlm to IDL. Use either the "dlm_register" command to load Icy, or place
+   the Icy dlm files in the appropriate IDL directory for loading on
+   start-up.
+ 
+ 
+Sensitivity to float/double variable type
+--------------------------------------------------------
+ 
+   All Icy routines and functions expect real input values as doubles, and
+   return doubles for reals on output. IDL recognizes both single (float)
+   and double precision representations for reals. An issue exists
+   concerning the IDL representation of real values. In some circumstances,
+   an IDL float passed to an Icy routine produces an output different from
+   that if the value had type double.
+ 
+   Assign a double precision value as a float variable, then output the
+   value of the variable.
+ 
+   Example:
+ 
+      IDL> xf = 123456.78901234567
+      IDL> print, format='(f20.10)', xf
+           123456.7890625000
+ 
+   Assign the same double precision value as a double variable, then output
+   the value of the variable.
+ 
+      IDL> xd = 123456.78901234567d
+      IDL> print, format='(f20.10)', xd
+           123456.7890123457
+ 
+   Notice the difference in output.
+ 
+   Assign a second double precision value as a float, use a value four
+   orders of magnitude larger than the previous example.
+ 
+      IDL> xf = 1234567890.1234567
+      IDL> print, format='(f23.7)', xf
+           1234567936.0000000
+ 
+   Now assign the value as a double precision value.
+ 
+      IDL> xd = 1234567890.1234567d
+      IDL> print, format='(f23.7)', xd
+           1234567890.1234567
+ 
+   Again, notice the difference between the single precision and double
+   precision representations of the same value.
+ 
+   Example:
+ 
+   Solve a system of the form Ax=b using a mixture of integer and double
+   declared variables...
+ 
+      IDL> A = [[ 4, 16000, 17000 ], $
+      IDL>      [ 2, 5    , 8     ], $
+      IDL>      [ 3, 6    , 10    ]  ]
+ 
+      IDL> b = [ 100.1d, 0.1, .01 ]
+ 
+   ...and using an LAPACK algorithm:
+ 
+      IDL> x = la_linear_equation( A, b )
+ 
+      IDL> print, x
+          -0.397432    -0.334865     0.321148
+ 
+   Use an Icy call to compute a 'b' vector from 'A' and the solution vector
+   'x'. How does the result compare with the declared 'b'?
+ 
+      IDL> cspice_mxv, A, x, b_calc1
+ 
+      IDL> print, b_calc1
+             100.09967     0.099999875    0.0099998713
+ 
+   Difference the original 'b' vector and the calculated 'b_calc1' to
+   determine the order of round-off error:
+ 
+      IDL> print, b - b_calc1
+         0.00033078194   1.2665987e-07   1.2852252e-07
+ 
+   Now calculate a 'b' vector using the IDL native operator:
+ 
+      IDL> b_calc2 = a ## x
+ 
+      IDL> print, b_calc2
+            100.100
+          0.0999999
+         0.00999987
+ 
+   Difference the known (input) vector from the calculated vector:
+ 
+      IDL> print, b - transpose (b_calc2)
+         9.3078613e-05   9.6857548e-08   1.2852252e-07
+ 
+   Solve the same system, this time with the 'A' matrix explicitly defined
+   as double:
+ 
+      IDL> A = [[ 4d, 16000, 17000 ], $
+      IDL>      [ 2,  5,     8     ], $
+      IDL>      [ 3,  6,     10    ]  ]
+ 
+      IDL> b = [ 100.1d, .1, .01 ]
+ 
+      IDL> x = la_linear_equation( A, b )
+ 
+   Again, use an Icy call to compute a 'b' vector from 'A' and the solution
+   vector 'x'. Now, how does the result compare with the declared 'b'?
+ 
+      IDL> cspice_mxv, A, x, b_calc3
+ 
+   Difference the known (input) vector from the calculated vector:
+ 
+      IDL> print, b - b_calc3
+         1.9895197e-13       0.0000000  -1.1102230e-16
+ 
+   Note the magnitude of the difference vector b-bcalc3, ~10**(-13)
+   compared to the same calculation performed on the mixed integer-double
+   data values b-bcalc1, ~10**(-4).
+ 
+ 
+Icy Outputs Restricted to Named Variables
+--------------------------------------------------------
+ 
+   Inputs to Icy routines may be variables, constants, or function calls.
+ 
+   Permitted:
+ 
+      cspice_subroutine, input, output
+      output_vec[0] = output
+ 
+      cspice_subroutine, input1, input2, cspice_func(), input3, output1
+ 
+   Not permitted:
+ 
+      cspice_subroutine, input, output_vec[0]
+ 
+ 
+Use on 32-bit vs 64-bit Platforms
+--------------------------------------------------------
+ 
+   NAIF provides Icy for several platforms in both 32 and 64-bit format.
+   The Icy DLM functions only in the mode for which compiled.
+ 
+   It may be possible to run IDL in 32-bit mode on a 64-bit platform so as
+   to use a 32-bit compiled Icy. If so, the user must explicitly invoke the
+   32-bit version of IDL (default on 64-bit platforms is to run 64-bit
+   IDL).
+ 
+   To run IDL from the command line in 32-bit mode:
+ 
+      $ idl -32
+ 
+   Or use the applications (names may differ based on platform and IDL
+   version):
+ 
+      idl32
+      IDLWorkbench32
+      idlvm32
+ 
+   The error message returned when running a 64-bit IDL bit with the 32-bit
+   Icy DLM appears similar to:
+ 
+      % CSPICE_ICY: Error loading sharable executable.
+                    Symbol: IDL_Load, File = /Applications/icy/lib/icy.so
+                    dlopen(/Applications/icy/lib/icy.so, 1): no suitable
+                    image found.  Did find: /naif/icy/lib/icy.so, but
+                    wrong architecture
+ 
+   A similar error returns when running IDL 32-bit with the 64-bit Icy DLM.
+   The error message will mention a "wrong architecture" and/or "no
+   suitable image found."
+ 
+ 
+Revisions
+===========================================================================
+ 
+ 
+2013 FEB 04 by E. D. Wright.
+ 
+   Edits to text for clarity and completeness. Removed unneeded comments.
+ 
+ 
+2010 APR 28 by E. D. Wright.
+ 
+   Previous edits.
+ 
+ 
+2004 FEB 24 by E. D. Wright.
+ 
+   Initial release.
+ 

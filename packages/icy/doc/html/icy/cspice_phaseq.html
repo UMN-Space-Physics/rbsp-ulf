@@ -1,0 +1,416 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_phaseq</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_phaseq</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_PHASEQ computes the apparent phase angle for a target, observer,
+   illuminator set of ephemeris objects.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/phaseq_c.html">phaseq_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+   et         double precision scalar the time in ephemeris seconds past 
+              J2000 TDB at which to compute the phase angle.
+
+   target     scalar string naming the target body. Optionally, you may
+              supply a string containing the integer ID code
+              for the object. For example both &quot;MOON&quot; and &quot;301&quot;
+              are legitimate strings that indicate the Moon is the
+              target body. 
+              
+              Case and leading or trailing blanks are not significant
+              in the string 'target'.
+               
+   illmn      scalar string naming the illuminating body. Optionally, you
+              may supply a string containing the integer ID code
+              for the object. For example both &quot;SUN&quot; and &quot;10&quot;
+              are legitimate strings that indicate the sun is the
+              illuminating body. 
+              
+              Case and leading or trailing blanks are not significant
+              in the string 'illmn'.
+
+              In most cases, 'illmn' is the sun.
+
+   obsrvr     scalar string naming the observer body. Optionally, you may
+              supply a string containing the integer ID code
+              for the object. For example both &quot;MOON&quot; and &quot;301&quot;
+              are legitimate strings that indicate the Moon is the
+              observer body. 
+              
+              Case and leading or trailing blanks are not significant
+              in the string 'obsrvr'.
+
+   abcorr     scalar string indicating the aberration corrections to apply
+              to the state evaluations to account for one-way light time and
+              stellar aberration.
+
+              This routine accepts only reception mode aberration
+              corrections. See the header of <a href="cspice_spkezr.html">cspice_spkezr</a> for a detailed
+              description of the aberration correction options.
+              For convenience, the appropriate aberration options are
+              listed below:
+
+                 'NONE'     Apply no correction. Returns the &quot;true&quot;
+                            geometric state.
+
+                 'LT'       &quot;Reception&quot; case:  correct for
+                            one-way light time using a Newtonian
+                            formulation.
+
+                 'LT+S'     &quot;Reception&quot; case:  correct for
+                            one-way light time and stellar
+                            aberration using a Newtonian
+                            formulation.
+
+                 'CN'       &quot;Reception&quot; case:  converged
+                            Newtonian light time correction.
+
+                 'CN+S'     &quot;Reception&quot; case:  converged
+                            Newtonian light time and stellar
+                            aberration corrections.
+
+              Case and leading or trailing blanks are not significant
+              in the string 'abcorr'.
+
+   the call:
+
+      phaseq = <b>cspice_phaseq</b>( et, target, illmn, obsrvr, abcorr )
+
+   returns:
+
+      phaseq   scalar double precision, optionally light-time corrected,
+               phase angle between 'target' and 'illmn' as observed 
+               from 'obsrvr'. The range of 'phase' is [0, pi].
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+         KPL/MK
+
+         File name: <a href= "standard.html">standard.tm</a>
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00009.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00009.tpc',
+                                'naif0009.tls'  )
+
+         \begintext
+
+   Example:
+
+      Determine the time intervals from December 1, 2006 UTC to
+      January 31, 2007 UTC for which the sun-moon-earth configuration
+      phase angle satisfies the relation conditions with respect to a
+      reference value of .57598845 radians (the phase angle at
+      January 1, 2007 00:00:00.000 UTC, 33.001707 degrees). Also
+      determine the time windows corresponding to the local maximum and
+      minimum phase angles, and the absolute maximum and minimum phase
+      angles during the search interval. The configuration defines the
+      sun as the illuminator, the moon as the target, and the earth as
+      the observer.
+
+      MAXWIN  =  5000L
+      TIMFMT  = 'YYYY-MON-DD HR:MN:SC.###'
+      TIMLEN  =  41
+
+      relate = [ '=', '&lt;', '&gt;',                         $
+                 'LOCMIN', 'ABSMIN', 'LOCMAX', 'ABSMAX' ]
+
+      ;;
+      ;; Load kernels.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+
+      ;;
+      ;; Store the time bounds of our search interval in
+      ;; the cnfine confinement window.
+      ;;
+      <a href="cspice_str2et.html">cspice_str2et</a>, [ '2006 DEC 01', '2007 JAN 31'], et
+
+      ;;
+      ;; Search using a step size of 1 day (in units of seconds).
+      ;; The reference value is 0.57598845 radians. We're not using the
+      ;; adjustment feature, so we set 'adjust' to zero.
+      ;;
+      target  = 'MOON'
+      illmn   = 'SUN'
+      abcorr  = 'LT+S'
+      obsrvr  = 'EARTH'
+      refval  = 0.57598845D
+      adjust  = 0.D
+      step    = <a href="cspice_spd.html">cspice_spd</a>()
+      nintvls = MAXWIN
+
+      cnfine = <a href="cspice_celld.html">cspice_celld</a>( 2 )
+      <a href="cspice_wninsd.html">cspice_wninsd</a>, et[0], et[1], cnfine
+
+      result = <a href="cspice_celld.html">cspice_celld</a>( MAXWIN*2)
+
+      for j=0, 6 do begin
+
+         print, 'Relation condition: ',  relate[j]
+
+         ;;
+         ;; Perform the search. The SPICE window 'result' contains
+         ;; the set of times when the condition is met.
+         ;;
+         <a href="cspice_gfpa.html">cspice_gfpa</a>, target, illmn,     abcorr, $
+                      obsrvr, relate[j], refval, $
+                      adjust, step,      nintvls,$
+                      cnfine, result
+
+         ;;
+         ;; List the beginning and ending times in each interval
+         ;; if 'result' contains data.
+         ;;
+         count = <a href="cspice_wncard.html">cspice_wncard</a>( result )
+
+         if ( count eq 0 ) then begin
+
+            print, 'Result window is empty.'
+
+         endif else begin
+
+            for i= 0L, (count - 1L ) do begin
+
+               ;;
+               ;; Fetch the endpoints of the Ith interval
+               ;; of the result window.
+               ;;
+               <a href="cspice_wnfetd.html">cspice_wnfetd</a>, result, i, left, right
+               <a href="cspice_timout.html">cspice_timout</a>, [left, right], TIMFMT, TIMLEN, timstr
+
+               phaseq = <b>cspice_phaseq</b>( left, target, illmn, obsrvr, abcorr )
+               print, 'Start time = ', timstr[0], phaseq
+
+               phaseq = <b>cspice_phaseq</b>( right, target, illmn, obsrvr, abcorr )
+               print, 'Stop time  = ', timstr[1], phaseq
+
+            endfor
+
+         endelse
+         print, ' '
+
+
+      endfor
+
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in Matlab due to data persistence.
+      ;;
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   IDL outputs:
+
+      Relation condition: =
+      Start time = 2006-DEC-02 13:31:34.414      0.57598845
+      Stop time  = 2006-DEC-02 13:31:34.414      0.57598845
+      Start time = 2006-DEC-07 14:07:55.470      0.57598845
+      Stop time  = 2006-DEC-07 14:07:55.470      0.57598845
+      Start time = 2006-DEC-31 23:59:59.997      0.57598845
+      Stop time  = 2006-DEC-31 23:59:59.997      0.57598845
+      Start time = 2007-JAN-06 08:16:25.512      0.57598845
+      Stop time  = 2007-JAN-06 08:16:25.512      0.57598845
+      Start time = 2007-JAN-30 11:41:32.557      0.57598845
+      Stop time  = 2007-JAN-30 11:41:32.557      0.57598845
+
+      Relation condition: &lt;
+      Start time = 2006-DEC-02 13:31:34.414      0.57598845
+      Stop time  = 2006-DEC-07 14:07:55.470      0.57598845
+      Start time = 2006-DEC-31 23:59:59.997      0.57598845
+      Stop time  = 2007-JAN-06 08:16:25.512      0.57598845
+      Start time = 2007-JAN-30 11:41:32.557      0.57598845
+      Stop time  = 2007-JAN-31 00:00:00.000      0.46827909
+
+      Relation condition: &gt;
+      Start time = 2006-DEC-01 00:00:00.000      0.94071497
+      Stop time  = 2006-DEC-02 13:31:34.414      0.57598845
+      Start time = 2006-DEC-07 14:07:55.470      0.57598845
+      Stop time  = 2006-DEC-31 23:59:59.997      0.57598845
+      Start time = 2007-JAN-06 08:16:25.512      0.57598845
+      Stop time  = 2007-JAN-30 11:41:32.557      0.57598845
+
+      Relation condition: LOCMIN
+      Start time = 2006-DEC-05 00:16:50.317     0.086121423
+      Stop time  = 2006-DEC-05 00:16:50.317     0.086121423
+      Start time = 2007-JAN-03 14:18:31.977     0.079899769
+      Stop time  = 2007-JAN-03 14:18:31.977     0.079899769
+
+      Relation condition: ABSMIN
+      Start time = 2007-JAN-03 14:18:31.977     0.079899769
+      Stop time  = 2007-JAN-03 14:18:31.977     0.079899769
+
+      Relation condition: LOCMAX
+      Start time = 2006-DEC-20 14:09:10.392       3.0550629
+      Stop time  = 2006-DEC-20 14:09:10.392       3.0550629
+      Start time = 2007-JAN-19 04:27:54.600       3.0746039
+      Stop time  = 2007-JAN-19 04:27:54.600       3.0746039
+
+      Relation condition: ABSMAX
+      Start time = 2007-JAN-19 04:27:54.600       3.0746039
+      Stop time  = 2007-JAN-19 04:27:54.600       3.0746039
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine returns the phase angle using the location of the
+   bodies (if point objects) or the centers of the bodies (if finite
+   bodies).
+
+
+                       ILLMN      OBS
+       ILLMN as seen      ^       /
+       from TARG at       |      /
+       ET - LT.           |     /
+                         &gt;|..../&lt; phase angle
+                          |   /
+                        . |  /
+                      .   | /
+                     .    |v     TARG as seen from OBS
+               SEP   .   TARG    at ET
+                      .  /
+                        /
+                       v
+
+        PI = SEP + PHASE
+
+        so
+
+        PHASE = PI - SEP
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 11-NOV-2013, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   compute the phase of two objects wrt an illumination source
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

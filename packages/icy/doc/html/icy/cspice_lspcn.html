@@ -1,0 +1,257 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_lspcn</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_lspcn</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_LSPCN computes L_s, the planetocentric longitude of the sun,
+   as seen from a specified body.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/lspcn_c.html">lspcn_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+
+      body        is the name of the central body, typically a planet. 
+ 
+      et          is the epoch at which the longitude of the sun (L_s) is
+                  to be computed. 'et' is expressed as seconds past J2000
+                  TDB (Barycentric Dynamical Time).
+ 
+      abcorr      indicates the aberration corrections to be applied 
+                  when computing the longitude of the sun.  'abcorr' 
+                  may be any of the following. 
+ 
+                     &quot;NONE&quot;     Apply no correction. 
+ 
+                     &quot;LT&quot;       Correct the position of the sun, 
+                                relative to the central body, for 
+                                planetary (light time) aberration. 
+ 
+                     &quot;LT+S&quot;     Correct the position of the sun, 
+                                relative to the central body, for 
+                                planetary and stellar aberrations. 
+
+   the call:
+
+      double = <b>cspice_lspcn</b>( body, et, abcorr )
+
+   returns:
+
+      The function returns the scalar double precision planetocentric 
+      longitude of the sun, often called &quot;L_s,&quot; for the 
+      specified body at the specified time. This is the longitude of 
+      the body-sun vector in a right-handed frame whose basis vectors 
+      are defined as follows: 
+ 
+         - The positive Z direction is given by the instantaneous 
+           angular velocity vector of the orbit of the body about 
+           the sun. 
+ 
+         - The positive X direction is that of the cross product of the 
+           instantaneous north spin axis of the body with the
+           positive Z direction. 
+ 
+         - The positive Y direction is Z x X. 
+ 
+      Units are radians; the range is 0 to 2*pi.  Longitudes are 
+      positive to the east. 
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; A simple program that computes L_s for a body and time 
+      ;; supplied interactively.  The geometric state of the sun is 
+      ;; used.
+      ;;
+      ;; Local parameters
+      ;;
+      ABCORR     = &quot;NONE&quot; 
+      SPICETRUE  = 1B
+      SPICEFALSE = 0B
+      cont       = SPICETRUE
+      
+      ;;
+      ;; Initialize to strings all values used with interactive input.
+      ;;
+      body       = ''
+      timstr     = ''y
+      ask        = ''
+      
+      ;;
+      ;; Load a standard kernel set.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+      
+      ;;
+      ;; Input loop.
+      ;;
+      while cont do begin
+
+         ;;
+         ;; Get the central body name and the time string.
+         ;;
+         print
+         read, body  , PROMPT = &quot;Enter name of central body       &gt; &quot;
+         read, timstr, PROMPT = &quot;Enter calendar, JD, or DOY time  &gt; &quot;
+
+         <a href="cspice_str2et.html">cspice_str2et</a>, timstr, et
+ 
+         ;;
+         ;; Convert longitude to degrees. 
+         ;;
+         lon = <a href="cspice_dpr.html">cspice_dpr</a>() * <b>cspice_lspcn</b>( body, et, ABCORR )
+         print
+         print, &quot;Central body              = &quot; + body
+         print, &quot;Time                      = &quot; + timstr
+         print, &quot;Planetocentric L_s (deg.) = &quot; + string(lon)
+
+         ;;
+         ;; Continue the input loop?
+         ;;
+         print
+         read, ask, PROMPT = &quot;Continue? [y/n]                  &gt; &quot;
+
+         if ( <a href="cspice_eqstr.html">cspice_eqstr</a>( ask, 'n' )  ) then cont = SPICEFALSE
+
+      endwhile
+
+   IDL outputs:
+   
+      Enter name of central body       &gt; Earth
+      Enter calendar, JD, or DOY time  &gt; 21 march 2005
+
+      Central body              = Earth
+      Time                      = 21 march 2005
+      Planetocentric L_s (deg.) =       0.48153756
+
+      Continue? [y/n]                  &gt; y
+
+      Enter name of central body       &gt; Mars
+      Enter calendar, JD, or DOY time  &gt; 21 March 2006
+
+      Central body              = Mars
+      Time                      = 21 March 2006
+      Planetocentric L_s (deg.) =        27.927035
+
+      Continue? [y/n]                  &gt; n
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   planetocentric longitude of sun 
+   compute L_s 
+   compute Ls 
+   compute L_sub_s 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

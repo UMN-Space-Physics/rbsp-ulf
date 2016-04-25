@@ -1,0 +1,207 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_pdpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_pdpool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_PDPOOL inserts double precision data into the kernel pool.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/pdpool_c.html">pdpool_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      name    the scalar string name of the kernel pool variable to
+              associate with the values supplied in the array 'dvals'.
+              'name' is restricted to a length of 32 characters or less.
+
+      dvals    an array of double precision values to load into 
+               the kernel pool sub-system with the assigned 
+               variable name 'name'.
+   
+   the call:
+   
+      <b>cspice_pdpool</b>, name, dvals
+   
+   performs the operation.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Define array sizes and the kernel variable name.
+      ;;
+      PDPOOL_DIM  = 9
+      PDPOOL_VAR  = 'pdpool_array'
+      NUM_VARS    = 30
+   
+      ;;
+      ;; Create an array of doubles, 0 to (PIPOOL_DIM-1)
+      ;;
+      pdpool_arr  = dindgen( PDPOOL_DIM )   
+   
+      ;;
+      ;; Insert the data assigned to 'PDPOOL_VAR' into the kernel pool.
+      ;;
+      <b>cspice_pdpool</b>, PDPOOL_VAR, pdpool_arr
+   
+      ;;
+      ;; Retrieve the variable's associated values into the 
+      ;; array named 'dvals'. Retrieve all values, so set
+      ;; 'START' to zero.
+      ;;
+      START = 0
+      <a href="cspice_gdpool.html">cspice_gdpool</a>, PDPOOL_VAR, START, NUM_VARS, dvals, found
+   
+      ;;
+      ;; Check we found the expected variable, and ensure
+      ;; the expected values.
+      ;;
+      if ( found ) then begin
+   
+         print, 'Found array variable ' + PDPOOL_VAR + ' with entries:'
+   
+         for i = 0, (n_elements(dvals)-1) do begin
+            print, dvals[i]
+         endfor
+   
+      endif else begin
+         print, 'Variable ' + PDPOOL_VAR + ' not found in kernel pool.'
+      endelse
+   
+   IDL outputs:
+   
+      Found array variable pdpool_array with entries:
+             0.0000000
+             1.0000000
+             2.0000000
+             3.0000000
+             4.0000000
+             5.0000000
+             6.0000000
+             7.0000000
+             8.0000000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Kernel pool variable names are restricted to a length of 32 
+   characters or less.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 10-FEB-2010, EDW (JPL)
+
+      Added mention of the length restriction on the kernel pool variable
+      name 'name'.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   Set the value of a d.p. kernel pool variable 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

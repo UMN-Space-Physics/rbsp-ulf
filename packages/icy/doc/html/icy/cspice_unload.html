@@ -1,0 +1,205 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_unload</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_unload</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_UNLOAD unloads a SPICE kernel file (of any type)
+   from IDL.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/unload_c.html">unload_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      file   the scalar string name or array of string names of a 
+             SPICE kernel file to unload, this file or list of files  
+             loaded through with <a href="cspice_furnsh.html">cspice_furnsh</a>
+   
+   the call:
+
+      <b>cspice_unload</b>, file
+   
+   removes the file and all associated data from the kernel 
+   sub-system. If file is a meta-text kernel, the sub-system
+   unloads all files listed in the kernel.
+   
+   Note: a <b>cspice_unload</b> call deletes ALL kernel variables except
+   those loaded into the kernel pool via a <a href="cspice_furnsh.html">cspice_furnsh</a> kernel 
+   load  call, i.e. <b>cspice_unload</b> erases kernel variables placed 
+   in the pool by the pool functions: <a href="cspice_pipool.html">cspice_pipool</a>, <a href="cspice_pdpool.html">cspice_pdpool</a>, 
+   and <a href="cspice_pcpool.html">cspice_pcpool</a>.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; A leapseconds kernel.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, 'naif0008.tls'
+
+            ...
+      
+      <b>cspice_unload</b>, 'naif0008.tls'
+
+
+      ;;
+      ;; A planetary ephemeris SPK file de405s.bsp.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, 'de405s.bsp'
+
+            ...
+
+      <b>cspice_unload</b>, 'de405s.bsp'
+
+
+      ;;
+      ;; A meta kernel that lists leapseconds, SPK,
+      ;; and PCK kernels. The calls loads/unloads all files listed
+      ;; in the meta kernel.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+
+            ...
+
+      <b>cspice_unload</b>, '<a href= "standard.html">standard.tm</a>'
+
+
+      ;;
+      ;; Specify kernels by listing them in an array of strings.
+      ;;
+      kern = [ '/kernels/gen/lsk/naif0008.tls',        $
+               '/kernels/gen/spk/de405_2000-2050.bsp', $
+               '/kernels/gen/pck/pck00008.tpc'         ]
+               
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, kern
+
+            ...
+
+      <b>cspice_unload</b>, kern
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+   <a href="../req/pck.html">PCK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.1.0, 07-JUN-2007, EDW (JPL)
+
+      Example section showed a <a href="cspice_furnsh.html">cspice_furnsh</a> call instead of the
+      <b>cspice_unload</b>.
+
+      Added capability to process vector 'file' input.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   Unload a SPICE kernel 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,306 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ckgp</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ckgp</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CKGP returns pointing (attitude) for a specified 
+   spacecraft clock time.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ckgp_c.html">ckgp_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      inst     the scalar integer NAIF ID for the instrument, spacecraft, 
+               or other structure for which pointing is requested, the 
+               frame fixed to this object is called the&quot;instrument frame&quot;
+               or &quot;instrument-fixed&quot; frame
+   
+      sclkdp   the double precision scalar encoded spacecraft clock time
+               for which pointing is being requested.  
+   
+      tol      the scalar double precision time tolerance in ticks (+/-),
+               the units of encoded spacecraft clock time, about 'sclkdp'
+   
+                  The C-matrix returned by <b>cspice_ckgp</b> is the one whose
+                  time tag is closest to 'sclkdp' and within 'tol' units
+                  of 'sclkdp'.
+   
+               In general, because using a non-zero tolerance affects 
+               selection of the segment from which the data is obtained, 
+               users are strongly discouraged from using a non-zero 
+               tolerance when reading CKs with continuous data. Using 
+               a non-zero tolerance should be reserved exclusively to 
+               reading CKs with discrete data because in practice 
+               obtaining data from such CKs using a zero tolerance is 
+               often not possible due to time round off. 
+
+      ref      the scalar string name of the desired reference 
+               frame for the returned pointing
+
+   the call:
+   
+      <b>cspice_ckgp</b>, inst, sclkdp, tol, ref, cmat, clkout, found
+   
+   returns:
+   
+      cmat     a double precision, 3x3 rotation matrix that transforms 
+               the components of a vector expressed in the frame 
+               specified by 'ref' to components expressed in the frame 
+               tied to the instrument, spacecraft, or other structure 
+               at time 'clkout'
+   
+      clkout   the scalar double precision encoded spacecraft clock 
+               time associated with the returned C-matrix. (this value 
+               may differ from the requested time, but never by more 
+               than the input tolerance 'tol')
+   
+      found    a scalar boolean with value TRUE when requested 
+               pointing is found
+   
+   If 'vec_ref' is a double-precision 3-vector defined in reference
+   frame 'ref', rotate 'vec_ref' into the instrument frame via:
+   
+      vec_inst = cmat ## vec_ref              ;; column vector
+         or
+      vec_inst = transpose(cmat) # vec_ref    ;; row vector
+         or
+      <a href="cspice_mxv.html">cspice_mxv</a>, cmat, vec_ref, vec_inst     ;; row vector
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+   Retrieve pointing data from a Voyager 2 CK kernel.
+   
+      ;;
+      ;; Constants for this program:
+      ;;
+      ;; -- The code for the Voyager 2 spacecraft clock is -32
+      ;;
+      ;; -- The code for the narrow angle camera on the Voyager 2
+      ;;    spacecraft is -32001.
+      ;;
+      ;; --  Spacecraft clock times for successive Voyager images always
+      ;;     differ by more than 0:0:400.  This is an acceptable
+      ;;     tolerance, and must be converted to &quot;ticks&quot; (units of
+      ;;     encoded SCLK) for input to ckgp_c .
+      ;;     
+      ;; -- The reference frame we want is FK4.
+      ;;
+      ;; -- The narrow angle camera boresight has direction 
+      ;;    ( 0, 0, 1 ) in camera (instrument) frame.
+      ;;
+      SC     =  -32
+      INST   =  -32001
+      REF    = 'FK4'
+      TOLVGR = '0:0:400'
+      BORE   = [ 0.d, 0.d, 1.d]
+      NPICS  = 2
+      CK     = '/kernels/voyager2/ck/vg2_jup_qmw_na.bc'
+      SCLK   = '/kernels/voyager2/sclk/vg200004.tsc' 
+   
+      SCLKCH =  [ '2/18381:54:768' , '4/08970:58:768' ]
+   
+      ;;
+      ;; Load the CK pointing file. 
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, CK
+      
+      ;;
+      ;; Need to load a Voyager 2 SCLK kernel to convert from 
+      ;; clock string to ticks.  Although not required for
+      ;; the Voyager spacecraft clocks, most modern spacecraft
+      ;; clocks require a leapseconds kernel to be loaded in
+      ;; addition to an SCLK kernel.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, SCLK
+      
+      ;;
+      ;;
+      ;; Convert tolerance from VGR formatted character string 
+      ;; SCLK to ticks, which are units of encoded SCLK. 
+      ;;
+      <a href="cspice_sctiks.html">cspice_sctiks</a>, SC, TOLVGR, toltik
+   
+      for i = 0, (NPICS-1) do begin
+   
+         ;; 
+         ;; <b>cspice_ckgp</b> requires encoded spacecraft clock time. 
+         ;;
+         <a href="cspice_scencd.html">cspice_scencd</a>, SC, sclkch[i], sclkdp  
+   
+         ;;
+         ;; Retrieve the 'REF' reference frame to 'INST' reference frame
+         ;; transformation matrix at time sclkdp with a tolerance 
+         ;; 'toltik'.
+         ;;
+         ;;   [INST] = [cmat][ref]
+         ;;      
+         <b>cspice_ckgp</b>, INST, sclkdp, toltik, REF, cmat, clkout, found
+   
+         ;;
+         ;; Did we find pointing information within (+/-) 'toltik' of the
+         ;; requested time.
+         ;;
+         if ( found ) then begin
+         
+            ;;
+            ;; 
+            ;; Transform the 'BORE' vector from 'INST' reference frame to
+            ;; 'REF' frame.
+            ;;                T
+            ;;  [ref] = [cmat] [INST]
+            ;;
+            ;; The Icy code to perform the same operation.
+            ;;
+            ;;    <a href="cspice_mtxv.html">cspice_mtxv</a>, cmat, BORE, bore_ref
+            ;;
+            bore_ref = cmat # BORE
+            
+            print, 'At SCLK time        : ', sclkch[i]
+            print, 'The boresight vector: ', bore_ref
+            
+         endif else begin
+         
+            print, 'Pointing not found for SCLK time: ', sclkch[i]
+            
+         endelse
+         
+      endfor
+   
+   IDL outputs (for SCLK = 2/18381:54:768):
+   
+      At SCLK time        : 2/18381:54:768
+      The boresight vector:  -0.089388922  0.94794277  0.30563724
+   
+   IDL outputs (for SCLK = 4/08970:58:768):
+   
+      Pointing not found for SCLK time: 4/08970:58:768
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ck.html">CK.REQ</a>
+   <a href="../req/sclk.html">SCLK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.2, 03-JUN-2010, BVS (JPL)
+
+       Edits to header. Added warning regarding non-zero tolerance.
+
+   -Icy Version 1.0.1, 09-JUN-2006, EDW (JPL)
+
+       Edits to header. Improved argument descriptions.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   get ck pointing 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

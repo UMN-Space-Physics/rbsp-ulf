@@ -1,0 +1,196 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_etcal</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_etcal</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_ETCAL converts from an ephemeris epoch measured in 
+   seconds past the epoch of J2000 to a calendar string 
+   format using a formal calendar free of leapseconds.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/etcal_c.html">etcal_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+     et    the double precision scalar or N-vector of ephemeris 
+           time expressed as ephemeris seconds past J2000
+
+   the call:
+   
+      <b>cspice_etcal</b>, et, cal
+   
+   returns:
+   
+      cal   the scalar string or N-vector of strings describing 
+            the calendar form of 'et' based on the Gregorian Calendar
+            covering all dates infinitely forward and backward in 
+            time, respecting leapyears, but not leapseconds
+   
+   Use of <b>cspice_etcal</b> does not require a loaded leapseconds kernel.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   ;;
+   ;; An arbitrary array of ephemeris time values,
+   ;; sequentially representing the J2000 epoch (TDB) and the
+   ;; subsequent 19 seconds.
+   ;;
+   IDL&gt; et = dblarr(20)
+
+   ;;
+   ;; Convert the ephemeris time to a calendar representation of
+   ;; the time.
+   ;;
+   IDL&gt; <b>cspice_etcal</b>, et, cal
+
+   ;;
+   ;; Output the 'cal' time strings. We ought to observe graduations 
+   ;; of one second.
+   ;;
+   IDL&gt; for i=0,19 do print, cal[i]
+   2000 JAN 01 12:00:00.000
+   2000 JAN 01 12:00:01.000
+   2000 JAN 01 12:00:02.000
+   2000 JAN 01 12:00:03.000
+   2000 JAN 01 12:00:04.000
+   2000 JAN 01 12:00:05.000
+   2000 JAN 01 12:00:06.000
+   2000 JAN 01 12:00:07.000
+   2000 JAN 01 12:00:08.000
+   2000 JAN 01 12:00:09.000
+   2000 JAN 01 12:00:10.000
+   2000 JAN 01 12:00:11.000
+   2000 JAN 01 12:00:12.000
+   2000 JAN 01 12:00:13.000
+   2000 JAN 01 12:00:14.000
+   2000 JAN 01 12:00:15.000
+   2000 JAN 01 12:00:16.000
+   2000 JAN 01 12:00:17.000
+   2000 JAN 01 12:00:18.000
+   2000 JAN 01 12:00:19.000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.1.0, 22-AUG-2007, EDW (JPL)
+
+      Added example code into the Examples section.
+
+      Added capability to process vector 'et' input
+      returning a vector 'cal' on output.
+       
+   -Icy Version 1.0.1, 09-DEC-2005, EDW (JPL)
+
+      Added Examples section.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Convert ephemeris time to a formal calendar date
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:30 2014</pre>
+
+</body>
+</html>
+

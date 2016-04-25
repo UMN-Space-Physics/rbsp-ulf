@@ -1,0 +1,356 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ckw02</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ckw02</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CKW02 adds a type 2 segment to a C-kernel.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ckw02_c.html">ckw02_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      handle   scalar integer value of the file handle for 
+               an open CK file returned from <a href="cspice_ckopn.html">cspice_ckopn</a>
+               
+      begtim   double precision scalar encoded SCLK segment
+               begin time value
+               
+      endtim   double precision scalar encoded SCLK segment 
+               end time value
+               
+      inst     the scalar integer NAIF instrument ID code
+      
+      ref      scalar string identifying the reference frame for the
+               segment
+               
+      segid    a scalar string to identify the segment
+      
+      start    a double precision N-vector containing
+               encoded SCLK interval start times
+               
+      stop     a double precision N-vector containing
+               the encoded SCLK interval stop times
+               
+      quats    a 4xN double precision matrix of quaternions
+               representing instrument pointing
+               
+      avvs     a 3xN double precision matrix of angular 
+               velocity vectors
+    
+      rates    a double precision N-vector containing the
+               number of seconds per tick for each interval
+   
+   the call:
+   
+      <b>cspice_ckw02</b>, handle, $ 
+                    begtim, $ 
+                    endtim, $ 
+                    inst,   $
+                    ref',   $
+                    segid,  $
+                    start,  $
+                    stop,   $
+                    quats,  $
+                    avvs,   $
+                    rates
+   
+   writes the data for a type 2 segment to the open CK file 
+   indicated by 'handle'.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Create a CK type 2 segment; fill with data for a simple time 
+      ;; dependent rotation and angular velocity.
+      ;;
+   
+      ;;
+      ;; Define needed parameters
+      ;;
+      CK2        = &quot;type2.bc&quot;
+      INST       = -77702
+      MAXREC     = 201
+      SECPERTICK = 0.001d
+      SPICETRUE  = 1L
+      IFNAME     = &quot;Test CK type 2 segment created by <b>cspice_ckw02</b>&quot;
+      SEGID      = &quot;Test type 2 CK segment&quot;
+   
+      ;;
+      ;; 'NCOMCH' is the number of characters to reserve for the kernel's
+      ;; comment area. This example doesn't write comments, so set to 
+      ;; zero.
+      ;;
+      NCOMCH     = 0
+      
+      ;;
+      ;; The base reference from for the rotation data.
+      ;;
+      REF        = &quot;J2000&quot;
+   
+      ;;
+      ;; Time spacing in encoded ticks.
+      ;;
+      SPACING_TICKS = 10.d
+      
+      ;;
+      ;; Time spacing in seconds
+      ;;
+      SPACING_SECS = SPACING_TICKS * SECPERTICK
+      
+      ;;
+      ;; Declare an angular rate in radians per sec.
+      ;;
+      RATE = 1.d-2
+   
+      ;;
+      ;; Open a new kernel.
+      ;;
+      <a href="cspice_ckopn.html">cspice_ckopn</a>, CK2, IFNAME, NCOMCH, handle
+   
+      ;;
+      ;; Create a 4xMAXREC matrix for quaternions, and a 
+      ;; 3xMAXREC for expavs.
+      ;;
+      quats = dblarr( 4, MAXREC )
+      av    = dblarr( 3, MAXREC )
+   
+      ;;
+      ;; Create a 3x3 double precision identity matrix.
+      ;; The Icy call:
+      ;;
+      ;;   <a href="cspice_ident.html">cspice_ident</a>, work_mat
+      ;;
+      ;; performs the same function.
+      ;;
+      work_mat = identity( 3 )
+   
+      ;;
+      ;; Convert the matrix to quaternions.
+      ;;
+      <a href="cspice_m2q.html">cspice_m2q</a>, work_mat, work_quat
+   
+      ;;
+      ;; Copy the work quaternions to the first row of
+      ;; 'quats'.
+      ;;
+      quats[0:3] = work_quat
+   
+      ;;
+      ;; Create an angular velocity vector. Copy to the first row 
+      ;; of 'av'. This vector is in the 'REF' reference frame.
+      ;;
+      av [0:2] = [0.d, 0.d, RATE ]
+   
+      ;;
+      ;; Create arrays of interval start and stop times.  The interval
+      ;; associated with each quaternion will start at the epoch of
+      ;; the quaternion and will extend 0.8 * SPACING_TICKS forward in time,
+      ;; leaving small gaps between the intervals.
+      ;;
+      starts = dblarr( MAXREC )
+      stops  = dblarr( MAXREC )
+   
+      ;;
+      ;; Fill in the clock rates array with a constant 'SECPERTICK' for
+      ;; all values.
+      ;;
+      rates  = dblarr( MAXREC ) + SECPERTICK
+   
+      ;;
+      ;; Create an array of encoded tick values in increments of 
+      ;; 'SPACING_TICKS' with an initial value of 1000 ticks...
+      ;;
+      sclkdp = dindgen(MAXREC) * SPACING_TICKS
+      sclkdp = sclkdp + 1000.d
+   
+      starts = sclkdp
+      stops  = sclkdp + ( 0.8d * SPACING_TICKS )
+   
+      
+      ;;
+      ;; Fill the rest of the av and quats matrices
+      ;; with simple data.
+      ;;
+      for i = 1, (MAXREC-1) do begin
+   
+         ;;
+         ;; Create the transformation matrix for a rotation of 'theta' 
+         ;; about the Z axis. Calculate 'theta' from the constant
+         ;; angular rate 'RATE' at increments of 'SPACING_SECS'.
+         ;;
+         theta = ( double(i) * RATE * SPACING_SECS)
+         <a href="cspice_rotmat.html">cspice_rotmat</a>, work_mat, theta, 3, work_mat
+   
+         ;;
+         ;; Convert the 'work_mat' matrix to SPICE type quaternions.
+         ;;
+         <a href="cspice_m2q.html">cspice_m2q</a>, work_mat, work_quat
+   
+         ;;
+         ;; Store the quaternions in the 'quat' matrix.
+         ;; Store angular velocity in 'av'. Both variables
+         ;; represent arrays, but in IDL you can fill them
+         ;; as vectors.
+         ;; 
+         ;;
+         quats[ (i*4):((i*4)+3) ] = work_quat
+         av   [ (i*3):((i*3)+2) ] = [ 0.d, 0.d, RATE ]
+   
+      endfor
+   
+      ;;
+      ;; Set the segment boundaries equal to the first and last
+      ;; time in the segment.
+      ;;
+      begtim = starts[      0]
+      endtim = stops [MAXREC-1]
+   
+      ;;
+      ;; All information ready to write. Write to a CK type 2 segment
+      ;; to the file indicated by 'handle'.
+      ;;
+      <b>cspice_ckw02</b>, handle, $
+                    begtim, $
+                    endtim, $
+                    INST,   $
+                    REF,    $
+                    SEGID , $
+                    starts, $
+                    stops,  $
+                    quats,  $
+                    av,     $
+                    rates
+   
+      ;;
+      ;; SAFELY close the file.
+      ;;
+      <a href="cspice_ckcls.html">cspice_ckcls</a>, handle
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ck.html">CK.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a> 
+   <a href="../req/sclk.html">SCLK.REQ</a> 
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 07-JAN-2008, EDW (JPL)
+
+      Removed mention of 'nrec' from the I/O section. mention of
+      this argument constitutes a typo as the Icy interface
+      does not need to explicitly pass this value.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   write ck type_2 pointing data segment 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

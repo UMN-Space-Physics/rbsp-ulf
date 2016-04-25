@@ -1,0 +1,201 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_utc2et</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_utc2et</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_UTC2ET converts an input time from Calendar or Julian 
+   Date UTC format to ephemeris seconds past J2000.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/utc2et_c.html">utc2et_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      utcstr   a scalar string containing a UTC time-date expression
+               in either Calendar or Julian Date format .
+               
+               'utcstr' should not exceed 80 characters in length.
+ 
+   the call:
+   
+      <b>cspice_utc2et</b>, utcstr, et
+   
+   returns:
+   
+      et   the scalar double precision value equivalent of 'utcstr', 
+           expressed in ephemeris seconds past J2000. If an error occurs, 
+           or if the input string is ambiguous, et is not changed.
+   
+      Note: NAIF recommends calls to <a href="cspice_str2et.html">cspice_str2et</a> instead of <b>cspice_utc2et</b>.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Load a leapseconds kernel.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+   
+      ;;
+      ;; Set the time string.
+      ;;
+      utcstr = 'December 1, 2004 15:04:11'
+   
+      ;;
+      ;; Make the call.
+      ;;
+      <b>cspice_utc2et</b>, utcstr, et
+      print, et
+
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   IDL outputs:
+   
+         1.5518552e+08
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine handles that task of converting strings
+   representing epochs in the UTC system to ephemeris seconds
+   (TDB) past the epoch of the J2000 frame.
+
+   Although this routine is intended primarily for the
+   conversion of epochs during the &quot;space age&quot; it may also
+   be used to convert much earlier epochs.  However, before
+   using this routine to convert epochs prior to 1972
+   you must be sure that the assumptions made by in the
+   implementation are consistent with the accuracy of
+   the input calendar string.
+
+   This routine does not attempt to account for variations in the
+   length of the second that were used prior to Jan 1, 1972.
+   Instead each &quot;UTC&quot; day prior to Jan 1, 1972 is assumed
+   to have exactly 86400 TDT seconds.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.2, 04-NOV-2008, EDW (JPL)
+
+      Expanded and improved header
+
+   -Icy Version 1.0.1, 27-MAR-2006, EDW (JPL)
+
+      Corrected a typo in the Examples section, 'time_str'
+      in the <b>cspice_utc2et</b> replaced with 'utcstr'.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   utc to ephemeris time
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

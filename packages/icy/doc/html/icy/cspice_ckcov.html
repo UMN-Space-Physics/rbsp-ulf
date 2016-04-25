@@ -1,0 +1,399 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ckcov</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ckcov</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CKCOV finds the coverage window for a specified object in a 
+   specified CK file.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ckcov_c.html">ckcov_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+
+      ck       the scalar string name of an C-kernel. 
+
+      idcode   the scalar integer CK ID code of an object, normally a
+               spacecraft structure or instrument, for which
+               pointing data are expected to exist in the specified
+               CK file.
+ 
+      needav   a scalar boolean variable indicating whether only
+               segments having angular velocity are to be considered
+               when determining coverage. When 'needav' has value true,
+               segments without angular velocity don't
+               contribute to the coverage window; when 'needav' has 
+               has value false, all segments for 'idcode' may contribute
+               to the coverage window.
+ 
+ 
+      level    the scalar string defining the level (granularity) at
+               which the coverage is examined. Allowed values and  
+               corresponding meanings are: 
+ 
+                  &quot;SEGMENT&quot;   The output coverage window contains
+                              intervals defined by the start and
+                              stop times of segments for the object
+                              designated by 'idcode'.
+ 
+                  &quot;INTERVAL&quot;  The output coverage window contains
+                              interpolation intervals of segments
+                              for the object designated by
+                              'idcode'. For type 1 segments, which
+                              don't have interpolation intervals,
+                              each epoch associated with a pointing
+                              instance is treated as a singleton
+                              interval; these intervals are added
+                              to the coverage window.
+ 
+                              All interpolation intervals are
+                              considered to lie within the segment
+                              bounds for the purpose of this
+                              summary:  if an interpolation
+                              interval extends beyond the segment
+                              coverage interval, only its
+                              intersection with the segment
+                              coverage interval is considered to
+                              contribute to the total coverage.
+ 
+      tol      the scalar double precision tolerance value expressed 
+               in ticks of the spacecraft clock associated with 'idcode'.
+               Before each interval is inserted into the coverage window, 
+               the interval is intersected with the segment coverage
+               interval, then if the intersection is non-empty, it
+               is expanded by 'tol': the left endpoint of the
+               intersection interval is reduced by 'tol' and the
+               right endpoint is increased by 'tol'. Adjusted
+               interval endpoints, when expressed as encoded SCLK,
+               never are less than zero ticks.  Any intervals that
+               overlap as a result of the expansion are merged.
+ 
+               The coverage window returned when tol &gt; 0 indicates
+               the coverage provided by the file to the CK readers
+               <a href="cspice_ckgpav.html">cspice_ckgpav</a> and <a href="cspice_ckgp.html">cspice_ckgp</a> when that value of 'tol'
+               is passed to them as an input.
+               
+      timsys   the scalar string indicating the time system used in the
+               output coverage window. 'timsys' may have the
+               values:
+  
+                     &quot;SCLK&quot;   Elements of 'cover' are expressed in 
+                              encoded SCLK (&quot;ticks&quot;), where the 
+                              clock is associated with the object 
+                              designated by 'idcode'. 
+ 
+                      &quot;TDB&quot;   Elements of 'cover' are expressed as 
+                              seconds past J2000 TDB. 
+
+      cover    an initialized Icy window data structure.
+               'cover' optionally may contain coverage data on
+               input; on output, the data already present in 'cover'
+               will be combined with coverage found for the object
+               designated by 'idcode' in the file 'ck'.
+
+   the call:
+
+      <b>cspice_ckcov</b>, ck, idcode, needav, level, tol, timsys, cover
+
+   returns:
+
+      cover    an Icy window data structure which represents
+               the merged coverage for 'idcode'. When the coverage
+               level is &quot;INTERVAL&quot;, this is the set of time
+               intervals for which data for 'idcode' are present in
+               the file 'ck', merged with the set of time intervals
+               present in 'cover' on input. The merged coverage is
+               represented as the union of one or more disjoint time
+               intervals. The window 'cover' contains the pairs of
+               endpoints of these intervals.
+
+               When the coverage level is &quot;SEGMENT&quot;, 'cover' is
+               computed in a manner similar to that described above,
+               but the coverage intervals used in the computation
+               are those of segments rather than interpolation
+               intervals within segments.  
+ 
+               When 'tol' is &gt; 0, the intervals comprising the
+               coverage window for 'idcode' are expanded by 'tol'
+               and any intervals overlapping as a result are merged.
+               The resulting window is returned in 'cover'. The
+               expanded window in no case extends beyond the segment
+               bounds in either direction by more than 'tol'.
+ 
+               The interval endpoints contained in 'cover' are
+               encoded spacecraft clock times if 'timsys' is &quot;SCLK&quot;;
+               otherwise the times are converted from encoded
+               spacecraft clock to seconds past J2000 TDB.
+
+               The user must create 'cover' using <a href="cspice_celld.html">cspice_celld</a>. (Note:
+               a set is a type of cell).
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; From a given CK file, retrieve the list of objects listed
+      ;; in the file then retrieve the time coverage for each object.
+      ;;
+      ;; Local parameters...
+      ;;
+      SPICEFALSE = 0B
+      MAXIV      = 1000
+      WINSIZ     = 2 * MAXIV
+      TIMLEN     = 51
+      MAXOBJ     = 1000
+      
+      ;;
+      ;; ...and kernels from the Cassini mission.
+      ;;
+      CK   = '/kernels/cassini/ck/990817_990818ra.bc'
+      SCLK = '/kernels/cassini/sclk/cas00085.tsc'
+
+      ;;
+      ;; Local variables
+      ;;
+      cover = <a href="cspice_celld.html">cspice_celld</a>( WINSIZ )
+      ids   = <a href="cspice_celli.html">cspice_celli</a>( MAXOBJ )
+
+      ;;
+      ;; Load a standard kernel set.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, SCLK
+
+      ;;
+      ;; Find the set of objects in the CK file. 
+      ;;
+      <a href="cspice_ckobj.html">cspice_ckobj</a>, CK, ids
+
+      ;;
+      ;; We want to display the coverage for each object. Loop over
+      ;; the contents of the ID code set, find the coverage for
+      ;; each item in the set, and display the coverage.
+      ;;
+      for i=0, <a href="cspice_card.html">cspice_card</a>( ids ) - 1 do begin
+      
+         ;;
+         ;;  Find the coverage window for the current object, 'i'.
+         ;;  Empty the coverage window each time 
+         ;;  so we don't include data for the previous object.
+         ;;
+         obj = ids.base[ ids.data + i ]
+         <a href="cspice_scard.html">cspice_scard</a>, 0L, cover
+         <b>cspice_ckcov</b>, CK, obj,  SPICEFALSE, 'INTERVAL', 0.D, 'TDB', cover 
+
+         ;;
+         ;; Get the number of intervals in the coverage window.
+         ;;
+         niv = <a href="cspice_wncard.html">cspice_wncard</a>( cover )
+
+         ;;
+         ;; Display a simple banner.
+         ;;
+         print, '========================================'
+         print, 'Coverage for object:', obj
+
+         ;;
+         ;; Convert the coverage interval start and stop times to TDB
+         ;; calendar strings.
+         ;;
+         for j=0, niv-1 do begin
+         
+            ;;
+            ;; Get the endpoints of the jth interval.
+            ;;
+            <a href="cspice_wnfetd.html">cspice_wnfetd</a>, cover, j, b, e
+
+            ;;
+            ;; Convert the endpoints to TDB calendar
+            ;; format time strings and display them.
+            ;; Pass the endpoints in an array, [b,e],
+            ;; so <a href="cspice_timout.html">cspice_timout</a> returns an array of time 
+            ;; strings.
+            ;;
+            <a href="cspice_timout.html">cspice_timout</a>, [b,e], $ 
+                           'YYYY MON DD HR:MN:SC.### (TDB) ::TDB',  $
+                           TIMLEN ,$
+                           timstr 
+
+            print, 'Interval: ', j
+            print, 'Start   : ', timstr[0]
+            print, 'Stop    : ', timstr[1]
+            print
+
+         
+        endfor
+
+    endfor
+      
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   IDL outputs:
+   
+      ========================================
+      Coverage for object:      -82000
+      Interval:        0
+      Start   : 1999 AUG 17 17:31:05.601 (TDB)
+      Stop    : 1999 AUG 17 23:06:46.222 (TDB)
+
+      Interval:        1
+      Start   : 1999 AUG 17 23:06:49.472 (TDB)
+      Stop    : 1999 AUG 18 06:07:10.057 (TDB)
+
+      Interval:        2
+      Start   : 1999 AUG 18 06:07:13.307 (TDB)
+      Stop    : 1999 AUG 18 11:53:21.924 (TDB)
+
+      Interval:        3
+      Start   : 1999 AUG 18 11:53:25.174 (TDB)
+      Stop    : 1999 AUG 18 13:31:05.135 (TDB)
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine provides an API via which applications can determine 
+   the coverage a specified CK file provides for a specified 
+   object. 
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ck.html">CK.REQ</a>
+   <a href="../req/cells.html">CELLS.REQ</a> 
+   <a href="../req/daf.html">DAF.REQ</a> 
+   <a href="../req/time.html">TIME.REQ</a> 
+   <a href="../req/windows.html">WINDOWS.REQ</a> 
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.4, 04-APR-2012, EDW (JPL)
+
+      Corrected typo in argument name used in the call example.
+      
+      Explicitly described ID variables as &quot;CK IDs.&quot;
+
+   -Icy Version 1.0.3, 06-FEB-2008, EDW (JPL)
+
+      Corrected typo in abstract and call example.
+
+   -Icy Version 1.0.2, 30-NOV-2007, NJB, EDW (JPL)
+
+        Corrected bug in the Examples section program:
+        program now empties the coverage window prior to collecting
+        data for the current object. Updated example to
+        use <a href="cspice_wncard.html">cspice_wncard</a> rather than <a href="cspice_card.html">cspice_card</a>.
+
+   -Icy Version 1.0.1, 27-FEB-2007, EDW (JPL)
+
+      Replaced <a href="cspice_unload.html">cspice_unload</a> call in example section with
+      <a href="cspice_kclear.html">cspice_kclear</a>.
+
+   -Icy Version 1.0.0, 30-DEC-2004, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   get coverage window for ck object 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

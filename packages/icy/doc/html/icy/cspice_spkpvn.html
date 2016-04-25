@@ -1,0 +1,413 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkpvn</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkpvn</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKPVN returns, for a specified SPK segment and time, the state
+   (position and velocity) of the segment's target body relative to its
+   center of motion.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/spkpvn_c.html">spkpvn_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle,
+      descr     respectively, the scalar integer file handle assigned
+                to a SPK file and the double precision 5-array descriptor
+                for a segment within the file. Together they determine the
+                ephemeris data from which the state of the body is to be
+                computed.
+
+      et        the scalar double precision epoch (ephemeris time) at which
+                the state is to be computed. 'et' is expressed as seconds
+                past J2000 TDB.
+
+   the call:
+
+      <b>cspice_spkpvn</b>, handle, descr, et, ref, state, center
+
+   returns:
+
+      ref      the scalar integer ID code of the reference frame relative
+               to which the state returned by the routine is expressed.
+
+      state    a double precision 6-array containing the position and
+               velocity, at epoch 'et', for the body covered by the specified
+               segment. 'state' has six elements:  the first three contain the
+               body's position; the last three contain the body's velocity.
+               These vectors are expressed into the specified  reference
+               frame. Units are always km and km/sec.
+
+      center   the scalar integer SPK ID code of the center of motion for
+               the state.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   In the following code fragment, an SPK file is searched for
+   a segment containing ephemeris data for the Jupiter system
+   barycenter at a particular epoch. Using this segment,
+   states of the Jupiter system barycenter relative to the
+   solar system barycenter are evaluated at a sequence of times.
+
+   This method of state computation minimizes the number of
+   segment searches required to obtain requested data, but
+   it bypasses the SPK subsystem's state chaining mechanism.
+
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+         KPL/MK
+
+         File name: <a href= "standard.html">standard.tm</a>
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00010.tpc                  Planet orientation and
+                                          radii
+            naif0010.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00010.tpc',
+                                'naif0010.tls'  )
+
+         \begintext
+
+   Example:
+
+      ;;
+      ;; Local constants
+      ;;
+      META   =  '<a href= "standard.html">standard.tm</a>'
+      ND     =  2
+      NI     =  6
+      TIMFMT =  'YYYY MON DD HR:MN:SC.######::TDB TDB'
+      TIMLEN =  41
+
+
+      ;;
+      ;; Load meta-kernel.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, META
+
+      ;;
+      ;; Convert starting time to seconds past J2000 TDB.
+      ;;
+      timstr = '2012 APR 27 00:00:00.000 TDB'
+
+      <a href="cspice_str2et.html">cspice_str2et</a>, timstr, et0
+
+      ;;
+      ;; Find a loaded segment for the Jupiter barycenter
+      ;; that covers 'et0'.
+      ;;
+      body = 5;
+
+      <a href="cspice_spksfs.html">cspice_spksfs</a>, body,   et0,               $
+                     handle, descr, segid,  found
+
+      if ( ~found ) then begin
+         <a href="cspice_kclear.html">cspice_kclear</a>
+         print, 'Body : ', body
+         print, 'Time : ', timstr
+         print, 'No SPK segment found for the body at time.'
+         return
+      endif
+
+      ;;
+      ;; Unpack the descriptor of the current segment.
+      ;;
+      <a href="cspice_dafus.html">cspice_dafus</a>, descr, ND, NI, dc, ic
+
+      <a href="cspice_frmnam.html">cspice_frmnam</a>, ic[2], frname
+
+      print, format='(A, I10)',   'Body        = ',ic[0]
+      print, format='(A, I10)',   'Center      = ',ic[1]
+      print, format='(A, A)',     'Frame       = ',frname
+      print, format='(A, I10)',   'Data type   = ', ic[3]
+      print, format='(A, e16.8)', 'Start ET    = ',dc[0]
+      print, format='(A, e16.8)', 'Stop ET     = ',dc[1]
+      print, format='(A, A)',     'Segment ID = ',segid
+      print
+
+
+      ;;
+      ;; Evaluate states at 10-second steps, starting at 'et0'
+      ;; and continuing for 20 seconds.
+      ;;
+
+      for i=0, 2 do begin
+
+         et = et0 + ( 10.D * i )
+
+         ;;
+         ;; Convert 'et' to a string for display.
+         ;;
+         <a href="cspice_timout.html">cspice_timout</a>, et, TIMFMT, TIMLEN, outstr
+
+         ;;
+         ;; Attempt to compute a state only if the segment's
+         ;; coverage interval contains 'et'.
+         ;;
+         if ( et le dc[1] ) then begin
+
+            ;;
+            ;; This segment has data at 'et'. Evaluate the
+            ;; state of the target relative to its center
+            ;; of motion.
+            ;;
+            <b>cspice_spkpvn</b>, handle, descr, et, ref_id, state, center
+
+            ;;
+            ;;  Display the time and state.
+            ;;
+            print, outstr
+            print, format='(A, e24.17)', 'Position X (km):   ',state[0]
+            print, format='(A, e24.17)', 'Position Y (km):   ',state[1]
+            print, format='(A, e24.17)', 'Position Z (km):   ',state[2]
+            print, format='(A, e24.17)', 'Velocity X (km/s): ',state[3]
+            print, format='(A, e24.17)', 'Velocity Y (km/s): ',state[4]
+            print, format='(A, e24.17)', 'Velocity Z (km/s): ',state[5]
+            print
+
+         endif else begin
+
+            print, 'Body : ', body
+            print, 'Time : ', outstr
+            print, 'No data for body found at time'
+
+            <a href="cspice_kclear.html">cspice_kclear</a>
+            return
+
+         endelse
+
+      endfor
+
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   IDL outputs:
+
+      Body        =          5
+      Center      =          0
+      Frame       = J2000
+      Data type   =          2
+      Start ET    =  -3.16919520e+09
+      Stop ET     =   1.69685280e+09
+      Segment ID = DE-0421LE-0421
+
+      2012 APR 27 00:00:00.000000 TDB
+      Position X (km):    4.64528993982164860e+08
+      Position Y (km):    5.41513126156852007e+08
+      Position Z (km):    2.20785135624629408e+08
+      Velocity X (km/s): -1.03868564830765493e+01
+      Velocity Y (km/s):  7.95324700713742416e+00
+      Velocity Z (km/s):  3.66185835431306517e+00
+
+      2012 APR 27 00:00:10.000000 TDB
+      Position X (km):    4.64528890113592625e+08
+      Position Y (km):    5.41513205689313412e+08
+      Position Z (km):    2.20785172243209451e+08
+      Velocity X (km/s): -1.03868579616041927e+01
+      Velocity Y (km/s):  7.95324528430304944e+00
+      Velocity Z (km/s):  3.66185765185608103e+00
+
+      2012 APR 27 00:00:20.000000 TDB
+      Position X (km):    4.64528786245005608e+08
+      Position Y (km):    5.41513285221757650e+08
+      Position Z (km):    2.20785208861782461e+08
+      Velocity X (km/s): -1.03868594401314791e+01
+      Velocity Y (km/s):  7.95324356146845002e+00
+      Velocity Z (km/s):  3.66185694939899253e+00
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   For most user applications, the high-level SPK APIs
+
+      <a href="cspice_spkezr.html">cspice_spkezr</a>
+      <a href="cspice_spkez.html">cspice_spkez</a>
+      <a href="cspice_spkpos.html">cspice_spkpos</a>
+      <a href="cspice_spkezp.html">cspice_spkezp</a>
+
+   should be used instead of this routine.
+
+   The f2c'd routine spkpvn_ called by <b>cspice_spkpvn</b> is the most basic of
+   the SPK readers, the reader upon which spkezr_c and spkgeo_c, etc.
+   are built. <b>cspice_spkpvn</b> normally should not be called directly except in
+   cases where some optimization is required. (That is, where the
+   calling program has prior knowledge of the center-barycenter shifts
+   to be performed, or a non-standard method of determining the files
+   and segments to be used when computing states.)
+
+   This is the only reader that makes distinctions between the
+   various segment types in the SPK format. The complete list
+   of types currently supported is shown below.
+
+      Type   Description
+      ----   -------------------------
+         1   Modified Difference Array
+         2   Chebyshev (P)
+         3   Chebyshev (P,V)
+         5   Two body propagation between discrete states
+         8   Lagrange interpolation, equally spaced discrete states
+         9   Lagrange interpolation, unequally spaced discrete states
+        12   Hermite interpolation, equally spaced discrete states
+        13   Hermite interpolation, unequally spaced discrete states
+        14   Chebyshev Unequally spaced
+        15   Precessing Ellipse
+        17   Equinoctial Elements
+        18   ESOC/DDID Hermite/Lagrange Interpolation
+        19   ESOC/DDID Piecewise Interpolation
+        21   Extended Modified Difference Array
+
+      The maximum record lengths for each data type currently
+      supported are as follows:
+
+                Data type       Maximum record length
+                ---------       ---------------------
+                    1                    71
+                    2                    87
+                    3                   171
+                    5                    15
+                    8                   171
+                    9                   197
+                   12                    87
+                   13                    99
+                   14                 Variable
+                   15                    16
+                   17                    12
+                   18                   198
+                   19                   198
+                   21                    96
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/spk.html">SPK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 24-OCT-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   position and velocity from ephemeris
+   spk file position and velocity
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

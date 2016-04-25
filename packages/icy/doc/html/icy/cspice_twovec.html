@@ -1,0 +1,190 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_twovec</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_twovec</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_TWOVEC calculates the transformation matrix to the 
+   right-handed reference frame having an input vector as a 
+   specified axis and a second input vector lying in a
+   define coordinate plane.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/twovec_c.html">twovec_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      axdef    a double precision axis 3-vector 
+      
+      indexa   the integer index signifying 'axdef' (1, 2 or 3)
+      
+      plndef   a second double precision 3-vector in the 
+               same plane as axdef
+      
+      indexp   the index of the second principle axis, 
+               orthogonal to 'axdef' (1, 2 or 3)
+  
+   the call:
+   
+      <b>cspice_twovec</b>, axdef, indexa, plndef, indexp, mout
+   
+   returns
+   
+      mout    a double precision 3x3-matrix containing a 
+              rotation matrix from the frame of the original 
+              vectors to the new frame
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; A trivial example. Define the reference vectors...
+      ;;  
+      ;;  The i unit vector
+      ;;
+      axdef  = [ 1.d, 0.d, 0.d]
+      indexa = 1 
+   
+      ;;  
+      ;;  The -j unit vector. For this example, any vector
+      ;;  in the x-y plane will suffice.
+      ;;
+      plndef = [ 0.d, -1.d, 0.d]
+      indexp = 2
+   
+      ;;
+      ;; Calculate the transformation matrix. The new frame
+      ;; has axdef as axis indexa, with plndef in the same
+      ;; plane, the direction axis indexp in that plane
+      ;; and orthogonal to axdef. A third direction vector
+      ;; completes the right handed frame.
+      ;;
+      <b>cspice_twovec</b>, axdef, indexa, plndef, indexp, mout
+      print, mout
+   
+   IDL outputs:
+   
+          1.0000000       0.0000000       0.0000000
+          0.0000000      -1.0000000       0.0000000
+          0.0000000       0.0000000      -1.0000000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 23-SEP-2008, EDW (JPL)
+
+      Eliminated error in English.
+   
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   define an orthonormal frame from two vectors 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

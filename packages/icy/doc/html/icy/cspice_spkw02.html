@@ -1,0 +1,252 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkw02</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkw02</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKW02 write a type 2 SPK segment to a SPK file.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/spkw02_c.html">spkw02_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      handle   a scalar integer referring to an SPK file opened
+               with write access
+      body     a scalar integer NAIF ID identifying the body 
+               trajectory to record in the SPK file
+      center   the scalar integer NAIF ID for the center of motion 
+               associated with body
+      frame    a string variable holding the reference frame name
+               used to reference the states, e.g. &quot;J2000&quot;
+      first    the scalar double precision starting epoch, in TDB 
+               seconds past J2000, of the ephemeris data
+      last     the double precision ending epoch, in TDB 
+               seconds past J2000, of the ephemeris data
+      segid    a string variable holding to the segment identifier
+               (an SPK segment identifier may contain up to 40 
+               printing ASCII characters )
+      intlen   a double precision scalar describing the time
+               interval in seconds covered by the Chebyshev 
+               coefficient set
+      n        the integer number of coefficient sets
+      polydg   the integer degree of the Chebyshev polynomials,
+               i.e. the number of Chebyshev coefficients minus one
+      cdata    an array of double precision values containing
+               the sets of Chebyshev polynomial coefficients to
+               write to the SPK segment
+   
+                  the (degree + 1) coefficients for the first 
+                  coordinate of the first logical record 
+   
+                  the coefficients for the second coordinate 
+   
+                  the coefficients for the third coordinate 
+   
+                  the coefficients for the first coordinate for 
+                  the second logical record, ... 
+   
+                  and so on. 
+   
+      btime    the double precision time in seconds (past J2000
+               TDB) of the first set of coefficients; 'first'
+               is an appropriate value for 'btime'
+   
+   the call:
+   
+      <b>cspice_spkw02</b>, handle, body, center, frame, first, last, $
+                     segid, intlen, n, polydg, cdata, btime
+   
+   writes to the SPK file referred to by 'handle' a type 2 SPK segment
+   containing the data listed in 'cdata'.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Define the segment identifier parameters.
+      ;;
+      BODY          = 3
+      CENTER        = 10
+      REF           = 'J2000'
+      N_RECORDS     = 4
+      SPK2          = &quot;test2.bsp&quot;
+      CHBDEG        = 2
+   
+      ;;
+      ;; A set of Chebyshev coefficients.
+      ;; 
+      CHEBYCOEFFS02 = [1.0101d, 1.0102d, 1.0103d, $
+                       1.0201d, 1.0202d, 1.0203d, $
+                       1.0301d, 1.0302d, 1.0303d, $ 
+                       2.0101d, 2.0102d, 2.0103d, $
+                       2.0201d, 2.0202d, 2.0203d, $
+                       2.0301d, 2.0302d, 2.0303d, $
+                       3.0101d, 3.0102d, 3.0103d, $
+                       3.0201d, 3.0202d, 3.0203d, $
+                       3.0301d, 3.0302d, 3.0303d, $        
+                       4.0101d, 4.0102d, 4.0103d, $
+                       4.0201d, 4.0202d, 4.0203d, $
+                       4.0301d, 4.0302d, 4.0303d  $
+                      ]
+   
+      ;;
+      ;; A set of epochs. 
+      ;;
+      DISCRETEEPOCHS = [ 100.d, 200.d, 300.d, 400.d, 500.d, $ 
+                         600.d, 700.d, 800.d, 900.d         $
+                       ]
+      
+      ;;
+      ;; Create a segment identifier.
+      ;;
+      segid = 'SPK type 2 test segment'
+       
+      ;;
+      ;; Open a new SPK file.
+      ;;
+      if ( <a href="cspice_exists.html">cspice_exists</a>(SPK2) ) then begin
+         file_delete, SPK2
+      endif
+      <a href="cspice_spkopn.html">cspice_spkopn</a>, SPK2, 'Type 2 SPK internal file name.', 4, handle
+   
+      ;;
+      ;; Create a type 2 segment.
+      ;;
+      intlen = DISCRETEEPOCHS[1]-DISCRETEEPOCHS[0];
+   
+      <b>cspice_spkw02</b>, handle,                    $
+                     BODY,                      $
+                     CENTER,                    $
+                     REF,                       $
+                     DISCRETEEPOCHS[0],         $
+                     DISCRETEEPOCHS[N_RECORDS], $
+                     segid,                     $
+                     intlen,                    $
+                     N_RECORDS,                 $
+                     CHBDEG,                    $
+                     CHEBYCOEFFS02,             $ 
+                     DISCRETEEPOCHS[0]
+                       
+      ;;
+      ;; Close the SPK file.
+      ;;
+      <a href="cspice_spkcls.html">cspice_spkcls</a>, handle
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   write spk type_2 data segment 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

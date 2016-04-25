@@ -1,0 +1,232 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_latrec</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_latrec</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_LATREC converts latitudinal coordinates to rectangular
+   (Cartesian) coordinates.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/latrec_c.html">latrec_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      radius      a double precision scalar or N-vector describing 
+                  the distance of the position from origin.
+
+      longitude   a double precision scalar or N-vector describing 
+                  the angle of the position from the XZ plane
+                  measured in radians.
+
+      latitude    a double precision scalar or N-vector describing
+                  the angle of the position from the XY plane
+                  measured in radians
+   
+   the call:
+   
+      <b>cspice_latrec</b>, radius, longitude, latitude, rectan
+   
+   returns:
+   
+      rectan   a double precision 3-vector or 3xN array
+               containing the rectangular coordinates of the 
+               position or set of positions
+
+               'rectan' returns with the same measure of vectorization (N) 
+               as 'radius', 'longitude', and 'latitude'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;; 
+      ;; Define eleven sets of latitude coordinates, 'longitude'
+      ;; and 'latitude' expressed in degrees.
+      ;;
+      radius   = [ 0d, 1d, 1d , 1d , 1d  ,   1d, $
+                   1d, 1.4142d, 1.4142d, 1.4142d, 1.732d   ]
+                   
+      longitude= [ 0d, 0d, 90d, 0d , 180d, -90d, $
+                   0d, 45d    , 0d     , 90d    , 45d      ]
+                   
+      latitude = [ 0d, 0d, 0d , 90d, 0d  ,   0d, $
+                 -90d, 0d     , 45d    , 45d    , 35.2643d ]
+
+      lon_rad = longitude * <a href="cspice_rpd.html">cspice_rpd</a>()
+      lat_rad = latitude  * <a href="cspice_rpd.html">cspice_rpd</a>()
+
+      ;;
+      ;; Convert the coordinates from latitudinal to rectangular.
+      ;;
+      <b>cspice_latrec</b>, radius, lon_rad, lat_rad, rectan
+
+      ;;
+      ;; Print a header for the data output.
+      ;;
+      print, '   radius  longitude  latitude     x          y         z   '
+      print, '  --------  --------  --------  --------  --------  --------'
+
+      ;;
+      ;; Load the data for easy output.
+      ;;
+      output      = dblarr( 6, 11 )
+
+      output[0,*] = radius
+      output[1,*] = longitude
+      output[2,*] = latitude
+      output[3,*] = rectan[0,*]
+      output[4,*] = rectan[1,*]
+      output[5,*] = rectan[2,*]
+
+      ;;
+      ;; Output the coordinate table.
+      ;;
+      print, FORMAT='(6D10.4)', output
+
+   IDL outputs:
+
+       radius  longitude  latitude     x          y         z   
+      --------  --------  --------  --------  --------  --------
+        0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+        1.0000    0.0000    0.0000    1.0000    0.0000    0.0000
+        1.0000   90.0000    0.0000    0.0000    1.0000    0.0000
+        1.0000    0.0000   90.0000    0.0000    0.0000    1.0000
+        1.0000  180.0000    0.0000   -1.0000    0.0000    0.0000
+        1.0000  -90.0000    0.0000    0.0000   -1.0000    0.0000
+        1.0000    0.0000  -90.0000    0.0000    0.0000   -1.0000
+        1.4142   45.0000    0.0000    1.0000    1.0000    0.0000
+        1.4142    0.0000   45.0000    1.0000    0.0000    1.0000
+        1.4142   90.0000   45.0000    0.0000    1.0000    1.0000
+        1.7320   45.0000   35.2643    1.0000    1.0000    1.0000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.1.1, 05-FEB-2008, EDW (JPL)
+
+      Edited I/O section, replaced comment
+      
+         &quot;returns with the same order&quot;
+      
+      with
+      
+         &quot;returns with the same measure of vectorization&quot;
+      
+   -Icy Version 1.1.0, 12-SEP-2004, EDW (JPL)
+
+       Added capability to process vectors 'radius',
+       'longitude', and 'latitude' as input,
+       returning array 'rectan' on output.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   latitudinal to rectangular coordinates
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

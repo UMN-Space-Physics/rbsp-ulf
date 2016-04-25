@@ -1,0 +1,232 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_pcpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_pcpool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_PCPOOL provides toolkit programmers a method for 
+   programmatically inserting character data into the 
+   kernel pool.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/pcpool_c.html">pcpool_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      name     the scalar string name of the kernel pool variable to
+               associate with the values supplied in the array 'cvals'.
+              'name' is restricted to a length of 32 characters or less.
+
+      length   the integer value describing the max length
+               to allow for the data strings assigned to 'name'.
+   
+      cvals    an array of strings, each string not longer 
+               than 'length', to load into the kernel pool
+               sub-system with the assigned variable name 'name'.
+   
+   the call:
+   
+      <b>cspice_pcpool</b>, name, length, cvals
+
+   returns
+
+      Inserts the variable 'name' into the kernel pool with values as
+      defined in 'cvals'.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+   
+      ;;
+      ;; Define the parameters for the string array.
+      ;;
+      LNSIZE        = 81
+      PCPOOL_DIM    = 10
+      PCPOOL_VAR    = 'pcpool_array'
+      PCPOOL_VAL_TMP= 'pcpool_val'
+      
+      ;;
+      ;; Populate the pcpool_arr array with values.
+      ;;
+      pcpool_arr = strarr( PCPOOL_DIM )
+      
+      ;;
+      ;; Fill pcpool_arr with PCPOOL_DIM entries of the
+      ;; form n_pcpool_val.
+      ;;
+      for i = 0,  (PCPOOL_DIM-1) do begin
+   
+         pcpool_arr[i] =  string(i) + '_' + PCPOOL_VAL_TMP
+   
+         ;;
+         ;; Compress all whitespace from the string
+         ;;
+         <a href="cspice_cmprss.html">cspice_cmprss</a>, ' ', 0, pcpool_arr[i], temp
+         pcpool_arr[i] =  temp
+   
+      endfor
+    
+      ;;
+      ;; Insert the array data into the kernel pool
+      ;; with variable name 'pcpool_array.'
+      ;;
+      <b>cspice_pcpool</b>, PCPOOL_VAR, LNSIZE, pcpool_arr  
+      
+      ;;
+      ;; Retrieve the variable's associated values in
+      ;; array cvals.
+      ;;
+      ROOM   = PCPOOL_DIM
+      START  = 0
+      <a href="cspice_gcpool.html">cspice_gcpool</a>, PCPOOL_VAR, START, ROOM, LNSIZE, cvals, found
+   
+      ;;
+      ;; Check we found the expected variable, and ensure
+      ;; the expected values.
+      ;;
+      if ( found ) then begin
+         print, 'Found array variable ' + PCPOOL_VAR + ' with entries:'
+   
+         for i = 0, (n_elements(cvals)-1) do begin
+            print, '   ' + cvals[i]
+         endfor
+         
+      endif else begin
+         print, 'Variable ' + PCPOOL_VAR + ' not found in kernel pool.'
+      endelse
+   
+   IDL outputs:
+   
+      Found array variable pcpool_array with entries:
+         0_pcpool_val
+         1_pcpool_val
+         2_pcpool_val
+         3_pcpool_val
+         4_pcpool_val
+         5_pcpool_val
+         6_pcpool_val
+         7_pcpool_val
+         8_pcpool_val
+         9_pcpool_val
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Kernel pool variable names are restricted to a length of 32 
+   characters or less.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 10-FEB-2010, EDW (JPL)
+
+      Added mention of the length restriction on the kernel pool variable
+      name 'name'.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   Set the value of a character kernel pool variable 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

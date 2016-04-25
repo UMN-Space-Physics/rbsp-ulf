@@ -1,0 +1,210 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_rotate</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_rotate</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_ROTATE calculates the 3x3 rotation matrix generated
+   by a rotation of a specified angle about a specified axis. 
+   This rotation operates as a rotation of the coordinate
+   system. 
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/rotate_c.html">rotate_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      angle   a double precision angle of rotation measured in radians
+
+      iaxis   the integer ID of the axis of rotation where
+              X=1, Y=2, Z=3
+
+   the call:
+   
+      <b>cspice_rotate</b>, angle, iaxis, mout
+   
+   returns:
+   
+      mout   a double precision 3x3 rotation matrix that describes a
+             rotation of 'angle' radians about 'iaxis'
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; A Pi/10 rotation about the Z axis.
+      ;;
+      <b>cspice_rotate</b>, 0.1d*<a href="cspice_pi.html">cspice_pi</a>(), 3, rot_mat
+      print, rot_mat
+
+      ;;
+      ;; Apply the coordinate rotation to a vector.
+      ;;
+      vec = [ 1.2d, 3.4d, 4.5d ]
+   
+      ;;
+      ;; First use the Icy matrix vector multiplication 
+      ;; routine.
+      ;;
+      <a href="cspice_mxv.html">cspice_mxv</a>, rot_mat, vec, vec1
+      print, vec1
+      
+      ;;
+      ;; Now use the IDL # operator to perform the same
+      ;; calculation, transposing the rot_mat matrix to 
+      ;; the IDL nominal format.
+      ;;
+      vec2 = transpose( rot_mat ) # vec
+      print, vec2
+   
+      ;;
+      ;; Finally, use the IDL ## operator to again perform
+      ;; the operation, this time as in linear algebra.
+      ;;
+      vec3 = rot_mat ## vec      
+      print, vec3
+
+   IDL outputs for rot_mat:
+   
+          0.95105652      0.30901699      0.0000000
+         -0.30901699      0.95105652      0.0000000
+          0.0000000       0.0000000       1.0000000
+
+   IDL outputs for vec1:
+   
+      2.1919256    2.8627718    4.5000000
+   
+   IDL outputs for vec2:
+   
+      2.1919256    2.8627718    4.5000000
+   
+   IDL outputs for vec3:
+   
+      2.1919256
+      2.8627718
+      4.5000000
+   
+   Note the equality of vec1 and vec2. The numerical values
+   of vec3 match those in vec1 and vec2, yet vec3 is a
+   column vector (an IDL 1x3 array).
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/rotation.html">ROTATION.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 26-JAN-2006, EDW (JPL)
+
+      Reformatted Example section to improve reading clarity.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   generate a rotation matrix 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

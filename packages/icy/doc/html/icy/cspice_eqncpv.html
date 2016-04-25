@@ -1,0 +1,345 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_eqncpv</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_eqncpv</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   Compute the state (position and velocity of an object whose
+   trajectory is described via equinoctial elements relative to some
+   fixed plane (usually the equatorial plane of some planet).
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/eqncpv_c.html">eqncpv_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      et         the scalar double precision ephemeris time, expressed
+                 as seconds past J2000 TDB, at which the state
+                 of the target body is to be computed.
+
+                 'et' has units of TDB seconds.
+
+      epoch      the scalar double precision epoch of the equinoctial
+                 elements in seconds past the J2000 epoch.
+
+                 'epoch' has units of TDB seconds.
+
+      eqel       a double precision 9-vector containing the equinoctial
+                 elements for some orbit expressed relative to the equatorial
+                 frame of the central body.
+
+                 (The z-axis of the equatorial frame is the direction
+                 of the pole of the central body relative to some
+                 inertial frame.  The x-axis is given by the cross
+                 product of the Z-axis of the inertial frame
+                 with the direction of the pole of the central body.
+                 The Y-axis completes a right handed frame.
+                 (If the z-axis of the equatorial frame is aligned
+                 with the z-axis of the inertial frame, then the
+                 x-axis of the equatorial frame will be located at
+                 90 degrees + rapol in the inertial frame.)
+
+                 The specific arrangement of the elements is spelled
+                 out below.  The following terms are used in the
+                 discussion of elements of eqel
+
+                     inc   --- inclination of the orbit
+                     omega --- argument of periapse
+                     node  --- longitude of the ascending node
+                     e     --- eccentricity of the orbit
+
+                 eqel[0] is the semi-major axis (a) of the orbit in km.
+
+                 eqel[1] is the value of 'h' at the specified epoch.
+                         ( e*sin(omega+node) ).
+
+                 eqel[2] is the value of 'k' at the specified epoch
+                         ( e*cos(omega+node) ).
+
+                 eqel[3] is the mean longitude (mean0+omega+node) at
+                         the epoch of the elements measured in radians.
+
+                 eqel[4] is the value of 'p' (tan(inc/2)*sin(node))at
+                         the specified epoch.
+
+                 eqel[5] is the value of 'q' (tan(inc/2)*cos(node))at
+                         the specified epoch.
+
+                 eqel[6] is the rate of the longitude of periapse
+                         (domega/dt + dnode/dt ) at the epoch of
+                         the elements. This rate is assumed to hold
+                         for all time. The rate is measured in
+                         radians per second.
+
+                 eqel[7] is the derivative of the mean longitude
+                         ( dm/dt + domega/dt + dnode/dt ). This
+                         rate is assumed to be constant and is
+                         measured in radians/second.
+
+                 eqel[8] is the rate of the longitude of the ascending
+                         node ( dnode/dt). This rate is measured
+                         in radians per second.
+
+      rapol      scalar double precision right ascension of the pole of the
+                 reference plane with respect to some inertial frame.
+
+                 'rapol' has units of radians.
+
+      decpol     scalar double precision declination of the pole of the
+                 reference plane with respect to some inertial frame,
+
+                 'decpol' has units of radians.
+
+   the call:
+
+      <b>cspice_eqncpv</b>, et, epoch, eqel, rapol, decpol, state
+
+   returns:
+
+      state      double precision 6-vector describing the state of the object
+                 defined by 'eqel' relative to the inertial frame used to
+                 define rapol and decpol. Units are in km and km/sec.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      Compute a state vector from a set of equinoctial elements.
+
+      ;;
+      ;; Suppose you have classical elements and rates of
+      ;; change of the ascending node and argument of periapse
+      ;; for some satellite of the earth.
+      ;;
+      ;; By transforming the classical elements this routine
+      ;; compute the state of the object at an arbitrary epoch.
+      ;; The code below illustrates how to do this.
+      ;;
+      ;; The table below illustrates the meanings of the various
+      ;; variables used in the discussion below.
+      ;;
+      ;;       Variable     Meaning
+      ;;       --------     ----------------------------------
+      ;;       a            Semi-major axis in km.
+      ;;       ecc          Eccentricity of orbit.
+      ;;       inc          Inclination of orbit.
+      ;;       node         Longitude of the ascending node at epoch.
+      ;;       omega        Argument of periapse at epoch.
+      ;;       m            Mean anomaly at epoch.
+      ;;       dmdt         Mean anomaly rate in radians/second.
+      ;;       dnode        Rate of change of longitude of ascending node
+      ;;                    in radians/second.
+      ;;       domega       Rate of change of argument of periapse in
+      ;;                    radians/second.
+      ;;       epoch        is the epoch of the elements in seconds past
+      ;;                    the J2000 epoch.
+      ;;
+      ;;      eqel[0] = a
+      ;;      eqel[1] = ecc * sin( omega + node )
+      ;;      eqel[2] = ecc * cos( omega + node )
+      ;;
+      ;;      eqel[3] = m + omega + node
+      ;;
+      ;;      eqel[4] = tan(inc/2.0) * sin(node)
+      ;;      eqel[5] = tan(inc/2.0) * cos(node)
+      ;;
+      ;;      eqel[6] = domega
+      ;;      eqel[7] = domega + dmdt + dnode
+      ;;      eqel[8] = dnode
+      ;;
+      ;; In this case, the rates of node and argument of
+      ;; periapse are zero and the pole of the central
+      ;; frame is aligned with the pole of an inertial frame.
+      ;;
+
+      p      =      1.0d4
+      gm     = 398600.436d
+      ecc    =      0.1d
+      a      = p/( 1.d - ecc )
+      dmdt   = sqrt ( gm / a ) / a
+      omega  = 30.d * <a href="cspice_rpd.html">cspice_rpd</a>()
+      node   = 15.d * <a href="cspice_rpd.html">cspice_rpd</a>()
+      inc    = 10.d * <a href="cspice_rpd.html">cspice_rpd</a>()
+      m      = 45.d * <a href="cspice_rpd.html">cspice_rpd</a>()
+      epoch  = -100000000.d
+      dnode  = 0.d
+      domega = 0.d
+
+      eqel  = [  a,                     $
+                ecc*sin(omega+node),    $
+                ecc*cos(omega+node),    $
+                m  + omega + node,      $
+                tan(inc/2.d)*sin(node), $
+                tan(inc/2.d)*cos(node), $
+                domega,                 $
+                domega + dmdt + dnode,  $
+                dnode ]
+
+      rapol  = -<a href="cspice_halfpi.html">cspice_halfpi</a>()
+      decpol =  <a href="cspice_halfpi.html">cspice_halfpi</a>()
+
+      et = epoch - 10000.d0
+
+      for i = 1, 10 do begin
+         et = et + 250.d
+
+         print
+
+         <b>cspice_eqncpv</b>, et, epoch, eqel, rapol, decpol, state
+         print, 'Pos = ',state[0:2]
+         print, 'Vel = ',state[3:5]
+
+      endfor
+
+   IDL outputs:
+
+      Pos =       -10732.167       3902.5058       1154.4516
+      Vel =       -2.5407669      -5.1522692     -0.76157581
+
+      Pos =       -11278.383       2586.1799       955.18410
+      Vel =       -1.8271564      -5.3629158     -0.83001977
+
+      Pos =       -11645.295       1228.6124       740.70957
+      Vel =       -1.1080964      -5.4828109     -0.88325573
+
+      Pos =       -11832.800      -147.99098       514.80525
+      Vel =      -0.39342066      -5.5159047     -0.92150772
+
+      Pos =       -11843.089      -1522.4698       281.17526
+      Vel =       0.30828845      -5.4665647     -0.94512794
+
+      Pos =       -11680.365      -2874.7848       43.424394
+      Vel =       0.98951988      -5.3393639     -0.95455246
+
+      Pos =       -11350.590      -4186.0498      -194.95853
+      Vel =        1.6436489      -5.1389380     -0.95026851
+
+      Pos =       -10861.293      -5438.5362      -430.61041
+      Vel =        2.2647587      -4.8698990     -0.93279157
+
+      Pos =       -10221.411      -6615.6606      -660.29899
+      Vel =        2.8474759      -4.5367943     -0.90265092
+
+      Pos =       -9441.1703      -7701.9679      -880.92519
+      Vel =        3.3868216      -4.1441030     -0.86038222
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine evaluates the input equinoctial elements for
+   the specified epoch and return the corresponding state.
+
+   This routine was adapted from a routine provided by
+   Bob Jacobson at JPL.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   SPK
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 22-NOV-2011, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Compute a state from equinoctial elements
+
+
+
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:30 2014</pre>
+
+</body>
+</html>
+

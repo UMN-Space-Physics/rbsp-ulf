@@ -1,0 +1,310 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafac</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafac</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFAC adds comments from a buffer of character strings to the
+   comment area of a binary DAF, appending them to any comments which
+   are already present in the file's comment area.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/dafac_c.html">dafac_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the scalar integer referring to a DAF opened with
+               write access. This handle refers to the DAF to
+               which add the contents of 'buffer' as comments.
+
+      length   the scalar integer defining the maximum length of
+               the string buffer rows.
+
+      buffer   a string vector containing comments which to write into
+               the comment area of the binary DAF attached to 'handle'.
+
+               Each element of 'buffer' should contain one comment line.
+
+   the call:
+
+      <b>cspice_dafac</b>, handle, length, buffer
+
+   returns:
+
+      The call adds the contents of 'buffer' to the DAF referred
+      to by 'handle'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Create a comment text block. Use the list
+      ;; of bodies in the SPK for this example.
+      ;;
+      comments = [ 'Body list',            $
+                   '1 MERCURY BARYCENTER', $
+                   '2 VENUS BARYCENTER  ', $
+                   '3 EARTH BARYCENTER  ', $
+                   '4 MARS BARYCENTER   ', $
+                   '5 JUPITER BARYCENTER', $
+                   '6 SATURN BARYCENTER ', $
+                   '7 URANUS BARYCENTER ', $
+                   '8 NEPTUNE BARYCENTER', $
+                   '9 PLUTO BARYCENTER  ', $
+                   '10 SUN              ', $
+                   '199 MERCURY         ', $
+                   '299 VENUS           ', $
+                   '301 MOON            ', $
+                   '399 EARTH           ', $
+                   '401 PHOBOS          ', $
+                   '402 DEIMOS          ', $
+                   '499 MARS            ', $
+                   '501 IO              ', $
+                   '502 EUROPA          ', $
+                   '503 GANYMEDE        ', $
+                   '504 CALLISTO        ', $
+                   '599 JUPITER         ', $
+                   '603 TETHYS          ', $
+                   '604 DIONE           ', $
+                   '605 RHEA            ', $
+                   '606 TITAN           ', $
+                   '607 HYPERION        ', $
+                   '608 IAPETUS         ', $
+                   '699 SATURN          ', $
+                   '701 ARIEL           ', $
+                   '702 UMBRIEL         ', $
+                   '703 TITANIA         ', $
+                   '704 OBERON          ', $
+                   '705 MIRANDA         ', $
+                   '799 URANUS          ', $
+                   '801 TRITON          ', $
+                   '802 NEREID          ', $
+                   '899 NEPTUNE         ', $
+                   '901 CHARON          ', $
+                   '999 PLUTO           ', $
+                   '301001              ', $
+                   '399001 GOLDSTONE    ', $
+                   '399002 CANBERRA     ', $
+                   '399003 MADRID       ', $
+                   '401001              ' ]
+
+      ;;
+      ;; Define the SPK file to which add the 'comments' text.
+      ;;
+      SPK = 'test.spk'
+
+      ;;
+      ;; Open for writing the 'SPK'; return the corresponding
+      ;; file handle to 'handle'.
+      ;;
+      <a href="cspice_dafopw.html">cspice_dafopw</a>, SPK, handle
+
+      ;;
+      ;; Add the comments to the 'SPK', use a default line length
+      ;; of 80 characters.
+      ;;
+      <b>cspice_dafac</b>, handle, 80L, comments
+
+      ;;
+      ;; SAFELY close the file.
+      ;;
+      <a href="cspice_dafcls.html">cspice_dafcls</a>, handle
+
+   Assuming 'SPK' originally lacked comments, the file now
+   contains the comments:
+
+      Body list
+      1 MERCURY BARYCENTER
+      2 VENUS BARYCENTER
+      3 EARTH BARYCENTER
+      4 MARS BARYCENTER
+      5 JUPITER BARYCENTER
+      6 SATURN BARYCENTER
+      7 URANUS BARYCENTER
+      8 NEPTUNE BARYCENTER
+      9 PLUTO BARYCENTER
+      10 SUN
+      199 MERCURY
+      299 VENUS
+      301 MOON
+      399 EARTH
+      401 PHOBOS
+      402 DEIMOS
+      499 MARS
+      501 IO
+      502 EUROPA
+      503 GANYMEDE
+      504 CALLISTO
+      599 JUPITER
+      603 TETHYS
+      604 DIONE
+      605 RHEA
+      606 TITAN
+      607 HYPERION
+      608 IAPETUS
+      699 SATURN
+      701 ARIEL
+      702 UMBRIEL
+      703 TITANIA
+      704 OBERON
+      705 MIRANDA
+      799 URANUS
+      801 TRITON
+      802 NEREID
+      899 NEPTUNE
+      901 CHARON
+      999 PLUTO
+      301001
+      399001 GOLDSTONE
+      399002 CANBERRA
+      399003 MADRID
+      401001
+
+   If 'SPK' contained comments before running the program, the comments
+   defined in 'comments' are appended to the existing comments.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A binary DAF contains a data area which is reserved for storing
+   annotations or descriptive textual information about the data
+   contained in a file. This area is referred to as the ``comment
+   area'' of the file. The comment area of a DAF is a line oriented
+   medium for storing textual information. The comment area preserves
+   leading or embedded white space in the line(s) of text which are
+   stored so that the appearance of the information will be unchanged
+   when it is retrieved (extracted) at some other time. Trailing
+   blanks, however, are NOT preserved, due to the way that character
+   strings are represented in standard Fortran 77.
+
+   This routine will take a buffer of text lines and add (append) them
+   to the comment area of a binary DAF. If there are no comments in the
+   comment area of the file, then space will be allocated and the text
+   lines in `buffer' will be placed into the comment area. The text lines
+   may contain only printable ASCII characters (decimal values 32 -
+   126).
+
+   There is NO maximum length imposed on the significant portion of a
+   text line that may be placed into the comment area of a DAF. The
+   maximum length of a line stored in the comment area should be
+   reasonable, however, so that they may be easily extracted. A good
+   maximum value for this would be 255 characters, as this can easily
+   accommodate ``screen width'' lines as well as long lines which may
+   contain some other form of information.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 11-NOV-2013, EDW (JPL)
+
+      Edits to Examples text. Added Particulars section text.
+
+   -Icy Version 1.0.0, 22-FEB-2008, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   add comments to a binary DAF
+   append comments to a DAF comment area
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

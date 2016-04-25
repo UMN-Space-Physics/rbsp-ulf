@@ -1,0 +1,276 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_set</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_set</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SET compare two sets of any data type given a relational 
+   operator.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/set_c.html">set_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      a   is a scalar Icy set.  
+
+      op   is a scalar string defining the comparison operator, 
+           indicating the way in which the input sets are to be 
+           compared. 'op' may be any of the following: 
+
+               Operator             Meaning 
+               --------  ------------------------------------- 
+                  &quot;=&quot;     a = b is true if 'a' and 'b' are equal 
+                         (contain the same elements). 
+
+                  &quot;&lt;&gt;&quot;    a &lt;&gt; b is true if 'a' and 'b' are not 
+                          equal. 
+
+                  &quot;&lt;=&quot;    a &lt;= b is true if 'a' is a subset of 'b'. 
+
+                  &quot;&lt;&quot;     a &lt; b is true if 'a' is a proper subset 
+                          of 'b'. 
+
+                  &quot;&gt;=&quot;    a &gt;= b is true if 'b' is a subset of 'a'. 
+
+                  &quot;&gt;&quot;     a &gt; b is true if 'b' is a proper subset 
+                          of a. 
+
+                  &quot;&amp;&quot;     a &amp; b is true if 'a' and 'b' have one or more 
+                          elements in common (the intersection of
+                          the two sets in non-empty.)
+
+                  &quot;~&quot;     a ~ b is true if 'a' and 'b' are disjoint 
+                          sets. 
+
+
+      b   is an Icy set of the same data type as 'a'. 
+
+          The user must create 'a' and 'b' using either
+          <a href="cspice_celld.html">cspice_celld</a> or <a href="cspice_celli.html">cspice_celli</a>.
+
+   the call:
+
+      boolean = <b>cspice_set</b>( a, op, b )
+
+   returns:      
+   
+      The function returns the result of the comparison: 'a' (op) 'b'.
+
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Create the cells...
+      ;;
+      SIZE = 10
+      
+      a = <a href="cspice_celli.html">cspice_celli</a>( SIZE )
+      b = <a href="cspice_celli.html">cspice_celli</a>( SIZE )
+      c = <a href="cspice_celli.html">cspice_celli</a>( SIZE )
+      
+      ;;
+      ;; ... insert the test data so that
+      ;; 'b' = 'c' define strict subsets of 'a'.
+      ;;
+      <a href="cspice_insrti.html">cspice_insrti</a>, [ 1l, 2, 3, 4 ], a
+      <a href="cspice_insrti.html">cspice_insrti</a>, [ 1l, 3       ], b
+      <a href="cspice_insrti.html">cspice_insrti</a>, [ 1l, 3       ], c
+
+      ;;
+      ;; Evaluations returning TRUE
+      ;;
+      bval = <b>cspice_set</b>( b, &quot;=&quot;,  c )
+      if( bval ) then print, &quot;True: b is equal to c&quot;
+
+      bval = <b>cspice_set</b>( a, &quot;&lt;&gt;&quot;, c )
+      if( bval ) then print, &quot;True: a is not equal to c&quot; 
+
+      bval = <b>cspice_set</b>( a, &quot;&gt;&quot;,  b )
+      if( bval ) then print, &quot;True: a is a proper superset of b&quot; 
+      
+      bval = <b>cspice_set</b>( b, &quot;&lt;=&quot;, c )
+      if( bval ) then print, &quot;True: b is a subset of c&quot; 
+      
+      bval = <b>cspice_set</b>( c, &quot;&lt;=&quot;, b )
+      if( bval ) then print, &quot;True: c is a subset of b&quot; 
+      
+      bval = <b>cspice_set</b>( a, &quot;&lt;=&quot;, a )
+      if( bval ) then print, &quot;True: a is a subset of a&quot; 
+
+      bval = <b>cspice_set</b>( a, &quot;&amp;&quot;,  b ) 
+      if( bval ) then print, &quot;True: a has elements in common with b.&quot; 
+      
+      bval = <b>cspice_set</b>( b, &quot;&amp;&quot;,  c )
+      if( bval ) then print, &quot;True: b has elements in common with c.&quot; 
+
+      print
+      
+      ;;
+      ;; Evaluations returning FALSE
+      ;;
+      bval = <b>cspice_set</b>( b, &quot;&lt;&gt;&quot;, c )
+      if( ~ bval ) then print, &quot;False: b is not equal to c&quot; 
+      
+      bval = <b>cspice_set</b>( a, &quot;=&quot;,  c )
+      if( ~ bval ) then print, &quot;False: a is equal to c&quot; 
+      
+      bval = <b>cspice_set</b>( a, &quot;&lt;&quot;,  b )
+      if( ~ bval ) then print, &quot;False: a is a proper subset of b&quot; 
+      
+      bval = <b>cspice_set</b>( b, &quot;&lt;&quot;,  c )
+      if( ~ bval ) then print, &quot;False: b is a proper subset of c&quot; 
+      
+      bval = <b>cspice_set</b>( b, &quot;&gt;=&quot;, a )
+      if( ~ bval ) then print, &quot;False: b is a superset of a&quot; 
+      
+      bval = <b>cspice_set</b>( a, &quot;&gt;&quot;,  a )
+      if( ~ bval ) then print, &quot;False: a is a proper superset of a&quot; 
+      
+      bval = <b>cspice_set</b>( a, &quot;~&quot;,  b )
+      if( ~ bval ) then print, &quot;False: a and b are disjoint sets.&quot; 
+
+
+   IDL outputs:
+   
+      True: b is equal to c
+      True: a is not equal to c
+      True: a is a proper superset of b
+      True: b is a subset of c
+      True: c is a subset of b
+      True: a is a subset of a
+      True: a has elements in common with b.
+      True: b has elements in common with c.
+
+      False: b is not equal to c
+      False: a is equal to c
+      False: a is a proper subset of b
+      False: b is a proper subset of c
+      False: b is a superset of a
+      False: a is a proper superset of a
+      False: a and b are disjoint sets.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The user must create any needed cell structures with <a href="cspice_celld.html">cspice_celld</a>,
+   <a href="cspice_celli.html">cspice_celli</a> prior to use regardless of whether the routine 
+   uses the cell as input or returns it as output.
+   
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/cells.html">CELLS.REQ</a>
+   <a href="../req/sets.html">SETS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 28-SEP-2006, EDW (JPL)
+
+      Corrections to English.
+      Correct Required Reading citation CELL.REQ to <a href="../req/cells.html">CELLS.REQ</a>.
+
+   -Icy Version 1.0.0, 22-AUG-2005, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   compare sets 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

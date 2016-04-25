@@ -1,0 +1,235 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_szpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_szpool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SZPOOL returns kernel pool size parameters.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/szpool_c.html">szpool_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      name   the scalar string name of the parameter to return, possible
+             values:
+   
+                 MAXVAR      is the maximum number of variables that the
+                             kernel pool may contain at any one time.
+                             MAXVAR should be a prime number.
+   
+                 MAXLEN      is the maximum length of the variable names
+                             that can be stored in the kernel pool.
+   
+                 MAXVAL      is the maximum number of distinct values that
+                             may belong to the variables in the kernel
+                             pool.  Each variable must have at least one
+                             value, and may have any number, so long as
+                             the total number does not exceed MAXVAL.
+                             MAXVAL must be at least as large as MAXVAR.
+   
+                 MXNOTE      is the maximum number of distinct
+                             variable-agents pairs that can be maintained
+                             by the kernel pool.  (A variable is &quot;paired&quot;
+                             with an agent, if that agent is to be
+                             notified whenever the variable is updated.)
+   
+                 MAXAGT      is the maximum number of agents that can be
+                             kept on the distribution list for
+                             notification of updates to kernel variables.
+   
+                 MAXCHR      is the maximum number of characters that can
+                             be stored in a component of a string valued
+                             kernel variable.
+   
+                 MAXLIN      is the maximum number of character strings
+                             that can be stored as data for kernel pool
+                             variables.
+   
+   the call:
+   
+      <b>cspice_szpool</b>, name, n, found    
+     
+   returns:
+   
+      n       the value of the parameter indicated by 'name'
+   
+      found   a boolean indicating whether the kernel pool
+              recognizes parameter 'name' (TRUE) or not 
+              (FALSE)
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Define an array of size parameter names.
+      ;;
+      NAMES = [ &quot;MAXVAR&quot;, $
+                &quot;MAXLEN&quot;, $
+                &quot;MAXVAL&quot;, $
+                &quot;MXNOTE&quot;, $
+                &quot;MAXAGT&quot;, $
+                &quot;MAXCHR&quot;, $
+                &quot;MAXLIN&quot;, $
+                &quot;EVERLASTING_GOBSTOPPER&quot; ]
+    
+      ;;
+      ;; Show the toolkit version.
+      ;;
+      print, &quot;Toolkit version: &quot;, <a href="cspice_tkvrsn.html">cspice_tkvrsn</a>('toolkit')
+      print
+    
+      ;;
+      ;; Loop over the parameter list, checking for a corresponding 
+      ;; value.
+      ;;
+      for i = 0, n_elements(NAMES)-1  do begin
+      
+         ;;
+         ;; Make the call, check for a 'found'
+         ;;
+         <b>cspice_szpool</b>, NAMES[i], value, found
+         
+         ;;
+         ;; Output the returned value or indicate a failure.
+         ;;
+         if (found) then begin
+            print, &quot;Parameter &quot; + NAMES[i] + &quot; has value &quot; + string(value)
+         endif else begin
+            print
+            print, &quot;No size parameter named &quot; + NAMES[i]
+         endelse
+      
+      endfor
+   
+   IDL outputs:
+   
+      Toolkit version: CSPICE_N0056
+   
+      Parameter MAXVAR has value         5003
+      Parameter MAXLEN has value           32
+      Parameter MAXVAL has value        40000
+      Parameter MXNOTE has value         2000
+      Parameter MAXAGT has value         1000
+      Parameter MAXCHR has value           80
+      Parameter MAXLIN has value         4000
+   
+      No size parameter named EVERLASTING_GOBSTOPPER
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   return a kernel pool definition parameter 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

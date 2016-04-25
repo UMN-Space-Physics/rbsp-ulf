@@ -1,0 +1,334 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ekacec</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ekacec</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EKACEC adds data to a character column in the specified 
+   record of an EK file.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ekacec_c.html">ekacec_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      handle      the scalar integer referring to an EK file open for 
+                  write access
+   
+      segno       the scalar integer indicating EK segment number
+                  for the new record
+                  
+      recno       the scalar integer indicating the index of the new
+                  record
+                  
+      column      the string scalar name of the column for the new record
+      
+      nvals       the integer number of entries from 'cvals' to add to 
+                  the new record
+                  
+      cvals_len   a scalar integer defining the length of the strings 
+                  in the 'cvals' array
+                  
+      cvals       an array of strings containing the data values to
+                  add to the new record in 'column'
+   
+                     Note: 'nvals' specifies the number of 'cvals'
+                     entries written to the new record.
+   
+      isnull      a scalar boolean flagging whether the entry is null, if
+                  equal to TRUE, <b>cspice_ekacec</b> reserves space for
+                  record but does not add the record to the EK
+   
+   the call:
+   
+      <b>cspice_ekacec</b>, handle, segno, recno, column,  $
+                     nvals, cvals_len, cvals, isnull
+   
+   adds 'nvals' of the 'cvals' array to column 'column' in segment 'segno',
+   record 'recno', of the EK file referred to by 'handle'.
+   
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Constants
+      ;;
+      EKNAME = &quot;ekacec.ek&quot;
+      IFNAME = &quot;Test EK/Enjoy&quot;
+      NCOLS  = 2
+      NROWS  = 5
+      NRESVC = 0
+      TABLE  = &quot;CHR_DATA&quot;
+      CVLEN  = 10
+      MAXVAL = 10
+      cvals  = strarr( MAXVAL )
+      
+      ;;
+      ;; Open a new EK file.  For simplicity, we won't
+      ;; reserve space for the comment area, so the 
+      ;; number of reserved comment characters is zero. 
+      ;; The constant IFNAME holds the internal file name. 
+      ;;
+      if ( <a href="cspice_exists.html">cspice_exists</a> (EKNAME) ) then begin
+         file_delete, EKNAME
+      endif
+   
+      ;;
+      ;; Create and open a new EK file.
+      ;;
+      <a href="cspice_ekopn.html">cspice_ekopn</a>, EKNAME, IFNAME, NRESVC, handle
+          
+      ;;
+      ;;   Set up the table and column names and declarations 
+      ;;   for the CHR_DATA segment.
+      ;;
+      cdecls = strarr(NCOLS)
+      cnames = strarr(NCOLS)
+   
+      ;;
+      ;; Define the column names and formats.
+      ;;
+      cnames[0] = &quot;CHR_COL_1&quot;
+      cdecls[0] = &quot;DATATYPE = CHARACTER*(*), &quot; +$
+                  &quot;INDEXED = TRUE, NULLS_OK = TRUE&quot;
+   
+      cnames[1] = &quot;CHR_COL_2&quot;
+      cdecls[1] = &quot;DATATYPE = CHARACTER*(9), &quot; +$
+                  &quot;SIZE = VARIABLE, NULLS_OK = TRUE&quot;
+          
+     ;;
+     ;; Start the segment.
+     ;;
+     <a href="cspice_ekbseg.html">cspice_ekbseg</a>, handle, TABLE, NCOLS, cnames, cdecls, segno
+   
+      ;;
+      ;; Loop over the number of rows, writing data to each column.
+      ;;
+      for i = 0, (NROWS-1) do begin
+   
+         ;;
+         ;; Set the null flag for i == 1.
+         ;;
+         isnull =  ( i EQ 1 );
+      
+         ;;
+         ;; Append a new record to the EK.
+         ;;
+         <a href="cspice_ekappr.html">cspice_ekappr</a>, handle, segno, recno
+   
+         ;;
+         ;; Define the scalar.
+         ;;
+         cvals[0] = string(i + 350)
+   
+         ;;
+         ;; Add the data to the EK in column 1.
+         ;;
+         <b>cspice_ekacec</b>, handle, segno, recno, cnames[0], 1, $
+                        CVLEN, cvals, isnull
+   
+         ;;
+         ;; Array-valued columns follow.
+         ;;
+         cvals[0] = string( 10*i )
+         cvals[1] = string((10*i) + 1)
+         cvals[2] = string((10*i) + 2)
+         cvals[3] = string((10*i) + 3)
+   
+         ;;
+         ;; Add the data to column 2.
+         ;;
+         <b>cspice_ekacec</b>, handle, segno, recno, cnames[1], 4, $
+                        CVLEN, cvals, isnull
+     
+      endfor
+   
+      ;;
+      ;; Close the file.
+      ;;
+      <a href="cspice_ekcls.html">cspice_ekcls</a>, handle
+   
+      ;;
+      ;; Open the created file. Show the values added.
+      ;;
+      <a href="cspice_ekopr.html">cspice_ekopr</a>, EKNAME, handle
+   
+      for i = 0, (NROWS-1) do begin
+       
+         <a href="cspice_ekrcec.html">cspice_ekrcec</a>, handle, segno, i, cnames[0], MAXVAL, $
+                        CVLEN, cvals,  isnull
+                     
+         if ( NOT isnull ) then begin
+            print, 'Data from column: ',cnames[0],'   record number: ',i
+            print, cvals
+            print   
+         endif
+    
+         ;;
+         ;; Array-valued columns follow.
+         ;;
+         <a href="cspice_ekrcec.html">cspice_ekrcec</a>, handle, segno, i, cnames[1],  MAXVAL, $
+                        CVLEN, cvals,  isnull
+                     
+         if ( NOT isnull ) then begin
+            print, 'Data from column: ',cnames[1], '   record number: ',i
+            print, cvals
+            print   
+         endif
+   
+      endfor
+   
+      ;;
+      ;; End the file.
+      ;;
+      <a href="cspice_ekcls.html">cspice_ekcls</a>, handle
+   
+   IDL outputs:
+   
+      Data from column: CHR_COL_1   record number:        0
+        350 
+   
+      Data from column: CHR_COL_2   record number:        0
+          0         1         2         3 
+   
+      Data from column: CHR_COL_1   record number:        2
+        352 
+   
+      Data from column: CHR_COL_2   record number:        2
+         20        21        22        23 
+   
+      Data from column: CHR_COL_1   record number:        3
+        353 
+   
+      Data from column: CHR_COL_2   record number:        3
+         30        31        32        33 
+   
+      Data from column: CHR_COL_1   record number:        4
+        354 
+   
+      Data from column: CHR_COL_2   record number:        4
+         40        41        42        43 
+   
+   Note record 1 does not appear due to setting the 'isnull' flag
+   to true for that record.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ek.html">EK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   add character data to EK column 
+   add data to EK 
+   write character data to EK column 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,288 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_inelpl</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_inelpl</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_INELPL finds the intersection of an ellipse and a plane.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/inelpl_c.html">inelpl_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      ellips   a scalar SPICE ellipse structure. The structure has the fields:
+
+                 center:    [3-array double]
+                 semiMajor: [3-array double]
+                 semiMinor: [3-array double]
+
+      plane    a scalar SPICE plane structure. The intersection of 'plane'
+               and 'ellips' is sought. The structure has the fields:
+
+                 normal:   [3-array double]
+                 constant: [scalar double]
+
+   the call:
+
+      <b>cspice_inelpl</b>, ellips, plane, nxpts, xpt1, xpt2
+
+   returns:
+
+      nxpts   scalar integer number of points of intersection of the
+              geometric plane and ellipse represented by 'plane'
+              and 'ellips'. 'nxpts' may take the values 0, 1, 2 or
+              -1.  The value -1 indicates that the ellipse lies
+              in the plane, so the number of intersection points
+              is infinite.
+
+              -1 also signals for the degenerate case where the ellipse
+              structure defines a single point and that point lies
+              in the plane of interest. In this case, -1 means not an
+              infinite number of intersections, rather that the
+              ellipse is a subset of the plane, that subset having
+              measure one.
+
+      xpt1,
+      xpt2    double precision 3-vectors points of intersection of the input
+              plane and ellipse. If there is only one intersection point,
+              both 'xpt1' and 'xpt2' contain that point. If the number of
+              intersection points is zero or infinite, the contents of
+              'xpt1' and 'xpt2' are undefined.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Standard SPK, LSK, PCK files.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+
+      ;;
+      ;; Retrieve the triaxial radii of Saturn (699)
+      ;;
+      <a href="cspice_bodvrd.html">cspice_bodvrd</a>, 'SATURN', 'RADII', 3, radii
+
+      ;;
+      ;; Define a position in the body frame at one hundred equatorial
+      ;; radii out along the x axis, one hundred radii above the
+      ;; equatorial plane.
+      ;;
+      vertex = [ 100.d0 * radii[0], 0.d0, radii[0] *100.d0 ];
+
+      ;;
+      ;; Find the limb of the ellipsoid as seen from the
+      ;; point 'vertex'. 'limb' returns as a CSPICE_ELLIPSE.
+      ;;
+      <a href="cspice_edlimb.html">cspice_edlimb</a>, radii[0], radii[1], radii[2], vertex, limb
+
+      ;;
+      ;; Define the equatorial plane as a SPICE plane. The Z
+      ;; axis is normal to the plane, the origin lies in the
+      ;; plane.
+      ;;
+      normal = [ 0.d, 0.d, 1.d]
+      point  = [ 0.d, 0.d, 0.d]
+      <a href="cspice_nvp2pl.html">cspice_nvp2pl</a> , normal, point, plane
+
+      ;;
+      ;; Calculate the intersection of the 'limb' and
+      ;; 'plane'.
+      ;;
+      <b>cspice_inelpl</b>, limb, plane, nxpts, xpt1, xpt2
+
+      print, 'Observer at (100, 0, 100) radii, no. intersection points: ',nxpts
+      print, '   Intersection points'
+      print, xpt1
+      print, xpt2
+      print, ' '
+
+      ;;
+      ;; One hundred radii along the Z pole vector (positive)
+      ;;
+      vertex = [ 0.d0 * radii[0], 0.d0, radii[0] *100.d0 ];
+
+      ;;
+      ;; The resulting limb ellipse should lie parallel to, but
+      ;; not in the same plane as the equatorial plane. No
+      ;; intersection should exist.
+      ;;
+      <a href="cspice_edlimb.html">cspice_edlimb</a>, radii[0], radii[1], radii[2], vertex, limb
+      <b>cspice_inelpl</b>, limb, plane, nxpts, xpt1, xpt2
+
+      print, 'Ellipse/plane parallel case, no. intersection points: ',nxpts
+      print, ' '
+
+      ;;
+      ;; One radii along the X axis, i.e. on the surface, a very
+      ;; degenerate case.
+      ;;
+      vertex = [ radii[0], 0.d0, 0.d0 ];
+
+      ;;
+      ;; In this case the limb ellipse exists as a point at (x, 0, 0).
+      ;;
+      <a href="cspice_edlimb.html">cspice_edlimb</a>, radii[0], radii[1], radii[2], vertex, limb
+
+      ;;
+      ;; Calculate the intersection of the plane and the degenerate ellipse.
+      ;;
+      <b>cspice_inelpl</b>, limb, plane, nxpts, xpt1, xpt2
+
+      ;;
+      ;; As the point (x, 0, 0) exists in 'plane' and that point represents
+      ;; the complete ellipse, the routine should return -1 for infinite
+      ;; number of intersections - though in this case the intersection contains
+      ;; only one element.
+      ;;
+      print, 'Degenerate case, no. intersection points: ', nxpts
+
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_unload.html">cspice_unload</a>, '<a href= "standard.html">standard.tm</a>'
+
+   IDL outputs for the first example:
+
+         Observer at (100, 0, 100) radii, no. intersection points:       2
+            Intersection points
+               602.68000       60264.987   3.1583792e-12
+               602.68000      -60264.987  -9.3798933e-12
+
+   IDL outputs for the second example, we expect no intersection:
+
+         Ellipse/plane parallel case, no. intersection points:           0
+
+   IDL outputs for the degenerate case:
+
+         Degenerate case, no. intersection points:                      -1
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine computes the intersection set of a non-degenerate
+   plane with a possibly degenerate ellipse. The ellipse is allowed
+   to consist of a line segment or a point.
+
+   A plane may intersect an ellipse in 0, 1, 2, or infinitely many
+   points. For there to be an infinite set of intersection points,
+   the ellipse must lie in the plane and consist of more than one
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ellipses.html">ELLIPSES.REQ</a>
+   <a href="../req/planes.html">PLANES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 21-JUN-2011, EDW (JPL)
+
+      Edits to comply with NAIF standard for Icy headers. Particulars section
+      now parallels Mice version.
+
+   -Icy Version 1.0.0, 20-OCT-2006, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   intersection of ellipse and plane
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

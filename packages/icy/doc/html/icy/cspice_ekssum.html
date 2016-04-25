@@ -1,0 +1,393 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ekssum</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ekssum</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EKSSUM returns summary information for a specified segment in a 
+   specified EK. 
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ekssum_c.html">ekssum_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      handle   the scalar integer handle for the EK of interest.
+      
+      segno    the scalar integer segment number to summarize.
+   
+   the call:
+   
+      <b>cspice_ekssum</b>, handle, segno , nrows, ncols, tabnam, $
+                     cnames, cclass, dtype, sizes, strlen, $
+                     indexd, nullok
+   
+   returns segment summary information:
+   
+      nrows    the scalar integer count of rows in segment
+               'segno'.
+               
+      ncols    the scalar integer count of columns in segment
+               'segno'.
+               
+      tabnam   a string naming the table containing the segment.
+
+      cnames   a string array of column names in the segment.      
+   
+         The following return arguments hold the summary information
+         for the columns named in 'cnames'. The ith entry
+         in each array corresponds to the ith column name in 'cnames'
+   
+      cclass   integer array of column class codes.
+      
+      dtype    integer array of column data type codes.
+   
+               The correspondence between data type and integer codes:      
+   
+               SPICE_CHR  = 0  (Character data)
+               SPICE_DP   = 1  (Double precision data)
+               SPICE_INT  = 2  (Integer data)
+               SPICE_TIME = 3  (SPICE representation of times)
+   
+      sizes    integer array of column entry sizes, i.e. the
+               count of array elements in a column entry.
+      
+      strlen   integer array containing the string length for
+               columns of data type SPICE_CHR.
+      
+      indexd   boolean array indicating whether a particular column
+               is indexed (TRUE) or not (FALSE).
+      
+      nullok   boolean array indicating whether a particular column
+               may contain null values (TRUE) or not (FALSE).
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Open the file named by EK, returning the file handle
+      ;; associated with the open file to the variable named
+      ;; 'handle'.
+      ;;
+      EK = 'test_file.ek'
+   
+      <a href="cspice_ekopr.html">cspice_ekopr</a>, EK, handle
+   
+      ;;
+      ;; Set the data type codes. A column of data in
+      ;; an EK has one of four data types.
+      ;;
+      ;; Character
+      ;;
+      SPICE_CHR  = 0
+   
+      ;;
+      ;; Double precision
+      ;;
+      SPICE_DP   = 1
+   
+      ;;
+      ;; Integer
+      ;;
+      SPICE_INT  = 2
+   
+      ;;
+      ;; Time
+      ;;
+      SPICE_TIME = 3 
+   
+      ;;
+      ;; Return the number of segments in EK.
+      ;;
+      nseg = <a href="cspice_eknseg.html">cspice_eknseg</a> ( handle ) 
+   
+      ;;
+      ;; Loop over each segment, summarizing the segment as we go.
+      ;;
+      for segno = 0, (nseg-1) do begin
+   
+         ;;
+         ;; Retrieve the segment summary in the file identified by
+         ;; file handle 'handle'.
+         ;;
+         ;;
+         <b>cspice_ekssum</b>, handle,  segno,   nrow, ncol,  $
+                        tabnam, cnames, cclass, dtype, $ 
+                        size  , strlen, indexd, nullok
+   
+         print, 'Table name ', tabnam
+         print, 'Ncols      ', ncol
+         print, 'Nnrows     ', nrow
+   
+         ;;
+         ;; Loop over each column found in the segment.
+         ;; 
+         for colno = 0, (ncol-1) do begin
+   
+            print, '  Name and attributes of column: ', colno         
+            print, '    column class                  ', cclass[colno]
+            print, '    column name                   ', cnames[colno]
+            print, '    data type                     ', dtype[colno]
+   
+            ;;
+            ;; Respond as appropriate for the data type in the column
+            ;;
+            case  dtype[colno] of
+            
+               SPICE_CHR  : begin
+                            print, '     String with length  ', strlen[colno]
+                        end
+                           
+               SPICE_INT  : begin
+                            print, '     Integer'
+                        end
+   
+               SPICE_DP   : begin
+                            print, '     Double precision'
+                        end
+   
+               SPICE_TIME : begin
+                            print, '     Time value'
+                        end
+   
+               else: print, '     dtype value error'
+   
+            endcase
+   
+            print, '    dimension                     ',   size[colno]
+            print, '    index flag                    ', indexd[colno]
+            print, '    nulls allowed flag            ', nullok[colno]
+            print, ' '
+   
+         endfor
+   
+      endfor
+
+
+   IDL outputs:
+
+      Table name SCALAR_1
+      Ncols                 8
+      Nnrows               10
+        Name and attributes of column:        0
+          column class                             3
+          column name                   TABLE_NAME
+          data type                                0
+           String with length            64
+          dimension                                1
+          index flag                       0
+          nulls allowed flag               0
+       
+        Name and attributes of column:        1
+          column class                             1
+          column name                   FILE_NO
+          data type                                2
+           Integer
+          dimension                                1
+          index flag                       0
+          nulls allowed flag               0
+       
+        Name and attributes of column:        2
+          column class                             1
+          column name                   SEGMENT_NO
+          data type                                2
+           Integer
+          dimension                                1
+          index flag                       0
+          nulls allowed flag               0
+       
+        Name and attributes of column:        3
+          column class                             1
+          column name                   ROW_NO
+          data type                                2
+           Integer
+          dimension                                1
+          index flag                       0
+          nulls allowed flag               0
+       
+        Name and attributes of column:        4
+          column class                             3
+          column name                   C_COL_1
+          data type                                0
+           String with length            -1
+          dimension                                1
+          index flag                       0
+          nulls allowed flag               0
+       
+        Name and attributes of column:        5
+          column class                             2
+          column name                   D_COL_1
+          data type                                1
+           Double precision
+          dimension                                1
+          index flag                       0
+          nulls allowed flag               0
+      
+        ... 
+       
+        Name and attributes of column:       15
+          column class                             4
+          column name                   I_COL_4
+          data type                                2
+           Integer
+          dimension                               -1
+          index flag                       0
+          nulls allowed flag               1
+       
+        Name and attributes of column:       16
+          column class                             5
+          column name                   T_COL_1
+          data type                                3
+           Time value
+          dimension                                6
+          index flag                       0
+          nulls allowed flag               1
+       
+        Name and attributes of column:       17
+          column class                             5
+          column name                   T_COL_2
+          data type                                3
+           Time value
+          dimension                                8
+          index flag                       0
+          nulls allowed flag               1
+       
+        Name and attributes of column:       18
+          column class                             5
+          column name                   T_COL_3
+          data type                                3
+           Time value
+          dimension                               -1
+          index flag                       0
+          nulls allowed flag               1
+       
+        Name and attributes of column:       19
+          column class                             5
+          column name                   T_COL_4
+          data type                                3
+           Time value
+          dimension                               -1
+          index flag                       0
+          nulls allowed flag               1
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ek.html">EK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 22-FEB-2010, EDW (JPL)
+
+      Updated header to list output of example code.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   return EK segment summary 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:30 2014</pre>
+
+</body>
+</html>
+

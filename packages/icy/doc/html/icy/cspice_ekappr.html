@@ -1,0 +1,293 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ekappr</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ekappr</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EKAPPR appends a new, empty record at the end of a specified
+   EK segment.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ekappr_c.html">ekappr_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      handle   the scalar integer referring to an EK file open for 
+               write access
+   
+      segno    the scalar integer indicating EK segment number
+               for the new record
+   
+   the call:
+   
+      <b>cspice_ekappr</b>, handle, segno, recno
+   
+   returns:
+   
+      recno    the scalar integer indicating the index of the new
+               record
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+     
+      ;;
+      ;; Initialize needed parameters.
+      ;;
+      SPICEFALSE = 0B
+      SPICETRUE  = 1B
+      EKNAME     = &quot;ekacex_t.ek&quot;
+      FNMLEN     = 50
+      IFNAME     = &quot;Test EK&quot;
+      LNMLEN     = 50
+      LSK        = &quot;<a href= "standard.html">standard.tm</a>&quot;
+      NCOLS      = 6
+      NRESVC     = 0
+      NROWS      = 9
+      TABLE       = &quot;DATAORDERS&quot;
+      
+      ;;
+      ;; Load a leapseconds kernel for UTC/ET conversion.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, LSK
+      
+      ;;
+      ;; Open a new EK file.  For simplicity, we won't 
+      ;; reserve space for the comment area, so the 
+      ;; number of reserved comment characters is zero. 
+      ;; The constant IFNAME is the internal file name. 
+      ;;
+      if( <a href="cspice_exists.html">cspice_exists</a>( EKNAME ) ) then begin
+         file_delete, EKNAME
+      endif
+      <a href="cspice_ekopn.html">cspice_ekopn</a>, EKNAME, IFNAME, NRESVC, handle
+      
+      cnames = strarr( NCOLS )
+      cdecls = strarr( NCOLS )
+      
+      cnames[0] = &quot;ORDER_ID&quot; 
+      cdecls[0] = &quot;DATATYPE = INTEGER, INDEXED = TRUE&quot;
+      
+      cnames[1] = &quot;CUSTOMER_ID&quot;
+      cdecls[1] = &quot;DATATYPE = INTEGER, INDEXED = TRUE&quot;
+      
+      cnames[2] = &quot;LAST_NAME&quot; 
+      cdecls[2] = &quot;DATATYPE = CHARACTER*(*), INDEXED  = TRUE&quot;
+      
+      cnames[3] = &quot;FIRST_NAME&quot; 
+      cdecls[3] = &quot;DATATYPE = CHARACTER*(*), INDEXED  = TRUE&quot;
+      
+      cnames[4] = &quot;ORDER_DATE&quot;
+      cdecls[4] = &quot;DATATYPE = TIME, INDEXED  = TRUE&quot; 
+      
+      cnames[5] = &quot;COST&quot;
+      cdecls[5] = &quot;DATATYPE = DOUBLE PRECISION, &quot;    +$
+                  &quot;INDEXED  = TRUE, NULLS_OK = TRUE&quot;
+         
+      ;;
+      ;; Start the segment.  We presume the number of  rows 
+      ;; of data is known in advance. 
+      ;;
+      <a href="cspice_ekbseg.html">cspice_ekbseg</a>, handle,  TABLE,   NCOLS,  $
+                     cnames,  cdecls,  segno
+      
+      ;;
+      ;; Prepare for an append operation to segment segno.
+      ;;
+      <b>cspice_ekappr</b>, handle, segno, recno
+      
+      ;;
+      ;; At this point, arrays containing data for the 
+      ;; segment's columns may be filled in.  The names 
+      ;; of the data arrays are shown below. 
+      ;;
+      ;;   Column           Data array 
+      ;;
+      ;;   &quot;ORDER_ID&quot;       ordids 
+      ;;   &quot;CUSTOMER_ID&quot;    cstids 
+      ;;   &quot;LAST_NAME&quot;      lnames 
+      ;;   &quot;FIRST_NAME&quot;     fnames 
+      ;;   &quot;ORDER_DATE&quot;     odates 
+      ;;   &quot;COST&quot;           costs 
+      ;;
+      ;; The null flags array indicates which entries are null. 
+      ;; It is ignored for columns that don't allow null 
+      ;; values.  In this case, only the COST column allows 
+      ;; nulls. 
+      ;;
+      ;; Fill in data arrays and null flag arrays here.  This code
+      ;; section would normally be replaced by calls to user functions
+      ;; returning column values.
+      ;;
+      ordids = lonarr( NROWS)
+      cstids = lonarr( NROWS)
+      costs  = dblarr( NROWS)
+      ets    = dblarr( NROWS)
+      fnames = strarr( NROWS)
+      lnames = strarr( NROWS)
+      
+      for i = 0, (NROWS-1) do begin
+      
+         ordids[i] =  i
+         cstids[i] =  i*100
+         costs [i] =  double(100*i)
+         fnames[i] = &quot;Order &quot; + string(i) + &quot; Customer first name&quot;
+         lnames[i] = &quot;Order &quot; + string(i) + &quot; Customer last name&quot;
+      
+         date_string = '2001 Mar ' + string(i)
+      
+         <a href="cspice_utc2et.html">cspice_utc2et</a>, date_string, et
+         ets[i] = et
+      
+      endfor
+      
+      nlflgs = SPICEFALSE   
+      
+      ;;
+      ;; Add the columns of data to the segment.  All of the 
+      ;; data for each column is written in one shot. Note,
+      ;; the interface code signals an error if the null flag
+      ;; for a column, 'nlflgs', has value SPICETRUE while the 
+      ;; declaration for the column lacks a NULLS_OK = TRUE 
+      ;; assignment.
+      ;;
+      <a href="cspice_ekacei.html">cspice_ekacei</a>, handle, segno, recno, &quot;order_id&quot;, NROWS, $
+                     ordids, nlflgs
+      
+      <a href="cspice_ekacei.html">cspice_ekacei</a>, handle, segno, recno, &quot;customer_id&quot;, NROWS, $
+                     cstids, nlflgs
+      
+      <a href="cspice_ekacec.html">cspice_ekacec</a>, handle, segno, recno, &quot;last_name&quot;, NROWS, $
+                     LNMLEN, lnames, nlflgs
+      
+      <a href="cspice_ekacec.html">cspice_ekacec</a>, handle, segno, recno, &quot;first_name&quot;, NROWS, $
+                     FNMLEN, fnames,  nlflgs 
+      
+      <a href="cspice_ekaced.html">cspice_ekaced</a>, handle, segno, recno, &quot;order_date&quot;, NROWS, $
+                     ets, nlflgs
+      
+      <a href="cspice_ekaced.html">cspice_ekaced</a>, handle, segno, recno, &quot;cost&quot;, NROWS, $
+                     costs, nlflgs 
+      
+      ;;
+      ;; The file must be closed by a call to <a href="cspice_ekcls.html">cspice_ekcls</a>
+      ;;
+      <a href="cspice_ekcls.html">cspice_ekcls</a>, handle
+      <a href="cspice_unload.html">cspice_unload</a>, '<a href= "standard.html">standard.tm</a>'
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ek.html">EK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   append record to EK segment 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

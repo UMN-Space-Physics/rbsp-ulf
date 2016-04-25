@@ -1,0 +1,278 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_gnpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_gnpool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_GNPOOL queries the kernel pool for names of pool variables
+   matching a user defined template.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/gnpool_c.html">gnpool_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      name     the scalar string matchi_c template to use when searching
+               for variable names in the kernel pool. The characters '*'
+               and '%' are used for the wild card string and wild card
+               character respectively.  For details of string
+               pattern matching see the header of the routine matchi_c.
+
+      start    a scalar integer value for the index indicating the
+               first component of the data vector to return (index 0 for
+               all elements).
+
+      room     the scalar integer specifying the maximum number of components
+               that can return for 'name'.
+
+      length   the scalar integer value describing the max length
+               to allow for the data strings (the value 81 returns
+               any kernel variable name).
+
+   the call:
+
+      <b>cspice_gnpool</b>, name, start, room, length, kvars, found
+
+   returns:
+
+      kvars   a string array of kernel variable names matching the template
+              'name', beginning with match number 'start'.
+
+      found   a scalar boolean that flags whether any kernel variable names
+              matched the 'name' template (TRUE) or not (FALSE).
+
+              'kvars' has a size of 'room' or less.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      Example(1):
+
+      ;;
+      ;; Load a leapseconds kernel.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+
+      ;;
+      ;; A template for Jupiter kernel variables.
+      ;;
+      VAR = 'BODY599*'
+
+      ;;
+      ;; Query for the variable name, return all matches from
+      ;; index 0.
+      ;;
+      INDEX  = 0
+      ROOM   = 10
+      STRLEN = 81
+
+      <b>cspice_gnpool</b>, VAR, INDEX, ROOM, STRLEN, kervar, found
+
+      if (found) then begin
+
+         ;;
+         ;; Output the returned variable names.
+         ;;
+         for i=0, n_elements(kervar)-1 do begin
+            print, '   Variable ' + string(i) + ' matching ' + VAR $
+                 + ' : ', kervar[i]
+         endfor
+
+      endif else begin
+         print, 'Failed to find  ' + VAR + ' in the kernel pool'
+      endelse
+
+   IDL outputs:
+
+      Variable        0 matching BODY599* : BODY599_POLE_DEC
+      Variable        1 matching BODY599* : BODY599_LONG_AXIS
+      Variable        2 matching BODY599* : BODY599_PM
+      Variable        3 matching BODY599* : BODY599_RADII
+      Variable        4 matching BODY599* : BODY599_POLE_RA
+
+
+      Example(2):
+
+      ;;
+      ;; Return to the array 'kervar' the names of the first
+      ;; 'ROOM' pool variables. Use the * wildcard character
+      ;; as a template to indicate a request for all kernel
+      ;; variables.
+      ;;
+      ;;
+      ;; Return all matches from 'INDEX' zero.
+      ;;
+      INDEX  = 0
+      ROOM   = 10
+      STRLEN = 81
+
+      ;;
+      ;; Load a meta kernel listing leapseconds and
+      ;; the default SPICE PCK kernels.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+
+      ;;
+      ;; Retrieve the variables from the pool.
+      ;;
+      <b>cspice_gnpool</b>, '*', index, ROOM, STRLEN, kervar, found
+
+      ;;
+      ;; Output the returned variable names.
+      ;;
+      if (found) then begin
+
+         ;;
+         ;; Output the returned variable names.
+         ;;
+         for i=0, n_elements(kervar)-1 do begin
+            print, '   Variable ' + string(i) + ' : ', kervar[i]
+         endfor
+
+      endif else begin
+         print, 'Failed to find any variable in the kernel pool'
+      endelse
+
+   IDL outputs:
+
+      Variable        0 : BODY711_NUT_PREC_PM
+      Variable        1 : BODY703_POLE_RA
+      Variable        2 : BODY402_NUT_PREC_PM
+      Variable        3 : BODY502_NUT_PREC_RA
+      Variable        4 : BODY299_POLE_RA
+      Variable        5 : BODY5_NUT_PREC_ANGLES
+      Variable        6 : BODY999_LONG_AXIS
+      Variable        7 : BODY713_POLE_RA
+      Variable        8 : BODY708_NUT_PREC_PM
+      Variable        9 : BODY808_NUT_PREC_RA
+
+   Note, the seemingly random order of the output list reflects the
+   order used by the SPICE kernel subsystem to store/lookup the
+   variable names.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.2, 29-APR-2011, EDW (JPL)
+
+      Edits to I/O section so as to parallel Mice version.
+
+   -Icy Version 1.0.1, 02-JAN-2007, EDW (JPL)
+
+      Edit to I/O section for 'room' and 'start' to improve clarity.
+
+      Minor edit to example comments concerning output list order.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   return names of kernel pool variables matching a template
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:30 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,315 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ekpsel</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ekpsel</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EKPSEL parses the SELECT clause of an EK query, returning
+   full particulars concerning each selected item. Use the routine
+   to determine at runtime the attributes of the columns named in
+   the select clause.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ekpsel_c.html">ekpsel_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given the EK query string 'query', the call:
+   
+      <b>cspice_ekpsel</b>, query, n, xbegs, xends, xtypes, $
+                     xclass, tabs, cols, error, `errmsg'
+   
+   returns:
+      
+      n        a scalar integer indicating the number of items 
+               in SELECT clause of query. 
+               
+      xbegs    a scalar integer array containing the positions of expressions 
+               in SELECT clause.
+               
+      xends    a scalar integer array containing end positions of expressions 
+               in SELECT clause. 
+               
+      xtypes   a scalar integer array containing the data type code
+               of the expressions. The possible return values:
+   
+                    0 indicates SPICE_CHR, for a character expression
+                    1 indicates SPICE_DP, for a double precision expression
+                    2 indicates SPICE_INT, for an integer expression
+                    3 indicates SPICE_TIME, for a time (double precision) 
+                                            expression 
+   
+      xclass   the classes of expressions.
+      
+      tabs     a vector of strings containing the names of tables 
+               qualifying SELECT columns.
+               
+      cols     a vector of strings containing the names of columns
+               in SELECT clause of query.
+               
+      error    a scalar boolean indicating whether an error occurred (true) 
+               in the select query or not (false).
+               
+      errmsg   a scalar string returning the parse error message if 
+               'error' equals TRUE.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Load an EK file and a meta kernel listing a
+      ;; leapseconds file.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, 'test_file.ek'
+   
+      ;;
+      ;; the select clause of the query string: 
+      ;;
+      ;;   Select c_col_1, d_col_1, i_col_1, t_col_1
+      ;;
+      query = &quot;Select c_col_1, d_col_1, i_col_1, t_col_1 from &quot; + $
+              &quot; scalar_2 order by row_no&quot;
+   
+      ;;
+      ;; Define the types of EK columns.
+      ;;
+      SPICE_CHR  = 0
+      SPICE_DP   = 1
+      SPICE_INT  = 2
+      SPICE_TIME = 3 
+   
+      <b>cspice_ekpsel</b>, query, n, xbegs, xends, xtypes, xclass, $
+                     tabs , cols , error , errmsg
+                                  
+      if ( error ) then begin
+         print, 'Error <b>cspice_ekpsel</b>: ' + errmsg
+      endif
+      
+      
+      ;;
+      ;; Call <a href="cspice_ekfind.html">cspice_ekfind</a> with the query string.
+      ;;   
+      <a href="cspice_ekfind.html">cspice_ekfind</a>, query, nmrows, error, errmsg
+      
+      if ( error ) then begin
+         print, 'Error <a href="cspice_ekfind.html">cspice_ekfind</a>: ', errmsg
+      endif
+   
+      ;;
+      ;; Use the appropriate fetch routine as needed for the type
+      ;; of data in each column.
+      ;;
+      for row = 0, (nmrows-1) do begin
+         
+         for col = 0, (n-1) do begin
+   
+            print, 'For row ', row, ' col ', col
+   
+            case  xtypes[col] of
+   
+               SPICE_CHR  : begin
+   
+                  <a href="cspice_ekgc.html">cspice_ekgc</a>, col, row, 0, cdata, isnull, found
+                               
+                  if( ~isnull) then begin
+                     print, '   Character data: ', cdata
+                  endif
+                                 
+                  end
+   
+               SPICE_INT  : begin
+   
+                  <a href="cspice_ekgi.html">cspice_ekgi</a>, col, row, 0, idata, isnull, found
+      
+                  if( ~isnull) then begin
+                     print, '   Integer data: ', idata
+                  endif
+      
+                  end
+                               
+               SPICE_DP   : begin
+       
+                  <a href="cspice_ekgd.html">cspice_ekgd</a>, col, row, 0, ddata, isnull, found
+      
+                  if( ~isnull) then begin
+                     print, '   DP data: ', ddata
+                  endif
+   
+                  end
+                               
+               SPICE_TIME : begin
+      
+                  <a href="cspice_ekgd.html">cspice_ekgd</a>, col, row, 0, ddata, isnull, found
+      
+                  if( ~isnull) then begin
+                     <a href="cspice_et2utc.html">cspice_et2utc</a>, ddata, &quot;C&quot;, 3, utcstr
+                     print, '   Time data: ', utcstr
+                  endif
+   
+                  end
+                              
+               else: print, 'Unknown value type'
+   
+               endcase
+   
+            endfor
+      
+         endfor
+   
+   IDL outputs (for test_file.ek):
+   
+      For row        0 col        0
+         Character data: SEG_2_C_COL_1_ROW_1
+      For row        0 col        1
+         DP data:       -2000001.0
+      For row        0 col        2
+         Integer data:      2000001
+      For row        0 col        3
+         Time data: 1999 DEC 09 08:25:34.817
+      For row        1 col        0
+         Character data: SEG_2_C_COL_1_ROW_2
+      For row        1 col        1
+         DP data:       -2000002.0
+      For row        1 col        2
+         Integer data:      2000002
+      For row        1 col        3
+         Time data: 1999 DEC 09 08:25:33.817
+   
+      ... continue ...
+   
+      For row       19 col        0
+         Character data: SEG_2_C_COL_1_ROW_20
+      For row       19 col        1
+         DP data:       -2000020.0
+      For row       19 col        2
+         Integer data:      2000020
+      For row       19 col        3
+         Time data: 1999 DEC 09 08:25:15.817
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ek.html">EK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+
+   -Icy Version 1.0.1, 04-FEB-2008, EDW (JPL)
+   
+      Edited example code to replace 
+      
+         not isnull
+      
+      with
+      
+         ~isnull
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   parse select clause of EK query 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:30 2014</pre>
+
+</body>
+</html>
+

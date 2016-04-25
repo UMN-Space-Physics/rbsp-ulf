@@ -1,0 +1,273 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ldpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ldpool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_LDPOOL loads the variable assignments in an ASCII
+   text kernel to the kernel pool.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ldpool_c.html">ldpool_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      filename   the scalar string name of a text kernel
+   
+   the call:
+   
+      <b>cspice_ldpool</b>, filename
+   
+   loads the assignments listed in 'filename' to the kernel pool.
+   
+   Note: This routine, has been superseded by <a href="cspice_furnsh.html">cspice_furnsh</a>. 
+   NAIF recommends users load all kernel files for read-only data 
+   access with <a href="cspice_furnsh.html">cspice_furnsh</a>.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Create a leapseconds kernel, load it, then check
+      ;; the pool for the data. 
+      ;;
+      ;; Start with the needed variable assignments.
+      ;;
+      LMPOOL_NVARS =  5
+      LSK          = &quot;ldpool.tls&quot;
+      NLINES       =  27
+      textbuf      =                                                $
+                   [                                                $
+                   &quot;DELTET/DELTA_T_A = 32.184&quot;,                     $
+                   &quot;DELTET/K         = 1.657D-3&quot;,                   $
+                   &quot;DELTET/EB        = 1.671D-2&quot;,                   $
+                   &quot;DELTET/M         = ( 6.239996 1.99096871D-7 )&quot;, $
+                   &quot;DELTET/DELTA_AT  = ( 10, @1972-JAN-1&quot;,          $
+                   &quot;                     11, @1972-JUL-1&quot;,          $
+                   &quot;                     12, @1973-JAN-1&quot;,          $
+                   &quot;                     13, @1974-JAN-1&quot;,          $
+                   &quot;                     14, @1975-JAN-1&quot;,          $
+                   &quot;                     15, @1976-JAN-1&quot;,          $
+                   &quot;                     16, @1977-JAN-1&quot;,          $
+                   &quot;                     17, @1978-JAN-1&quot;,          $
+                   &quot;                     18, @1979-JAN-1&quot;,          $
+                   &quot;                     19, @1980-JAN-1&quot;,          $
+                   &quot;                     20, @1981-JUL-1&quot;,          $
+                   &quot;                     21, @1982-JUL-1&quot;,          $
+                   &quot;                     22, @1983-JUL-1&quot;,          $
+                   &quot;                     23, @1985-JUL-1&quot;,          $
+                   &quot;                     24, @1988-JAN-1&quot;,          $
+                   &quot;                     25, @1990-JAN-1&quot;,          $
+                   &quot;                     26, @1991-JAN-1&quot;,          $
+                   &quot;                     27, @1992-JUL-1&quot;,          $
+                   &quot;                     28, @1993-JUL-1&quot;,          $
+                   &quot;                     29, @1994-JUL-1&quot;,          $
+                   &quot;                     30, @1996-JAN-1&quot;,          $
+                   &quot;                     31, @1997-JUL-1&quot;,          $
+                   &quot;                     32, @1999-JAN-1 )&quot;         $
+                   ]
+   
+   
+      lmpoolNames  = [                    $
+                     &quot;DELTET/DELTA_T_A&quot;,  $
+                     &quot;DELTET/K&quot;,          $
+                     &quot;DELTET/EB&quot;,         $
+                     &quot;DELTET/M&quot;,          $
+                     &quot;DELTET/DELTA_AT&quot;    $
+                     ]
+   
+      ;;
+      ;; Create a kernel file.  We must prepend a &quot;\begindata&quot; control
+      ;; word before the kernel variable assignments.
+      ;;   
+      openw, LUN, LSK, /Get_Lun
+   
+      printf, LUN, &quot;\begindata&quot;
+      
+      for i = 0, (NLINES-1) do begin
+        printf, LUN, textbuf[i]
+      endfor
+   
+      ;;
+      ;; Place a &quot;\begintext&quot; marker after the data assignments, 
+      ;; just in case...
+      ;;   
+      printf, LUN, &quot;\begintext&quot;
+      
+      ;;
+      ;; Close the new LSK.
+      ;;
+      close, LUN
+      
+      ;;
+      ;; Load the LSK into the kernel pool.
+      ;;
+      <b>cspice_ldpool</b>, LSK
+     
+      ;;
+      ;; Check the variable assignments now exist in the
+      ;; pool.
+      ;;
+      for i = 0, (LMPOOL_NVARS-1) do begin
+   
+         ;;
+         ;; Retrieve name, type, and array size for each
+         ;; variable name.
+         ;;
+         <a href="cspice_dtpool.html">cspice_dtpool</a>, lmpoolNames[i], found, n, dtype
+   
+         if (found) then begin
+            print, &quot;Variable name : &quot; + lmpoolNames[i]
+            print, &quot;Variable size : &quot; + string(n)
+            print, &quot;Variable type : &quot; + dtype
+            print
+         endif
+   
+      endfor
+   
+   IDL outputs:
+   
+      Variable name : DELTET/DELTA_T_A
+      Variable size :            1
+      Variable type : N
+   
+      Variable name : DELTET/K
+      Variable size :            1
+      Variable type : N
+   
+      Variable name : DELTET/EB
+      Variable size :            1
+      Variable type : N
+   
+      Variable name : DELTET/M
+      Variable size :            2
+      Variable type : N
+   
+      Variable name : DELTET/DELTA_AT
+      Variable size :           46
+      Variable type : N
+   
+   All five variable assignment found in the pool. A size 1 indicates 
+   a scalar, type N indicates a numeric value.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Text kernels input to this routine need not have native line
+   terminators for the platform. Lower level CSPICE routines can
+   read and process non-native text files. This functionality does
+   not exist in the Fortran SPICELIB.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+   <a href="../req/pck.html">PCK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   LOAD variables from a text kernel file into the pool 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

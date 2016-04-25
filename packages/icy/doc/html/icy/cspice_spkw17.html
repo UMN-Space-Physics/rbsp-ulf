@@ -1,0 +1,295 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkw17</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkw17</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   Write an SPK segment of type 17 given a type 17 data record.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/spkw17_c.html">spkw17_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the scalar integer file handle of an SPK file that has been
+               opened for writing.
+
+      body     the scalar integer NAIF ID for the body whose states are
+               to be recorded in an SPK file.
+
+      center   the scalar integer NAIF ID for the center of motion associated
+               with body.
+
+      frame    the scalar string reference frame name that states are
+               referenced to, for example 'J2000'.
+
+      first,   scalar double precision bounds on the ephemeris times, expressed
+      last     as seconds past J2000.
+
+      segid    the scalar string segment identifier. An SPK segment identifier
+               may contain up to 40 characters.
+
+      epoch    the scalar double precision epoch of equinoctial elements in
+               seconds past the J2000 epoch.
+
+      eqel     the double precision 9-vector containing the equinoctial
+               elements for some orbit relative to the equatorial frame of a
+               central body.
+
+               The Z-axis of the equatorial frame is the direction
+               of the pole of the central body relative to frame.
+               The x-axis is given by the cross product of the
+               Z-axis of frame with the direction of the pole of
+               the central body. The Y-axis completes a right
+               handed frame.
+
+               The specific arrangement of the elements is spelled
+               out below. The following terms are used in the
+               discussion of elements of 'eqel':
+
+                   inc  --- inclination of the orbit
+                   argp --- argument of periapse
+                   node --- longitude of the ascending node
+                   e    --- eccentricity of the orbit
+
+               eqel[0] is the semi-major axis (A) of the orbit in km.
+
+               eqel[1] is the value of H at the specified epoch.
+                       ( e*sin(argp+node) ).
+
+               eqel[2] is the value of K at the specified epoch
+                       ( e*cos(argp+node) ).
+
+               eqel[3] is the mean longitude (mean0+argp+node) at
+                       the epoch of the elements measured in radians.
+
+               eqel[4] is the value of p (tan(inc/2)*sin(node)) at
+                       the specified epoch.
+
+               eqel[5] is the value of q (tan(inc/2)*cos(node)) at
+                       the specified epoch.
+
+               eqel[6] is the rate of the longitude of periapse
+                       (dargp/dt + dnode/dt ) at the epoch of
+                       the elements. This rate is assumed to hold
+                       for all time. The rate is measured in
+                       radians per second.
+
+               eqel[7] is the derivative of the mean longitude
+                       ( dm/dt + dargp/dt + dnode/dt ). This
+                       rate is assumed to be constant and is
+                       measured in radians/second.
+
+               eqel[8] is the rate of the longitude of the ascending
+                       node ( dnode/dt). This rate is measured
+                       in radians per second.
+
+      rapol    scalar double precision Right Ascension of the pole of the
+               reference plane relative to frame measured in radians.
+
+      decpol   scalar double precision Declination of the pole of the
+               reference plane relative to frame measured in radians.
+
+   the call:
+
+      <b>cspice_spkw17</b>, handle, body,  center, frame, first, last, $
+                     segid,  epoch, eqel,   rapol, decpol
+
+   returns:
+
+      None. A type 17 segment is written to the file attached
+      to handle.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+
+      ;;
+      ;; Define the segment identifier parameters.
+      ;;
+      SPK17 = 'test17.bsp'
+
+      ;;
+      ;; Create a segment identifier.
+      ;;
+      segid = 'SPK type 17 test segment'
+
+      ;;
+      ;; Open a new SPK file.
+      ;;
+      if ( <a href="cspice_exists.html">cspice_exists</a>(SPK17) ) then begin
+         file_delete, SPK17
+      endif
+      <a href="cspice_spkopn.html">cspice_spkopn</a>, SPK17, 'Type 17 SPK internal file name.', 0L, handle
+
+      ;;
+      ;; Define a set of orbit parameters for an object about a center.
+      ;;
+      p    =      1.0d4
+      gm   = 398600.436d0
+      ecc  =      0.1d0
+      a    = p/( 1.0d0 - ecc )
+      n    = sqrt ( gm / a ) / a
+      argp = 30.0d0 * <a href="cspice_rpd.html">cspice_rpd</a>()
+      node = 15.0d0 * <a href="cspice_rpd.html">cspice_rpd</a>()
+      inc  = 10.0d0 * <a href="cspice_rpd.html">cspice_rpd</a>()
+      m0   = 45.0d0 * <a href="cspice_rpd.html">cspice_rpd</a>()
+      t0   = -100000000.0d0
+
+      ;;
+      ;; We want a rate for the node of 10 degrees/day and
+      ;; for the argument of periapse of 5 degrees/day.
+      ;;
+      fivdpd  = (  5.0d0 / 86400.0d0 ) * <a href="cspice_rpd.html">cspice_rpd</a>()
+      tendpd  = ( 10.0d0 / 86400.0d0 ) * <a href="cspice_rpd.html">cspice_rpd</a>()
+
+      eqel    = dindgen(9)
+      eqel[0] = a
+      eqel[1] = ecc * sin(argp+node)
+      eqel[2] = ecc * cos(argp+node)
+      eqel[3] = m0 + argp + node
+      eqel[4] = tan(inc/2.0d0) * sin(node)
+      eqel[5] = tan(inc/2.0d0) * cos(node)
+      eqel[6] = fivdpd + tendpd
+      eqel[7] = n + fivdpd + tendpd
+      eqel[8] = tendpd
+
+      rapol   = 30.0 * <a href="cspice_rpd.html">cspice_rpd</a>()
+      decpol  = 60.0 * <a href="cspice_rpd.html">cspice_rpd</a>()
+
+      body   = -1000
+      segid  = 'phoenix'
+      center = 399
+      frame  = 'J2000'
+
+      first  = -1.0d9
+      last   =  1.0d9
+      epoch  = 0.d0
+
+      ;;
+      ;; Now add the segment.
+      ;;
+      <b>cspice_spkw17</b>, handle, body,  center, frame,  first, last, $
+                     segid,  epoch, eqel,   rapol,  decpol
+
+      ;;
+      ;; SAFELY close the SPK file.
+      ;;
+      <a href="cspice_spkcls.html">cspice_spkcls</a>, handle
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine writes an SPK type 17 data segment to the open SPK
+   file according to the format described in the type 17 section of
+   the SPK Required Reading. The SPK file must have been opened with
+   write access.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   SPK
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 07-NOV-2011, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Write a type 17 spk segment
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

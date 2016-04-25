@@ -1,0 +1,338 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ekrced</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ekrced</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EKRCED reads data from a double precision column in 
+   a specified segment of an EK file.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ekrced_c.html">ekrced_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+
+      handle   the scalar integer referring to an EK file open for 
+               read access.
+
+      segno    the scalar integer indicating EK segment number
+               of interest.
+
+      recno    the scalar integer identifying the index for record
+               of interest.
+
+      column   the string scalar name of the column of interest.
+      
+      nelts    integer dimension of 'dvals' array. 'dvals' returns
+               with 'nelts' elements or less.
+
+   the call:
+
+      <b>cspice_ekrced</b>, handle, segno, recno, column, nelts, dvals, isnull
+
+   returns:
+
+      dvals     an array of double precision values containing the 
+                data values in 'column'.
+
+      isnull    a scalar boolean flagging whether the column entry 
+                is null.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   PRO EKRCED_T
+   
+      ;;
+      ;; Constants
+      ;;
+      EKNAME = 'ekrced.ek'
+      IFNAME = 'Test EK/Enjoy'
+      NCOLS  = 2
+      NROWS  = 5
+      NRESVC = 0
+      TABLE  = 'DP_DATA'
+      CVLEN  = 81
+      MAXVAL = 10
+      dvals  = dblarr( MAXVAL )
+      
+      ;;
+      ;; Open a new EK file.  For simplicity, we won't
+      ;; reserve space for the comment area, so the 
+      ;; number of reserved comment characters is zero. 
+      ;; The constant IFNAME stores the internal file name. 
+      ;;
+   
+      if ( <a href="cspice_exists.html">cspice_exists</a> (EKNAME) ) then begin
+         file_delete, EKNAME
+      endif
+   
+      ;;
+      ;; Create and open a new EK file.
+      ;;
+      <a href="cspice_ekopn.html">cspice_ekopn</a>, EKNAME, IFNAME, NRESVC, handle
+       
+      ;;
+      ;;   Set up the table and column names and declarations 
+      ;;   for the DP_DATA segment.  We'll index all of 
+      ;;   the columns.
+      ;;
+      cdecls = strarr(NCOLS) 
+      cnames = strarr(NCOLS)
+   
+      ;;
+      ;; Define the column names and formats.
+      ;;
+      cnames[0] = 'DP_COL_1'
+      cdecls[0] = 'DATATYPE = DOUBLE PRECISION, INDEXED = TRUE, ' +$
+                  'NULLS_OK = TRUE'
+    
+      cnames[1] = 'DP_COL_2'
+      cdecls[1] = 'DATATYPE = DOUBLE PRECISION, SIZE = VARIABLE, '+$
+                  'NULLS_OK = TRUE'
+   
+      ;;
+      ;; Start the segment.
+      ;;
+      <a href="cspice_ekbseg.html">cspice_ekbseg</a>, handle, TABLE, NCOLS, cnames, cdecls, segno
+   
+      ;;
+      ;; Loop over the number of rows, writing data to each column.
+      ;;
+      for i = 0, (NROWS-1) do begin
+   
+         ;;
+         ;; Set the null flag for i == 1.
+         ;;
+         isnull =  ( i EQ 1 );
+      
+         ;;
+         ;; Append a new record to the EK.
+         ;;
+         <a href="cspice_ekappr.html">cspice_ekappr</a>, handle, segno, recno
+   
+         ;;
+         ;; Define the scalar.
+         ;;
+         dvals[0] = double(i + 350.d)
+   
+         ;;
+         ;; Add the data to the EK in column 1.
+         ;;
+         <a href="cspice_ekaced.html">cspice_ekaced</a>, handle, segno,  recno,  cnames[0],  $
+                        1,      dvals,  isnull
+   
+         ;;
+         ;; Array-valued columns follow.
+         ;;
+         dvals[0] = double( 10*i)
+         dvals[1] = double((10*i)+1 )
+         dvals[2] = double((10*i)+2 )
+   
+         ;;
+         ;; Add the data to column 2.
+         ;;
+         <a href="cspice_ekaced.html">cspice_ekaced</a>, handle, segno,  recno,  cnames[1],  $
+                        3,      dvals,  isnull
+   
+      endfor
+   
+      ;;
+      ;; Close the file.
+      ;;
+      <a href="cspice_ekcls.html">cspice_ekcls</a>, handle
+   
+      ;;
+      ;; Open the created file. Show the values added.
+      ;;
+      <a href="cspice_ekopr.html">cspice_ekopr</a>, EKNAME, handle
+   
+      ;;
+      ;; Provide a maximum size for the return array 'dvals'.
+      ;;
+      nelts = 20l
+         
+      for i = 0, (NROWS-1) do begin
+   
+         <b>cspice_ekrced</b>, handle, segno, i, cnames[0], nelts, $
+                        dvals, isnull
+   
+         if ( NOT isnull ) then begin
+            print, 'Data from column: ',cnames[0],'   record number: ',i
+            print, dvals
+            print   
+         endif
+    
+         ;;
+         ;; Array-valued columns follow.
+         ;;
+         <b>cspice_ekrced</b>, handle, segno, i, cnames[1], nelts, $
+                        dvals, isnull
+   
+         if ( NOT isnull ) then begin
+            print, 'Data from column: ',cnames[1], '   record number: ',i
+            print, dvals
+            print   
+         endif
+   
+      endfor
+   
+      ;;
+      ;; End the file.
+      ;;
+      <a href="cspice_ekcls.html">cspice_ekcls</a>, handle
+   
+   END
+
+   
+   IDL outputs:
+   
+      Data from column: DP_COL_1   record number:        0
+          350.00000
+   
+      Data from column: DP_COL_2   record number:        0
+          0.0000000       1.0000000       2.0000000
+   
+      Data from column: DP_COL_1   record number:        2
+          352.00000
+   
+      Data from column: DP_COL_2   record number:        2
+          20.000000       21.000000       22.000000
+   
+      Data from column: DP_COL_1   record number:        3
+          353.00000
+   
+      Data from column: DP_COL_2   record number:        3
+          30.000000       31.000000       32.000000
+   
+      Data from column: DP_COL_1   record number:        4
+          354.00000
+   
+      Data from column: DP_COL_2   record number:        4
+          40.000000       41.000000       42.000000
+   
+   Note record 1 does not appear due to setting the 'isnull' flag
+   to true for that record.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ek.html">EK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 23-FEB-2010, EDW (JPL)
+
+      Correction to I/O section to document use of 'elts' argument.
+
+      Correction to example code; corrected &quot;<b>cspice_ekrced</b>&quot; argument list.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   read double precision data from EK column 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:30 2014</pre>
+
+</body>
+</html>
+

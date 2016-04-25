@@ -1,0 +1,214 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_bodvar</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_bodvar</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_BODVAR returns a double precision vector containing the values for
+   some designated body data stored in the kernel pool.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/bodvar_c.html">bodvar_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+   
+      body   the scalar integer NAIF ID of the body for which to
+             return the value(s) of 'item'
+   
+      item  the scalar string naming the property of 'body' to return,
+             e.g. RADII, GM, POLE_RA
+   
+                Note that `item' *is* case-sensitive.  This attribute 
+                is inherited from the case-sensitivity of kernel 
+                variable names. 
+
+   the call:
+   
+      <b>cspice_bodvar</b>, body, item, values
+   
+   returns:
+
+      values   an array of the double precision values associated with
+               the variable
+
+      Note: 'values' returns a vector even when 'item' refers to a scalar, i.e.
+      a scalar returns in 'values[0]'.
+
+      Deprecated: This routine has been superseded by <a href="cspice_bodvcd.html">cspice_bodvcd</a> and
+      <a href="cspice_bodvrd.html">cspice_bodvrd</a>.  This routine is supported only for purposes of
+      backward compatibility.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Load a SPICE PCK file containing body data.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+
+      ;;
+      ;; Retrieve the radius vector of Saturn. The procedure 
+      ;; searches for the kernel variable BODY699_RADII.
+      ;;
+      <b>cspice_bodvar</b>, 699, &quot;RADII&quot;, radii
+      print, radii
+
+   IDL outputs:
+
+      60268.000       60268.000       54364.000
+
+   The radii vector of Saturn expressed in kilometers as 
+   recorded in the PCK listed in the &quot;<a href= "standard.html">standard.tm</a>&quot; meta-kernel.
+   
+   Note: <b>cspice_bodvar</b> signals an error if the kernel pool
+   lacks the necessary data. Either initiate a catch handler:
+   
+      catch, err
+         if err eq 0 then <b>cspice_bodvar</b>, 399, &quot;RADII&quot;, radii
+      catch, /cancel
+   
+   or test for the existence of the kernel data with <a href="cspice_bodfnd.html">cspice_bodfnd</a>
+   (the NAIF ID for Saturn has the value 699):
+   
+      found = <a href="cspice_bodfnd.html">cspice_bodfnd</a>( 699, &quot;RADII&quot; )
+   
+      if (found) then begin
+         <b>cspice_bodvar</b>, 699, &quot;RADII&quot;, radii
+      endif
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+   <a href="../req/pck.html">PCK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.4, 18-MAY-2010, BVS (JPL)
+
+      Index lines now state that this routine is deprecated.
+
+   -Icy Version 1.0.3, 07-JAN-2010, EDW (JPL)
+
+      Edits to header, corrected typo in deprecation text statement.
+
+   -Icy Version 1.0.2, 08-AUG-2008, EDW (JPL)
+
+      Minor edits to header text.
+      
+   -Icy Version 1.0.1, 24-OCT-2005, EDW (JPL)
+
+      Added a call example to the I/O section.
+
+      Included notification that NAIF deprecated this routine.
+   
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   DEPRECATED fetch constants for a body from the kernel pool
+   DEPRECATED physical constants for a body
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,1026 @@
+; **** Starting SPD_GUI
+;Master widget id           1
+plot_type = 'SCREEN'
+start_time = '2007-03-23 00:00:00'
+end_time = '2007-03-24 00:00:00'
+probe = ['e']
+dtyp = ['fgm/fge/l1','fgm/fgl/l1','fgm/fgh/l1']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+;Finished Loading data...
+varnames = ['the_fge','the_fgl','the_fgh']
+set_plot, 'win'
+tplot, 'the_fge'
+tplot, 'the_fgl'
+tplot, 'the_fgh'
+probe = ['e']
+dtyp = ['fgm/fge_dsl/l2','fgm/fgl_dsl/l2','fgm/fgh_dsl/l2','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['e']
+dtyp = ['fgm/fge_dsl/l2','fgm/fgh_dsl/l2','fgm/fgl_dsl/l2','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+set_plot, 'win'
+tplot, 'the_fge'
+tplot, 'the_fgl'
+tplot, 'the_fgh'
+;Unexpected Exit from Choose_dtype Widget
+probe = ['a','b']
+dtyp = ['fgm/fge/l1','fgm/fge_dsl/l2','fgm/fgh/l1','fgm/fgh_dsl/l2','fgm/fgl/l1','fgm/fgl_dsl/l2','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+;Finished Loading data...
+varnames = ['thb_fge','thb_fgl','thb_fgh']
+set_plot, 'win'
+tplot, 'thb_fge'
+tplot, 'thb_fgl'
+tplot, 'thb_fgh'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_01'
+tplot, 'thb_fge'
+tplot, 'thb_fgl'
+tplot, 'thb_fgh'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_01.ps
+probe = ['a','b']
+dtyp = ['fgm/fge_dsl/l2','fgm/fgl_dsl/l2','fgm/fgh_dsl/l2','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['a','b','c','d','e']
+dtyp = ['fgm/fge/l1','fgm/fge_dsl/l2','fgm/fgh/l1','fgm/fgh_dsl/l2','fgm/fgl/l1','fgm/fgl_dsl/l2','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+;Finished Loading data...
+varnames = ['thd_fge','thd_fgl','thd_fgh']
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'thd_fge'
+tplot, 'thd_fgl'
+tplot, 'thd_fgh'
+probe = ['e']
+dtyp = ['fgm/fge/l1']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['e']
+dtyp = ['fgm/fge/l1','fgm/fgh/l1']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['e']
+dtyp = ['fgm/fge/l1','fgm/fge_dsl/l2','fgm/fgh/l1']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['e']
+dtyp = ['fgm/fge/l1','fgm/fge_dsl/l2','fgm/fgh/l1','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['a','b']
+dtyp = ['fgm/fge/l1','fgm/fge_dsl/l2','fgm/fgh/l1','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['a','b']
+dtyp = ['fgm/fge/l1','fgm/fge_dsl/l2','fgm/fgh/l1','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['a','b']
+dtyp = ['fgm/fge/l1','fgm/fge_dsl/l2','fgm/fgh/l1','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['a','b','c','d','e']
+dtyp = ['fgm/fge/l1','fgm/fge_dsl/l2','fgm/fgh/l1','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['a','b','c','d','e']
+dtyp = ['fgm/fge/l1','fgm/fge_dsl/l2','fgm/fgh/l1','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['a','b','c','d','e']
+dtyp = ['fgm/fge/l1','fgm/fge_dsl/l2','fgm/fgh/l1','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+probe = ['a','b','c','d','e']
+dtyp = ['fgm/fge/l1','fgm/fge_dsl/l2','fgm/fgh/l1','fgm/fgs_dsl/l2']
+varnames = spd_ui_load_data_fn('2007-03-23/00:00:00', '2007-03-24/00:00:00', dtype=dtyp, station=station, astation=asi_station, probe=probe)
+set_plot, 'win'
+tplot, 'thd_fge'
+tplot, 'thd_fgl'
+tplot, 'thd_fgh'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_01'
+tplot, 'thd_fge'
+tplot, 'thd_fgl'
+tplot, 'thd_fgh'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_01.ps
+plot_type = 'SCREEN'
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge', 'thd_fge_ssl', in_coord='dsl', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl', 'thd_fgl_ssl', in_coord='dsl', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh', 'thd_fgh_ssl', in_coord='dsl', out_coord='ssl'
+varnames = ['thd_fge_ssl','thd_fgl_ssl','thd_fgh_ssl']
+set_plot, 'win'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+varnames = ['thd_fge','thd_fgl','thd_fgh']
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_01'
+tplot, 'thd_fge'
+tplot, 'thd_fgl'
+tplot, 'thd_fgh'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_01.ps
+plot_type = 'SCREEN'
+;Input and Output Coordinate Systems are the same forthd_fge
+;Input and Output Coordinate Systems are the same forthd_fgl
+;Input and Output Coordinate Systems are the same forthd_fgh
+varnames = ['thd_fge','thd_fgl','thd_fgh']
+set_plot, 'win'
+tplot, 'thd_fge'
+tplot, 'thd_fgh'
+tplot, 'thd_fgl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge', 'thd_fge_ssl', in_coord='dsl', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh', 'thd_fgh_ssl', in_coord='dsl', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl', 'thd_fgl_ssl', in_coord='dsl', out_coord='ssl'
+varnames = ['thd_fge_ssl','thd_fgh_ssl','thd_fgl_ssl']
+set_plot, 'win'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_02.ps'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_02.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_ssl', 'thd_fge_dsl', in_coord='ssl', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_ssl', 'thd_fgh_dsl', in_coord='ssl', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_ssl', 'thd_fgl_dsl', in_coord='ssl', out_coord='dsl'
+varnames = ['thd_fge_dsl','thd_fgh_dsl','thd_fgl_dsl']
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_03.ps'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_03.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_dsl', 'thd_fge_ssl', in_coord='dsl', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_dsl', 'thd_fgh_ssl', in_coord='dsl', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_dsl', 'thd_fgl_ssl', in_coord='dsl', out_coord='ssl'
+varnames = ['thd_fge_ssl','thd_fgh_ssl','thd_fgl_ssl']
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_04.ps'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_04.ps.ps
+plot_type = 'SCREEN'
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_ssl', 'thd_fge_gse', in_coord='ssl', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_ssl', 'thd_fgh_gse', in_coord='ssl', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_ssl', 'thd_fgl_gse', in_coord='ssl', out_coord='gse'
+varnames = ['thd_fge_gse','thd_fgh_gse','thd_fgl_gse']
+set_plot, 'win'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_05.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_05.ps.ps
+plot_type = 'SCREEN'
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gse', 'thd_fge_ssl', in_coord='gse', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gse', 'thd_fgh_ssl', in_coord='gse', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gse', 'thd_fgl_ssl', in_coord='gse', out_coord='ssl'
+varnames = ['thd_fge_ssl','thd_fgh_ssl','thd_fgl_ssl']
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_06.ps'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_06.ps.ps
+plot_type = 'SCREEN'
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_ssl', 'thd_fge_gei', in_coord='ssl', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_ssl', 'thd_fgh_gei', in_coord='ssl', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_ssl', 'thd_fgl_gei', in_coord='ssl', out_coord='gei'
+varnames = ['thd_fge_gei','thd_fgh_gei','thd_fgl_gei']
+set_plot, 'win'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_07.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_07.ps.ps
+plot_type = 'SCREEN'
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gei', 'thd_fge_ssl', in_coord='gei', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gei', 'thd_fgh_ssl', in_coord='gei', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gei', 'thd_fgl_ssl', in_coord='gei', out_coord='ssl'
+varnames = ['thd_fge_ssl','thd_fgh_ssl','thd_fgl_ssl']
+set_plot, 'win'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_08.ps'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_08.ps.ps
+plot_type = 'SCREEN'
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_ssl', 'thd_fge_gsm', in_coord='ssl', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_ssl', 'thd_fgh_gsm', in_coord='ssl', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_ssl', 'thd_fgl_gsm', in_coord='ssl', out_coord='gsm'
+varnames = ['thd_fge_gsm','thd_fgh_gsm','thd_fgl_gsm']
+set_plot, 'win'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_09.ps'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_09.ps.ps
+plot_type = 'SCREEN'
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gsm', 'thd_fge_ssl', in_coord='gsm', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gsm', 'thd_fgh_ssl', in_coord='gsm', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gsm', 'thd_fgl_ssl', in_coord='gsm', out_coord='ssl'
+varnames = ['thd_fge_ssl','thd_fgh_ssl','thd_fgl_ssl']
+set_plot, 'win'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_10.ps'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_10.ps.ps
+plot_type = 'SCREEN'
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_ssl', 'thd_fge_dsl', in_coord='ssl', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_ssl', 'thd_fgh_dsl', in_coord='ssl', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_ssl', 'thd_fgl_dsl', in_coord='ssl', out_coord='dsl'
+varnames = ['thd_fge_dsl','thd_fgh_dsl','thd_fgl_dsl']
+set_plot, 'win'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_11.ps'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_11.ps.ps
+plot_type = 'SCREEN'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_01a.ps'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_01a.ps.ps
+;Input and Output Coordinate Systems are the same forthd_fge_dsl
+;Input and Output Coordinate Systems are the same forthd_fgh_dsl
+;Input and Output Coordinate Systems are the same forthd_fgl_dsl
+varnames = ['thd_fge_dsl','thd_fgh_dsl','thd_fgl_dsl']
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_02a.ps'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_02a.ps.ps
+plot_type = 'SCREEN'
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_dsl', 'thd_fge_ssl', in_coord='dsl', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_dsl', 'thd_fgh_ssl', in_coord='dsl', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_dsl', 'thd_fgl_ssl', in_coord='dsl', out_coord='ssl'
+varnames = ['thd_fge_ssl','thd_fgh_ssl','thd_fgl_ssl']
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_03a.ps'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_03a.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_ssl', 'thd_fge_gse', in_coord='ssl', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_ssl', 'thd_fgh_gse', in_coord='ssl', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_ssl', 'thd_fgl_gse', in_coord='ssl', out_coord='gse'
+varnames = ['thd_fge_gse','thd_fgh_gse','thd_fgl_gse']
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_05a.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_05a.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gse', 'thd_fge_dsl', in_coord='gse', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gse', 'thd_fgh_dsl', in_coord='gse', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gse', 'thd_fgl_dsl', in_coord='gse', out_coord='dsl'
+varnames = ['thd_fge_dsl','thd_fgh_dsl','thd_fgl_dsl']
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_06a.ps'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_06a.ps.ps
+plot_type = 'SCREEN'
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_dsl', 'thd_fge_gei', in_coord='dsl', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_dsl', 'thd_fgh_gei', in_coord='dsl', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_dsl', 'thd_fgl_gei', in_coord='dsl', out_coord='gei'
+varnames = ['thd_fge_gei','thd_fgh_gei','thd_fgl_gei']
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_07a.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_07a.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gei', 'thd_fge_dsl', in_coord='gei', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gei', 'thd_fgh_dsl', in_coord='gei', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gei', 'thd_fgl_dsl', in_coord='gei', out_coord='dsl'
+varnames = ['thd_fge_dsl','thd_fgh_dsl','thd_fgl_dsl']
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_08a.ps'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_08a.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_dsl', 'thd_fge_gsm', in_coord='dsl', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_dsl', 'thd_fgh_gsm', in_coord='dsl', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_dsl', 'thd_fgl_gsm', in_coord='dsl', out_coord='gsm'
+varnames = ['thd_fge_gsm','thd_fgh_gsm','thd_fgl_gsm']
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_09a.ps'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_09a.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gsm', 'thd_fge_dsl', in_coord='gsm', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gsm', 'thd_fgh_dsl', in_coord='gsm', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gsm', 'thd_fgl_dsl', in_coord='gsm', out_coord='dsl'
+varnames = ['thd_fge_dsl','thd_fgh_dsl','thd_fgl_dsl']
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_10a.ps'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_10a.ps.ps
+;Input and Output Coordinate Systems are the same forthd_fge_dsl
+;Input and Output Coordinate Systems are the same forthd_fgh_dsl
+;Input and Output Coordinate Systems are the same forthd_fgl_dsl
+varnames = ['thd_fge_dsl','thd_fgh_dsl','thd_fgl_dsl']
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_11a.ps'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_11a.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_dsl', 'thd_fge_gse', in_coord='dsl', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_dsl', 'thd_fgh_gse', in_coord='dsl', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_dsl', 'thd_fgl_gse', in_coord='dsl', out_coord='gse'
+varnames = ['thd_fge_gse','thd_fgh_gse','thd_fgl_gse']
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+plot_type = 'PS'
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+;Input and Output Coordinate Systems are the same forthd_fge_gse
+;Input and Output Coordinate Systems are the same forthd_fgh_gse
+;Input and Output Coordinate Systems are the same forthd_fgl_gse
+varnames = ['thd_fge_gse','thd_fgh_gse','thd_fgl_gse']
+plot_type = 'PS'
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_01b.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_01b.ps.ps
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_02b.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_02b.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gse', 'thd_fge_dsl', in_coord='gse', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gse', 'thd_fgh_dsl', in_coord='gse', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gse', 'thd_fgl_dsl', in_coord='gse', out_coord='dsl'
+varnames = ['thd_fge_dsl','thd_fgh_dsl','thd_fgl_dsl']
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_03b.ps'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_03b.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_dsl', 'thd_fge_gse', in_coord='dsl', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_dsl', 'thd_fgh_gse', in_coord='dsl', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_dsl', 'thd_fgl_gse', in_coord='dsl', out_coord='gse'
+varnames = ['thd_fge_gse','thd_fgh_gse','thd_fgl_gse']
+popen, 'C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_04b.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\My Documents\qa\qa_plots\fgm\fgm_test_02_step_04b.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gse', 'thd_fge_ssl', in_coord='gse', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gse', 'thd_fgh_ssl', in_coord='gse', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gse', 'thd_fgl_ssl', in_coord='gse', out_coord='ssl'
+varnames = ['thd_fge_ssl','thd_fgh_ssl','thd_fgl_ssl']
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_06b.ps'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_06b.ps.ps
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_06b.ps'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_06b.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_ssl', 'thd_fge_gse', in_coord='ssl', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_ssl', 'thd_fgh_gse', in_coord='ssl', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_ssl', 'thd_fgl_gse', in_coord='ssl', out_coord='gse'
+varnames = ['thd_fge_gse','thd_fgh_gse','thd_fgl_gse']
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_05b.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_05b.ps.ps
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_07b.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_07b.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gse', 'thd_fge_gei', in_coord='gse', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gse', 'thd_fgh_gei', in_coord='gse', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gse', 'thd_fgl_gei', in_coord='gse', out_coord='gei'
+varnames = ['thd_fge_gei','thd_fgh_gei','thd_fgl_gei']
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_07b.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_07b.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gei', 'thd_fge_gse', in_coord='gei', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gei', 'thd_fgh_gse', in_coord='gei', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gei', 'thd_fgl_gse', in_coord='gei', out_coord='gse'
+varnames = ['thd_fge_gse','thd_fgh_gse','thd_fgl_gse']
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_08b.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_08b.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gse', 'thd_fge_gsm', in_coord='gse', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gse', 'thd_fgh_gsm', in_coord='gse', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gse', 'thd_fgl_gsm', in_coord='gse', out_coord='gsm'
+varnames = ['thd_fge_gsm','thd_fgh_gsm','thd_fgl_gsm']
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_09b.ps'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_09b.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gsm', 'thd_fge_gse', in_coord='gsm', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gsm', 'thd_fgh_gse', in_coord='gsm', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gsm', 'thd_fgl_gse', in_coord='gsm', out_coord='gse'
+varnames = ['thd_fge_gse','thd_fgh_gse','thd_fgl_gse']
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_10b.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_10b.ps.ps
+;Input and Output Coordinate Systems are the same forthd_fge_gse
+;Input and Output Coordinate Systems are the same forthd_fgh_gse
+;Input and Output Coordinate Systems are the same forthd_fgl_gse
+varnames = ['thd_fge_gse','thd_fgh_gse','thd_fgl_gse']
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_11b.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_11b.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gse', 'thd_fge_gei', in_coord='gse', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gse', 'thd_fgh_gei', in_coord='gse', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gse', 'thd_fgl_gei', in_coord='gse', out_coord='gei'
+varnames = ['thd_fge_gei','thd_fgh_gei','thd_fgl_gei']
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_01a.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_01a.ps.ps
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_02c.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_02c.ps.ps
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_01c.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_01c.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gei', 'thd_fge_dsl', in_coord='gei', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gei', 'thd_fgh_dsl', in_coord='gei', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gei', 'thd_fgl_dsl', in_coord='gei', out_coord='dsl'
+varnames = ['thd_fge_dsl','thd_fgh_dsl','thd_fgl_dsl']
+popen, 'C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_03c.ps'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\Desktop\fgm\fgm_test_02_step_03c.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_dsl', 'thd_fge_gei', in_coord='dsl', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_dsl', 'thd_fgh_gei', in_coord='dsl', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_dsl', 'thd_fgl_gei', in_coord='dsl', out_coord='gei'
+varnames = ['thd_fge_gei','thd_fgh_gei','thd_fgl_gei']
+popen, 'C:\My Documents\fgm\fgm_test_02_step_04c.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\My Documents\fgm\fgm_test_02_step_04c.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gei', 'thd_fge_ssl', in_coord='gei', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gei', 'thd_fgh_ssl', in_coord='gei', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gei', 'thd_fgl_ssl', in_coord='gei', out_coord='ssl'
+varnames = ['thd_fge_ssl','thd_fgh_ssl','thd_fgl_ssl']
+popen, 'C:\My Documents\fgm\fgm_test_02_step_05c.ps'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+pclose
+;CREATED: C:\My Documents\fgm\fgm_test_02_step_05c.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_ssl', 'thd_fge_gei', in_coord='ssl', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_ssl', 'thd_fgh_gei', in_coord='ssl', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_ssl', 'thd_fgl_gei', in_coord='ssl', out_coord='gei'
+varnames = ['thd_fge_gei','thd_fgh_gei','thd_fgl_gei']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_06c.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_06c.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gei', 'thd_fge_gse', in_coord='gei', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gei', 'thd_fgh_gse', in_coord='gei', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gei', 'thd_fgl_gse', in_coord='gei', out_coord='gse'
+varnames = ['thd_fge_gse','thd_fgh_gse','thd_fgl_gse']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_07c.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_07c.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gse', 'thd_fge_gei', in_coord='gse', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gse', 'thd_fgh_gei', in_coord='gse', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gse', 'thd_fgl_gei', in_coord='gse', out_coord='gei'
+varnames = ['thd_fge_gei','thd_fgh_gei','thd_fgl_gei']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_08c.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_08c.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gei', 'thd_fge_gsm', in_coord='gei', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gei', 'thd_fgh_gsm', in_coord='gei', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gei', 'thd_fgl_gsm', in_coord='gei', out_coord='gsm'
+varnames = ['thd_fge_gsm','thd_fgh_gsm','thd_fgl_gsm']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_09c.ps'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_09c.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gsm', 'thd_fge_gei', in_coord='gsm', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gsm', 'thd_fgh_gei', in_coord='gsm', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gsm', 'thd_fgl_gei', in_coord='gsm', out_coord='gei'
+varnames = ['thd_fge_gei','thd_fgh_gei','thd_fgl_gei']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_10c.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_10c.ps.ps
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_11c.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_11c.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gei', 'thd_fge_gsm', in_coord='gei', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gei', 'thd_fgh_gsm', in_coord='gei', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gei', 'thd_fgl_gsm', in_coord='gei', out_coord='gsm'
+varnames = ['thd_fge_gsm','thd_fgh_gsm','thd_fgl_gsm']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_01d.ps'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_01d.ps.ps
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_02d.ps'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_02d.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gsm', 'thd_fge_dsl', in_coord='gsm', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gsm', 'thd_fgh_dsl', in_coord='gsm', out_coord='dsl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gsm', 'thd_fgl_dsl', in_coord='gsm', out_coord='dsl'
+varnames = ['thd_fge_dsl','thd_fgh_dsl','thd_fgl_dsl']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_03d.ps'
+tplot, 'thd_fge_dsl'
+tplot, 'thd_fgh_dsl'
+tplot, 'thd_fgl_dsl'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_03d.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_dsl', 'thd_fge_gsm', in_coord='dsl', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_dsl', 'thd_fgh_gsm', in_coord='dsl', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_dsl', 'thd_fgl_gsm', in_coord='dsl', out_coord='gsm'
+varnames = ['thd_fge_gsm','thd_fgh_gsm','thd_fgl_gsm']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_04d.ps'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_04d.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gsm', 'thd_fge_gse', in_coord='gsm', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gsm', 'thd_fgh_gse', in_coord='gsm', out_coord='gse'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gsm', 'thd_fgl_gse', in_coord='gsm', out_coord='gse'
+varnames = ['thd_fge_gse','thd_fgh_gse','thd_fgl_gse']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_05d.ps'
+tplot, 'thd_fge_gse'
+tplot, 'thd_fgh_gse'
+tplot, 'thd_fgl_gse'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_05d.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gse', 'thd_fge_gsm', in_coord='gse', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gse', 'thd_fgh_gsm', in_coord='gse', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gse', 'thd_fgl_gsm', in_coord='gse', out_coord='gsm'
+varnames = ['thd_fge_gsm','thd_fgh_gsm','thd_fgl_gsm']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_06d.ps'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_06d.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gsm', 'thd_fge_gei', in_coord='gsm', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gsm', 'thd_fgh_gei', in_coord='gsm', out_coord='gei'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gsm', 'thd_fgl_gei', in_coord='gsm', out_coord='gei'
+varnames = ['thd_fge_gei','thd_fgh_gei','thd_fgl_gei']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_07d.ps'
+tplot, 'thd_fge_gei'
+tplot, 'thd_fgh_gei'
+tplot, 'thd_fgl_gei'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_07d.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gei', 'thd_fge_gsm', in_coord='gei', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gei', 'thd_fgh_gsm', in_coord='gei', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gei', 'thd_fgl_gsm', in_coord='gei', out_coord='gsm'
+varnames = ['thd_fge_gsm','thd_fgh_gsm','thd_fgl_gsm']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_08d.ps'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_08d.ps.ps
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_09d.ps'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_09d.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_gsm', 'thd_fge_ssl', in_coord='gsm', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_gsm', 'thd_fgh_ssl', in_coord='gsm', out_coord='ssl'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_gsm', 'thd_fgl_ssl', in_coord='gsm', out_coord='ssl'
+varnames = ['thd_fge_ssl','thd_fgh_ssl','thd_fgl_ssl']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_10d.ps'
+tplot, 'thd_fge_ssl'
+tplot, 'thd_fgh_ssl'
+tplot, 'thd_fgl_ssl'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_10d.ps.ps
+thm_load_state, probe = 'd', trange = ['2007-03-23/16:40:00', '2007-03-23/19:00:04'], /get_support_data
+thm_cotrans,'thd_fge_ssl', 'thd_fge_gsm', in_coord='ssl', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:34:05', '2007-03-23/14:50:17'], /get_support_data
+thm_cotrans,'thd_fgh_ssl', 'thd_fgh_gsm', in_coord='ssl', out_coord='gsm'
+thm_load_state, probe = 'd', trange = ['2007-03-23/11:13:49', '2007-03-23/15:12:45'], /get_support_data
+thm_cotrans,'thd_fgl_ssl', 'thd_fgl_gsm', in_coord='ssl', out_coord='gsm'
+varnames = ['thd_fge_gsm','thd_fgh_gsm','thd_fgl_gsm']
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_11d.ps'
+tplot, 'thd_fge_gsm'
+tplot, 'thd_fgh_gsm'
+tplot, 'thd_fgl_gsm'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_02_step_11d.ps.ps
+varnames = ['the_fge']
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'the_fge'
+new_vars = strarr(n_elements(varnames))
+For j = 0, n_elements(varnames) -1 Do $
+  tsub_average, varnames[j], new_varname
+  new_vars[j] = new_varname
+varnames = new_vars
+set_plot, 'win'
+tplot, 'the_fge-d'
+plot_type = 'PS'
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_01.ps'
+tplot, 'the_fge-d'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_01.ps.ps
+varnames = ['the_fge']
+new_vars = strarr(n_elements(varnames))
+For j = 0, n_elements(varnames) -1 Do $
+  tsub_average, varnames[j], new_varname, /median
+  new_vars[j] = new_varname
+varnames = new_vars
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'the_fge-m'
+plot_type = 'PS'
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_02.ps'
+tplot, 'the_fge-m'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_02.ps.ps
+varnames = ['the_fge']
+width = 11
+new_vars = varnames+'_sm_11'
+For j = 0, n_elements(new_vars)-1 Do $
+  tsmooth_in_time, varnames[j], width, newname = new_vars[j]
+varnames = new_vars
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'the_fge_sm_11'
+plot_type = 'PS'
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_03.ps'
+tplot, 'the_fge_sm_11'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_03.ps.ps
+varnames = ['the_fge']
+time_res = 60
+new_vars = varnames+'_av_60'
+For j = 0, n_elements(new_vars)-1 Do $
+ avg_data, varnames[j], time_res, newname = new_vars[j]
+varnames = new_vars
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'the_fge_av_60'
+plot_type = 'PS'
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_04.ps'
+tplot, 'the_fge_av_60'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_04.ps.ps
+plot_type = 'SCREEN'
+varnames = ['the_fge']
+new_vars = varnames+'_clip'
+tclip, varnames, 20.0, -20.0, newname = new_vars
+varnames = new_vars
+set_plot, 'win'
+tplot, 'the_fge_clip'
+plot_type = 'PS'
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_05.ps'
+tplot, 'the_fge_clip'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_05.ps.ps
+plot_type = 'SCREEN'
+varnames = ['the_fge']
+new_vars = varnames+'_deflag'
+tdeflag, varnames, linear, newname = new_vars
+varnames = new_vars
+set_plot, 'win'
+tplot, 'the_fge_deflag'
+plot_type = 'PS'
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_06.ps'
+tplot, 'the_fge_deflag'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_06.ps.ps
+plot_type = 'SCREEN'
+varnames = ['the_fge']
+new_vars = varnames+'_deflag'
+tdeflag, varnames, repeat, newname = new_vars
+varnames = new_vars
+set_plot, 'win'
+tplot, 'the_fge_deflag'
+plot_type = 'PS'
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_07.ps'
+tplot, 'the_fge_deflag'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_07.ps.ps
+plot_type = 'SCREEN'
+varnames = ['the_fge']
+new_vars = varnames+'_degap'
+tdegap, varnames, newname = new_vars, dt = 1.5, margin = 0.30, maxgap = 10000
+varnames = new_vars
+set_plot, 'win'
+tplot, 'the_fge'
+plot_type = 'PS'
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_08.ps'
+tplot, 'the_fge'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_08.ps.ps
+new_vars = varnames+'_dspk'
+For j = 0, n_elements(new_vars)-1 Do $
+ clean_spikes, varnames[j], new_name = new_vars[j]
+varnames = new_vars
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'the_fge_dspk'
+plot_type = 'PS'
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_09.ps'
+tplot, 'the_fge_dspk'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_09.ps.ps
+varnames = ['the_fge']
+new_vars = 'd_'+varnames
+For j = 0, n_elements(new_vars)-1 Do $
+ deriv_data, varnames[j], newname = new_vars[j]
+varnames = new_vars
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'd_the_fge'
+plot_type = 'PS'
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_10.ps'
+tplot, 'd_the_fge'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_10.ps.ps
+plot_type = 'SCREEN'
+set_plot, 'win'
+tplot, 'd_the_fge'
+varnames = ['the_fge']
+set_plot, 'win'
+tplot, 'the_fge'
+spd_ui_wavelet, varnames, new_vars, ['2007-03-23/00:00:00','2007-03-24/00:00:00']
+varnames = new_vars
+set_plot, 'win'
+tplot, 'the_fge_x_wv_pow'
+tplot, 'the_fge_y_wv_pow'
+tplot, 'the_fge_z_wv_pow'
+plot_type = 'PS'
+popen, 'C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_11.ps'
+tplot, 'the_fge_x_wv_pow'
+tplot, 'the_fge_y_wv_pow'
+tplot, 'the_fge_z_wv_pow'
+pclose
+;CREATED: C:\Documents and Settings\cgoethel\fgm\fgm_test_03_step_11.ps.ps
+plot_type = 'SCREEN'
+varnames = ['the_fge']
+spd_ui_pwrspec, varnames, new_vars, ['2007-03-23/00:00:00','2007-03-24/00:00:00'], /dynamic
+varnames = new_vars
+End

@@ -1,0 +1,287 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spksfs</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spksfs</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKSFS searches through loaded SPK files to find the
+   highest-priority segment applicable to the body and time specified.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/spksfs_c.html">spksfs_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      body    the scalar integer SPK ID code of an ephemeris object,
+              typically a solar system body.
+
+      et      a scalar double precision time, in seconds past the
+              epoch J2000 TDB.
+
+   the call:
+
+      <b>cspice_spksfs</b>, body, et, handle, descr, ident, found
+
+   returns:
+
+      handle   the scalar integer handle of the SPK file containing a located
+               segment.
+
+      descr    the double precision 5-array descriptor of a located SPK
+               segment.
+
+      ident    the scalar string SPK segment identifier of a located
+               SPK segment.
+
+      found    indicates whether a requested segment was found or not.
+               The other output arguments are valid only if `found'
+               is set to true.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Find a segment for the Pluto barycenter, with coverage for
+   a specified epoch, in a JPL planetary SPK file.
+
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+         KPL/MK
+
+         File name: <a href= "standard.html">standard.tm</a>
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00010.tpc                  Planet orientation and
+                                          radii
+            naif0010.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00010.tpc',
+                                'naif0010.tls'  )
+
+         \begintext
+
+   Example:
+
+      ;;
+      ;; Local constants
+      ;;
+      META   =  '<a href= "standard.html">standard.tm</a>'
+      ND     =  2
+      NI     =  6
+
+      ;;
+      ;; Load a meta-kernel that specifies a planetary SPK file
+      ;; and leapseconds kernel. The contents of this meta-kernel
+      ;; are displayed above.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, META
+
+      ;;
+      ;; Get the NAIF ID code for the Pluto system barycenter.
+      ;; This is a built-in ID code, so something's seriously
+      ;; wrong if we can't find the code.
+      ;;
+      <a href="cspice_bodn2c.html">cspice_bodn2c</a>, 'PLUTO BARYCENTER', idcode, found
+
+      if ( ~found ) then begin
+         <a href="cspice_kclear.html">cspice_kclear</a>
+         print, 'SPICE(BUG)'
+         return
+      endif
+
+      ;;
+      ;; Pick a request time; convert to seconds past J2000 TDB.
+      ;;
+      reqtim = '2011 FEB 18 UTC'
+
+      <a href="cspice_str2et.html">cspice_str2et</a>, reqtim, et
+
+      ;;
+      ;; Find a loaded segment for the specified body and time.
+      ;;
+
+      <b>cspice_spksfs</b>, idcode, et, handle, descr, segid, found
+
+      if ( ~found ) then begin
+         <a href="cspice_kclear.html">cspice_kclear</a>
+         print, 'Body : ', idcode
+         print, 'Time : ', et
+         print, 'No descriptor found for the body at time.'
+         return
+      endif else begin
+
+         ;;
+         ;; Display the DAF file handle.
+         ;;
+         print, format='(A, I10)',   'DAF handle:    ', handle
+
+         ;;
+         ;; Display the segment ID.
+         ;;
+         ;;
+         ;; Unpack the descriptor. Display the contents.
+         ;;
+         <a href="cspice_dafus.html">cspice_dafus</a>, descr, ND, NI, dc, ic
+
+         print, format='(A, A)',      'Segment ID:       ',segid
+         print, format='(A, I10)',    'Body ID code:     ',ic[0]
+         print, format='(A, I10)',    'Center ID code:   ',ic[1]
+         print, format='(A, I10)',    'Frame ID code:    ',ic[2]
+         print, format='(A, I10)',    'SPK data type:    ',ic[3]
+         print, format='(A, e24.17)', 'Start time (TDB): ',dc[0]
+         print, format='(A, e24.17)', 'Stop time  (TDB): ',dc[1]
+         print
+
+      endelse
+
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   IDL outputs:
+
+      DAF handle:             1
+      Segment ID:       DE-0421LE-0421
+      Body ID code:              9
+      Center ID code:            0
+      Frame ID code:             1
+      SPK data type:             2
+      Start time (TDB): -3.16919520000000000e+09
+      Stop time  (TDB):  1.69685280000000000e+09
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine finds the highest-priority segment, in any loaded
+   SPK file, such that the segment provides data for the specified
+   body and epoch.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 24-OCT-2012, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   select spk file and segment
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

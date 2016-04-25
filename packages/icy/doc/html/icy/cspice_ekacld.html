@@ -1,0 +1,298 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ekacld</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ekacld</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EKACLD adds a column of double precision data to an EK 
+   segment.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ekacld_c.html">ekacld_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      handle   the scalar integer referring to an EK file open for 
+               write access
+      segno    the scalar integer indicating EK segment number
+               for the new record
+      column   the scalar string naming the target column for the data
+               stored in 'dvals'
+      dvals    an array of double precision values, listed in row order,
+               containing the data to add to the EK referred to by 'handle'
+      entszs   an array of integers containing the sizes of column
+               entries - used only for columns possessing variable size
+               entries; the ith element of 'entszs' corresponds to the
+               size of the ith entry of 'dvals'
+      nlflgs   an array of booleans indicating whether the
+               corresponding 'dvals' has a null value, with
+               the ith entry of 'nlflgs' corresponding to the ith
+               entry of 'dvals'
+      rcptrs   an integer array of record pointers, returned from
+               <a href="cspice_ekifld.html">cspice_ekifld</a>, for the input segment
+      wkindx   a read/write array of integers, used as a workspace
+               when building an column index - as this array
+               functions as read/write, the calling routine must
+               declare an appropriate size of nrows (the number of 
+               rows in the column)
+   
+   the call:
+   
+      <b>cspice_ekacld</b>, handle, segno, column, dvals, entszs, nlflgs, $
+                     rcptrs, wkindx
+   
+   writes the 'dvals' data to 'column' in segment 'segno' of the
+   EK referred to by 'handle'.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Initialize needed parameters.
+      ;;
+      SPICEFALSE = 0B
+      SPICETRUE  = 1B
+      EKNAME     = 'ekacld.ek'
+      IFNAME     = 'Test EK'
+      LNMLEN     = 50
+      LSK        = '<a href= "standard.html">standard.tm</a>'
+      NCOLS      = 2
+      NRESVC     = 0
+      NROWS      = 9
+      TABLE      = 'DATAORDERS'
+      
+      ;;
+      ;; Load a leapseconds kernel for UTC/ET conversion.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, LSK
+      
+      ;;
+      ;; Open a new EK file.  For simplicity, we won't 
+      ;; reserve space for the comment area, so the 
+      ;; number of reserved comment characters is zero. 
+      ;; The constant IFNAME is the internal file name. 
+      ;;
+      if ( <a href="cspice_exists.html">cspice_exists</a>( EKNAME) ) then begin
+         file_delete, EKNAME
+      endif
+      <a href="cspice_ekopn.html">cspice_ekopn</a>, EKNAME, IFNAME, NRESVC, handle
+      
+      cnames = strarr( NCOLS )
+      cdecls = strarr( NCOLS )
+      
+      ;;
+      ;; Note, store a time value in double precision,
+      ;; ephemeris seconds past J2000.
+      ;;
+      cnames[0] = 'ORDER_DATE'
+      cdecls[0] = 'DATATYPE = TIME, INDEXED  = TRUE' 
+      
+      cnames[1] = 'COST'
+      cdecls[1] = 'DATATYPE = DOUBLE PRECISION, '+$
+                  'INDEXED  = TRUE, NULLS_OK = TRUE'
+      
+      
+      ;;
+      ;; Start the segment.  We presume the number of  rows 
+      ;; of data is known in advance. 
+      ;;
+      <a href="cspice_ekifld.html">cspice_ekifld</a>, handle,  TABLE,   NCOLS,  NROWS,  $  
+                     cnames,   cdecls, segno,  rcptrs
+      
+      ;;
+      ;; At this point, arrays containing data for the 
+      ;; segment's columns may be filled in.  The names 
+      ;; of the data arrays are shown below. 
+      ;;
+      ;;   Column           Data array 
+      ;;
+      ;;   'ORDER_DATE'     odates 
+      ;;   'COST'           costs 
+      ;;
+      ;; The null flags array indicates which entries are null. 
+      ;; It is ignored for columns that don't allow null 
+      ;; values.  In this case, only the COST column allows 
+      ;; nulls. 
+      ;;
+      ;; Fill in data arrays and null flag arrays here.  This code
+      ;; section would normally be replaced by calls to user functions
+      ;; returning column values.
+      ;;
+      costs  = dblarr( NROWS)
+      ets    = dblarr( NROWS)
+      nlflgs = lonarr( NROWS)
+      wkindx = lonarr( NROWS)
+      sizes  = lonarr( NROWS)
+      
+      for i = 0, (NROWS-1) do begin
+      
+         costs [i] =  double(100*i)
+      
+         date_string = '2001 Mar ' + string(i)
+      
+         <a href="cspice_utc2et.html">cspice_utc2et</a>, date_string, et
+         ets[i] = et
+      
+         nlflgs[i]  =  SPICEFALSE
+      
+      endfor
+      
+      nlflgs[1] = SPICETRUE
+      
+      
+      ;;
+      ;; The sizes array shown below is ignored for scalar 
+      ;; and fixed-size array columns, so we need not 
+      ;; initialize it.  For variable-size arrays, the 
+      ;; Ith element of the sizes array must contain the size 
+      ;; of the Ith column entry in the column being written. 
+      ;; Normally, the sizes array would be reset for each 
+      ;; variable-size column. 
+      ;;
+      ;; Add the columns of data to the segment.  All of the 
+      ;; data for each column is written in one shot. 
+      ;;
+      <b>cspice_ekacld</b>, handle, segno, 'order_date', ets  , sizes, $
+                     nlflgs, rcptrs, wkindx
+      
+      <b>cspice_ekacld</b>, handle, segno, 'cost'      , costs, sizes, $
+                     nlflgs, rcptrs, wkindx
+      
+      ;;
+      ;; Complete the segment.  The rcptrs array is that 
+      ;; returned by ekifld_c. 
+      ;;
+      <a href="cspice_ekffld.html">cspice_ekffld</a>, handle, segno, rcptrs
+      
+      
+      ;;
+      ;; The file must be closed by a call to <a href="cspice_ekcls.html">cspice_ekcls</a>
+      ;;
+      <a href="cspice_ekcls.html">cspice_ekcls</a>, handle
+
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ek.html">EK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.2, 27-FEB-2007, EDW (JPL)
+
+      Add <a href="cspice_kclear.html">cspice_kclear</a> call to example section.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   write entire double precision column to EK segment 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

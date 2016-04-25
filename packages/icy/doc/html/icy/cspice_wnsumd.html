@@ -1,0 +1,269 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_wnsumd</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_wnsumd</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_WNSUMD summarizes the contents of a double precision window. 
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/wnsumd_c.html">wnsumd_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      window   the scalar SPICE window containing zero or more intervals.
+
+               You must create 'window' as a window structure via a 
+               <a href="cspice_celld.html">cspice_celld</a> call. 
+   
+   the call:
+
+      <b>cspice_wnsumd</b>, window, meas, avg, stddev, shortest, longest
+
+   returns:
+
+      meas        the double precision scalar total measure of 
+                  the intervals in the input  window. This is just 
+                  the sum of the measures of the individual intervals. 
+ 
+      avg         the double precision scalar average measure
+                  of the intervals in the input window. 
+
+      stddev      the double precision scalar standard deviation
+                  of the measures of the intervals in the input window. 
+
+      shortest,   
+      longest     the integer scalar indices of the left endpoint
+                  of, respectively, the shortest and longest intervals 
+                  in the data contained in 'window'.
+                  
+                     The following algorithm describes the relation of
+                     'shortest' and 'longest' to the window data:
+ 
+                        data_start = window.data
+                        data_end   = data_start + window.card - 1
+
+                        array = window.base[ data_start:data_end]
+
+                     The shortest interval:
+
+                        [ array[shortest], array[shortest+1] ]
+
+                     The longest interval:             
+
+                        [ array[longest], array[longest+1] ]
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Create a cell containing a double precision 12-vector.
+      ;;
+      win1 = <a href="cspice_celld.html">cspice_celld</a>( 12 )
+
+      ;;
+      ;; Define an array representing a window with six intervals. 
+      ;; The values in 'darray' have correct order for a 
+      ;; SPICE window.
+      ;;
+      darray = [ [ 1.d,  3.], $
+                 [  7., 11.], $
+                 [ 18., 18.], $
+                 [ 23., 27.], $
+                 [ 30., 69.], $
+                 [ 72., 80.] ]
+
+      ;;
+      ;; Add the 'darray' data to the cell.
+      ;;
+      count = size( darray, /n_elements)/2l
+
+      for i=0l, count -1 do begin
+
+         <a href="cspice_wninsd.html">cspice_wninsd</a>, darray[0,i], darray[1,i], win1
+
+      endfor
+
+      ;;
+      ;; Calculate the summary for 'win1'.
+      ;;
+      <b>cspice_wnsumd</b>, win1,    $
+                     meas,    $
+                     avg,     $
+                     stddev,  $
+                     shortest,$
+                     longest
+
+      ;;
+      ;; 'shortest' and 'longest' refer to the indices of
+      ;; the 'cell' data array.
+      ;;
+
+      intrvl_short= shortest/2l 
+      intrvl_long = longest/2l
+
+      print, 'Measure           : ', meas
+      print, 'Average           : ', avg
+      print, 'Standard Dev      : ', stddev
+      print, 'Index shortest    : ', shortest
+      print, 'Index longest     : ', longest
+      print, 'Interval shortest : ', intrvl_short
+      print, 'Interval longest  : ', intrvl_long 
+
+      data_start = win1.data
+      data_end   = data_start + win1.card - 1
+      array      = win1.base[ data_start:data_end]
+
+      print, 'Shortest interval : ', [ array[shortest], array[shortest+1] ]
+      print, 'Longest interval  : ', [ array[longest],  array[longest+1]  ]
+    
+   IDL outputs:
+
+      Measure           :        57.000000
+      Average           :        9.5000000
+      Standard Dev      :        13.413302
+      Index shortest    :            4
+      Index longest     :            8
+      Interval shortest :            2
+      Interval longest  :            4
+      Shortest interval :        18.000000       18.000000
+      Longest interval  :        30.000000       69.000000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine provides a summary of the input window, consisting 
+   of the following items: 
+
+      - The measure of the window. 
+
+      - The average and standard deviation of the measures 
+        of the individual intervals in the window. 
+
+      - The indices of the left endpoints of the shortest 
+        and longest intervals in the window. 
+
+   All of these quantities are zero if the window contains no
+   intervals. 
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/cells.html">CELLS.REQ</a>
+   <a href="../req/windows.html">WINDOWS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 04-DEC-2008, EDW (JPL)
+
+      Edited header to add information to the argument descriptions and
+      the code example.
+
+   -Icy Version 1.0.1, 12-SEP-2006, EDW (JPL)
+
+      Correct Required Reading citation CELL.REQ to <a href="../req/cells.html">CELLS.REQ</a>.
+
+   -Icy Version 1.0.0, 08-AUG-2004, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   summary of a d.p. window 
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:33 2014</pre>
+
+</body>
+</html>
+

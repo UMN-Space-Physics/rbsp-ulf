@@ -1,0 +1,308 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ckgpav</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ckgpav</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CKGPAV returns pointing (attitude) and angular velocity 
+   for a specified spacecraft clock time.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ckgpav_c.html">ckgpav_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      inst     the scalar NAIF integer ID for the instrument, 
+               spacecraft, or other structure for which pointing 
+               is being requested
+   
+      sclkdp   the double precision scalar encoded spacecraft 
+               clock time for which pointing is being requested
+   
+      tol      the double precision scalar time tolerance in 
+               ticks (+/-), the units of encoded spacecraft
+               clock time,  about 'sclkdp'
+   
+                  The C-matrix returned by <b>cspice_ckgpav</b> is the one whose
+                  time tag is closest to 'sclkdp' and within 'tol' units
+                  of 'sclkdp'.
+   
+               In general, because using a non-zero tolerance affects 
+               selection of the segment from which the data is obtained, 
+               users are strongly discouraged from using a non-zero 
+               tolerance when reading CKs with continuous data. Using 
+               a non-zero tolerance should be reserved exclusively to 
+               reading CKs with discrete data because in practice 
+               obtaining data from such CKs using a zero tolerance is 
+               often not possible due to time round off. 
+
+      ref      the scalar string name of the desired reference 
+               frame for the returned pointing
+   
+   the call:
+   
+      <b>cspice_ckgpav</b>, inst  , sclkdp, tol, ref, cmat, av, $
+                     clkout, found
+   
+   returns:
+   
+      cmat     a double precision, 3x3 rotation matrix that transforms 
+               the components of a vector expressed in the frame 
+               specified by `ref' to components expressed in the frame 
+               tied to the instrument, spacecraft, or other structure 
+               at time 'clkout'
+   
+      av       the double precision angular velocity 3-vector measured
+               in radians per second (this is the axis about which the 
+               reference frame tied to the instrument is rotating in 
+               the right-handed sense at time 'clkout')
+   
+      clkout   the scalar double precision encoded spacecraft clock 
+               time associated with the returned C-matrix (this value 
+               may differ from the requested time, but never by more 
+               than the input tolerance 'tol')
+   
+      found    a scalar boolean with value TRUE when requested 
+               pointing is found
+   
+   If 'vec_ref' is a double-precision 3-vector defined in reference
+   frame 'ref', rotate 'vec_ref' into the instrument frame via:
+   
+      vec_inst = cmat ## vec_ref              ;; column vector
+         or
+      vec_inst = transpose(cmat) # vec_ref    ;; row vector
+         or
+      <a href="cspice_mxv.html">cspice_mxv</a>, cmat, vec_ref, vec_inst     ;; row vector
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+   Retrieve pointing and angular velocity data from a Cassini 
+   CK kernel.
+   
+      ;;
+      ;; Constants for this program:
+      ;;
+      ;; -- The code for the Cassini spacecraft is -82
+      ;;
+      ;; -- The code for the Cassini spacecraft bus is -82000.
+      ;;
+      ;; -- The spacecraft clock ticks every 1/256 of a second. 
+      ;;     
+      ;; -- The reference frame we want is J2000.
+      ;;     
+      ;; -- The bus boresight has direction ( 0, 0, 1 ) in the
+      ;;    bus (instrument) frame.
+      ;;
+      SC     =   -82
+      INST   =   -82000
+      REF    =  'J2000'
+      TICS   =  256.d
+      NPICS  =   2
+      BORE   = [ 0.d, 0.d, 1.d]
+      CK     = '/kernels/cassini/ck/030810_031019_c39_port1_pa.bc'
+      SCLK   = '/kernels/cassini/sclk/cas00082.tsc' 
+   
+      SCLKCH =  [ '1440000000.000' , '1445000000.000' ]
+   
+      ;;
+      ;; Load the CK pointing file. 
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, CK
+      
+      ;;
+      ;; Need to load a Cassini SCLK kernel to convert from 
+      ;; clock string to ticks and the leapseconds kernel.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, SCLK
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+      
+      ;;
+      ;;
+      ;; Calculate a tolerance for pointing data. Use 5 seconds,
+      ;; convert to ticks by multiplying by the number of ticks
+      ;; per second.
+      ;;
+      toltik = 5.d * TICS
+   
+      for i = 0, (NPICS-1) do begin
+   
+         ;; 
+         ;; <a href="cspice_ckgp.html">cspice_ckgp</a> requires encoded spacecraft clock time. 
+         ;;
+         <a href="cspice_scencd.html">cspice_scencd</a>, SC, SCLKCH[i], sclkdp  
+         
+         ;;
+         ;; Retrieve the 'REF' reference frame to 'INST' reference frame
+         ;; transformation matrix at time sclkdp with a tolerance 
+         ;; 'toltik'.
+         ;;
+         ;;   [INST] = [cmat][ref]
+         ;;
+         <b>cspice_ckgpav</b>, INST, sclkdp, toltik, REF, cmat, av, clkout, found
+   
+         ;;
+         ;; Did we find pointing information within (+/-) 'toltik' of the
+         ;; requested time.
+         ;;
+         if ( found ) then begin
+   
+            ;;
+            ;; 
+            ;; Transform the 'BORE' vector from 'INST' reference frame to
+            ;; 'REF' frame.
+            ;;                T
+            ;;  [ref] = [cmat] [INST]
+            ;;
+            <a href="cspice_mtxv.html">cspice_mtxv</a>, cmat, BORE, bore_ref
+   
+            print, 'At SCLK time               : ', sclkch[i]
+            print, 'The boresight vector       : ', bore_ref
+            print, 'The angular velocity vector: ', av
+            
+         endif else begin
+         
+            print, 'Pointing not found for SCLK time: ', sclkch[i]
+            
+         endelse
+         
+      endfor
+   
+   IDL outputs (for SCLK = 1440000000.000):
+   
+      At SCLK time               : 1440000000.000
+      The boresight vector       : -0.25517775      0.88933091     0.37944018
+      The angular velocity vector: -3.1532789e-13  -7.8841788e-09  1.7857623e-08
+   
+   IDL outputs (for SCLK = 1445000000.000):
+   
+      At SCLK time               : 1445000000.000
+      The boresight vector       : -0.31149356      0.87452887     0.37171362
+      The angular velocity vector: -8.0798136e-11  -7.1102943e-10  1.5325493e-09
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ck.html">CK.REQ</a>
+   <a href="../req/sclk.html">SCLK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.2, 03-JUN-2010, BVS (JPL)
+
+       Edits to header. Added warning regarding non-zero tolerance.
+
+   -Icy Version 1.0.1, 09-JUN-2006, EDW (JPL)
+
+       Edits to header. Improved argument descriptions.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   get ck pointing and angular velocity 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,461 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_xfmsta</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_xfmsta</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_XFMSTA transforms a state between coordinate systems.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/xfmsta_c.html">xfmsta_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+Arguments-
+
+   input_state       is a state vector in the input ('input_coord_sys')
+                     coordinate system representing position and velocity.
+   
+                     All angular measurements must be in radians.
+   
+                     Note: body radii values taken from the kernel
+                     pool are used when converting to or from geodetic or
+                     planetographic coordinates. It is the user's
+                     responsibility to verify the distance inputs are in
+                     the same units as the radii in the kernel pool,
+                     typically kilometers.
+   
+   input_coord_sys   is the name of the coordinate system that the input
+                     state vector ('input_state') is currently in.
+   
+                     'input_coord_sys' may be any of the following:
+   
+                           'RECTANGULAR'
+                           'CYLINDRICAL'
+                           'LATITUDINAL'
+                           'SPHERICAL'
+                           'GEODETIC'
+                           'PLANETOGRAPHIC'
+   
+                     Leading spaces, trailing spaces, and letter case
+                     are ignored. For example, ' cyLindRical  ' would
+                     be accepted.
+   
+   output_coord_sys  is the name of the coordinate system that the state
+                     should be converted to.
+                     
+                     Please see the description of 'input_coord_sys'
+                     for details.
+   
+   body              is the name or NAIF ID of the body associated with the
+                     planetographic or geodetic coordinate system.
+   
+                     If one of the coordinate system choices is not
+                     geodetic or planetographic, 'body' may be an empty
+                     string (' ').
+   
+                     Examples of accepted body names or IDs are:
+                           'Earth'
+                           '399'
+   
+                     Leading spaces, trailing spaces, and letter case are
+                     ignored.
+                     
+   the call:
+   
+      <b>cspice_xfmsta</b>, input_state, input_coord_sys, output_coord_sys, body, $
+                     output_state
+   
+   returns:
+
+      output_state   the scalar double precision window of intervals, contained
+                     within the confinement window 'cnfine', on which the
+                     specified constraint is satisfied.
+            
+                     If 'result' is non-empty on input, its contents
+                     will be discarded before <a href="cspice_gfdist.html">cspice_gfdist</a> conducts its
+                     search.
+            
+                     'result' must be declared and initialized with sufficient
+                     size to capture the full set of time intervals 
+                     within the search region on which the specified constraint
+                     is satisfied.
+            
+                     If the search is for local extrema, or for absolute
+                     extrema with adjust set to zero, then normally each
+                     interval of result will be a singleton: the left and
+                     right endpoints of each interval will be identical.
+            
+                     If no times within the confinement window satisfy the
+                     constraint, 'result' will be returned with a
+                     cardinality of zero.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+   
+   Example(1):
+   
+      Find the apparent state of Phoebe as seen by CASSINI in the
+      J2000 frame at 2004 Jun 11 19:32:00. Transform the state from 
+      rectangular to latitudinal coordinates. For verification, 
+      transform the state back from latitudinal to rectangular coordinates.
+      
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+      
+         KPL/MK
+         
+         File name: xfmsta_ex1.tm
+         
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+         
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+         
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+         
+                File name                     Contents
+                ---------                     --------
+                cpck05Mar2004.tpc             Planet orientation and
+                                              radii
+                naif0009.tls                  Leapseconds
+                020514_SE_SAT105.bsp          Satellite ephemeris for
+                                              Saturn
+                030201AP_SK_SM546_T45.bsp     CASSINI ephemeris
+                981005_PLTEPH-DE405S.bsp      Planetary ephemeris
+                  
+         \begindata
+         
+         KERNELS_TO_LOAD = ( 'naif0009.tls'  ,
+                             '020514_SE_SAT105.bsp'  ,
+                             '030201AP_SK_SM546_T45.bsp',
+                             '981005_PLTEPH-DE405S.bsp',
+                             'cpck05Mar2004.tpc'   )
+                             
+         \begintext
+         
+      End of meta-kernel.
+      
+      Beginning of example program.
+      
+      ;;
+      ;; Load kernels
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, 'xfmsta_ex1.tm'
+      
+      ;; 
+      ;; Calculate the state at 2004 Jun 11 19:32:00 UTC.
+      ;;
+      <a href="cspice_str2et.html">cspice_str2et</a>, '2004-JUN-11-19:32:00', et
+      
+      ;;
+      ;; Calculate the apparent state of Phoebe as seen by
+      ;; CASSINI in the J2000 frame.
+      ;;
+      <a href="cspice_spkezr.html">cspice_spkezr</a>, 'phoebe', et, 'iau_phoebe', 'lt+s', 'cassini', $
+                      state_rec, ltime
+                      
+      ;;
+      ;; Transform the state from rectangular to latitudinal.
+      ;; Notice that since neither the input nor output
+      ;; coordinate frames are 'geodetic' or 'planetographic',
+      ;; the input for the body name is a blank string.
+      ;;
+      <b>cspice_xfmsta</b>, state_rec, 'rectangular', 'latitudinal', ' ', $
+                     state_lat
+      ;;          
+      ;; Transform the state back to rectangular from latitudinal. The
+      ;; result should be very close to 'state_rec'.
+      ;; 
+      <b>cspice_xfmsta</b>, state_lat, 'latitudinal', 'rectangular', ' ', $
+                     state_rec2
+   
+      ;; 
+      ;; Report the results.
+      ;; 
+      print, 'Phoebe as seen by Cassini - rectangular'
+      print, '  Position ', state_rec[0:2]
+      print, '  Velocity ', state_rec[3:5]
+      print, 'Phoebe as seen by Cassini - latitudinal'
+      print, '  Position ', state_lat[0:2]
+      print, '  Velocity ', state_lat[3:5]
+      print, 'Verification: Phoebe as seen by Cassini - rectangular'
+      print, '  Position ', state_rec2[0:2]
+      print, '  Velocity ', state_rec2[3:5]
+      
+      ;; 
+      ;; Unload the kernels.
+      ;; 
+      <a href="cspice_kclear.html">cspice_kclear</a>
+   
+   IDL outputs:
+   
+      Phoebe as seen by Cassini - rectangular
+        Position       -1982.6398      -934.53047      -166.56260
+        Velocity        3.9708321      -3.8124957      -2.3716630
+      Phoebe as seen by Cassini - latitudinal
+        Position        2198.1699      -2.7011211    -0.075846003
+        Velocity       -1.7809388    0.0023457914   -0.0011436048
+      Verification: Phoebe as seen by Cassini - rectangular
+        Position       -1982.6398      -934.53047      -166.56260
+        Velocity        3.9708321      -3.8124957      -2.3716630
+  
+   Example(2):
+   
+      Transform a given state from cylindrical to planetographic
+      coordinates with respect to Earth.
+   
+      ;;
+      ;; Initialize the cylindrical state.
+      ;;
+      state_cyl = [1, 0.5, 0.5, 0.2, 0.1, -0.2]
+   
+      ;;
+      ;; Load kernels.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '/home/skrening/kernels/generic/pck/cpck05Mar2004.tpc'
+                      
+      ;;
+      ;; Transform the state from cylindrical to planetographic.
+      ;; Note that since one of the coordinate systems is
+      ;; planetographic, the body name must be input.
+      ;;
+      <b>cspice_xfmsta</b>, state_cyl, 'cylindrical', 'planetographic', 'earth', $
+                     state_plan
+      ;;          
+      ;; Transform the state back to cylindrical from planetographic. The result
+      ;; should be very close to 'state_cyl'.
+      ;; 
+      <b>cspice_xfmsta</b>, state_plan, 'planetographic', 'cylindrical', 'earth', $
+                     state_cyl2
+   
+      ;; 
+      ;; Report the results.
+      ;; 
+      print, 'Cylindrical State'
+      print, '  Position ', state_cyl[0:2]
+      print, '  Velocity ', state_cyl[3:5]
+      print, 'Planetographic State'
+      print, '  Position ', state_plan[0:2]
+      print, '  Velocity ', state_plan[3:5]
+      print, 'Verification: Cylindrical State'
+      print, '  Position ', state_cyl2[0:2]
+      print, '  Velocity ', state_cyl2[3:5]
+      
+      ;; 
+      ;; Unload the kernels.
+      ;; 
+      <a href="cspice_kclear.html">cspice_kclear</a>
+   
+   IDL outputs:
+
+      Cylindrical State
+        Position       1.00000     0.500000     0.500000
+        Velocity      0.200000     0.100000    -0.200000
+      Planetographic State
+        Position       0.50000000       1.5477273      -6356.2385
+        Velocity       0.10000000   -0.0047210832     -0.19533339
+      Verification: Cylindrical State
+        Position        1.0000000      0.50000000      0.50000000
+        Velocity       0.20000000      0.10000000     -0.20000000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Input Order
+   -------------------------------------------
+   
+      The input and output states will be structured by the
+      following descriptions.
+      
+      For rectangular coordinates, the state vector is the following
+      in which X, Y, and Z are the rectangular position components and
+      DX, DY, and DZ are the time derivatives of each.
+           ISTATE = ( X, Y, Z, DX, DY, DZ )
+      
+      For cylindrical coordinates, the state vector is the following
+      in which R is the radius, LONG is the longitude, Z is the
+      height, and DR, DLONG, and DZ are the time derivatives of each.
+           ISTATE = ( R, LONG, Z, DR, DLONG, DZ )
+      
+      For latitudinal coordinates, the state vector is the following
+      in which R is the radius, LONG is the longitude, LAT is the
+      latitude, and DR, DLONG, and DLAT are the time derivatives of
+      each.
+           ISTATE = ( R, LONG, LAT, DR, DLONG, DLAT )
+      
+      For spherical coordinates, the state vector is the following in
+      which R is the radius, COLAT is the colatitude, LONG is the
+      longitude, and DR, DCOLAT, and DLONG are the time derivatives of
+      each.
+           ISTATE = ( R, COLAT, LONG, DR, DCOLAT, DLONG )
+      
+      For geodetic coordinates, the state vector is the following in
+      which LONG is the longitude, LAT is the latitude, ALT is the
+      altitude, and DLONG, DLAT, and DALT are the time derivatives of
+      each.
+           ISTATE = ( LONG, LAT, ALT, DLONG, DLAT, DALT )
+      
+      For planetographic coordinates, the state vector is the
+      following in which LONG is the longitude, LAT is the latitude,
+      ALT is the altitude, and DLONG, DLAT, and DALT are the time
+      derivatives of each.
+           ISTATE = ( LONG, LAT, ALT, DLONG, DLAT, DALT )
+   
+   Input Boundaries
+   -------------------------------------------
+   
+      There are intervals the input angles must fall within if
+      the input coordinate system is not rectangular. These
+      intervals are provided below.
+      
+         Input variable    Input meaning   Input interval [rad]
+         --------------    -------------   ------------------------
+             LONG           Longitude        0     &lt;= LONG  &lt;  2*pi
+             LAT            Latitude        -pi/2  &lt;= LAT   &lt;= pi/2
+             COLAT          Colatitude       0     &lt;= COLAT &lt;= pi
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 30-JAN-2012, SCK (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   state transformation between coordinate systems
+   convert state
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:33 2014</pre>
+
+</body>
+</html>
+

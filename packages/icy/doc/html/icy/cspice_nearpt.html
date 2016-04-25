@@ -1,0 +1,228 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_nearpt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_nearpt</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_NEARPT calculates the point on the surface of an
+   ellipsoid nearest to a specified off-ellipsoid position.
+   The routine also returns the altitude of the position 
+   above the ellipsoid.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/nearpt_c.html">nearpt_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      positn   a double precision position 3-vector of Cartesian
+               coordinates in the body fixed frame of an ellipsoid
+   
+      a,       the scalar double precision values of the ellipsoid's 
+      b,       triaxial radii ellipsoid, where:
+      c
+                  'a' is length in kilometers of the semi-axis of the ellipsoid
+                   parallel to the x-axis of the body-fixed reference frame 
+   
+                  'b' is length in kilometers of the semi-axis of the ellipsoid
+                   parallel to the y-axis of the body-fixed reference frame 
+   
+                  'c' is length in kilometers of the semi-axis of the ellipsoid
+                   parallel to the z-axis of the body-fixed reference frame 
+   
+   the call:
+   
+      <b>cspice_nearpt</b>, positn, a, b, c, npoint, alt
+   
+   returns:
+   
+      npoint   the double precision 3-vector defining the location
+               on the ellipsoid closest to 'positn'
+   
+      alt      the double precision scalar altitude of 'positn' 
+               above the ellipsoid. If 'positn' is inside the ellipsoid, '
+               alt' has negative value and have magnitude equal to the
+               distance between 'npoint' and 'positn'.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      Example(1):
+   
+      ;;
+      ;; Define the radii of an ellipsoid.
+      ;;
+      a  =  1.d
+      b  =  2.d
+      c  =  3.d
+   
+      ;;
+      ;; Use point on the X axis, outside the ellipsoid.
+      ;;
+      point  = [ 3.5d, 0.d, 0.d ]
+      <b>cspice_nearpt</b>, point, a, b, c, pnear, alt   
+   
+      print, pnear
+      print, alt
+   
+   IDL outputs for pnear:    1.0000000   0.0000000   0.0000000
+   IDL outputs for alt  :    2.5000000
+   
+   
+      Example(2):
+   
+      ;;
+      ;; Load a meta kernel containing SPK and leapseconds kernels.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+   
+      ;;
+      ;; Retrieve the position of the Moon wrt the Earth at
+      ;; ephemeris time 0.d (Jan 1 2000 12:00 TDB) in the Earth-fixed
+      ;; reference frame.
+      ;;
+      epoch = 0.d
+      abcorr= 'LT+S'
+      <a href="cspice_spkezr.html">cspice_spkezr</a>, 'moon', epoch, 'IAU_EARTH', abcorr, 'earth', $
+                      state, ltime
+   
+      ;;
+      ;; Retrieve the triaxial radii for Earth (body ID 399).
+      ;;
+      <a href="cspice_bodvrd.html">cspice_bodvrd</a>, 'EARTH', 'RADII', 3, radii
+
+      ;;
+      ;; Now calculate the point on the Earth nearest to the Moon
+      ;; given LT+S aberration correction at the epoch time.
+      ;;
+      <b>cspice_nearpt</b>, state[0:2], radii[0], radii[1], radii[2], npoint, alt
+      print, npoint
+      print, alt
+   
+   IDL outputs for npoint:
+       3345.8825  -5295.2982  -1198.2813
+   
+   IDL outputs for alt:
+       396037.22
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ellipses.html">ELLIPSES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 16-DEC-2005, EDW (JPL)
+
+      Edits to 'alt' description in I/O section.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   distance from point to ellipsoid
+   nearest point on an ellipsoid
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

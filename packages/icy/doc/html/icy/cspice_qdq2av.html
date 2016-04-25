@@ -1,0 +1,281 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_qdq2av</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_qdq2av</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_QDQ2AV derives angular velocity from a unit quaternion and 
+   its derivative with respect to time.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/qdq2av_c.html">qdq2av_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+
+      q    is a unit length double precision 4-vector representing
+           a SPICE-style quaternion.
+
+           Note that multiple styles of quaternions are in use.
+           This routine will not work properly if the input
+           quaternions do not conform to the SPICE convention.
+           See the Particulars section for details.
+ 
+      dq   is a double precision 4-vector representing the derivative
+           of 'q' with respect to time.
+
+   the call:
+
+      <b>cspice_qdq2av</b>, q, dq, av
+   
+   returns:
+
+      av   is a double precision 3-vector representing the angular 
+           velocity defined by 'q' and 'dq', that is, the angular 
+           velocity of the frame defined by the rotation matrix 
+           associated with 'q'. 
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Pick some Euler angles and form a rotation matrix.
+      ;;
+      angle =  [ -20.d, 50.d, -60.d  ] * <a href="cspice_rpd.html">cspice_rpd</a>()
+
+      <a href="cspice_eul2m.html">cspice_eul2m</a>, angle[2], angle[1], angle[0], 3, 1, 3, m
+         
+      <a href="cspice_m2q.html">cspice_m2q</a>, m, q
+
+      ;;
+      ;; Choose an angular velocity vector.  
+      ;;
+      expav = [ 1.d, 2., 3. ]
+
+      ;; 
+      ;; Form the quaternion derivative.
+      ;;
+      qav =  [ 0.0, expav ]
+
+      <a href="cspice_qxq.html">cspice_qxq</a>, q, qav, dq
+
+      dq = -0.5d * dq
+
+      ;;
+      ;; Recover angular velocity from 'q' and 'dq' using <b>cspice_qdq2av</b>.
+      ;;
+      <b>cspice_qdq2av</b>, q, dq, av
+
+      ;;
+      ;; Now we'll obtain the angular velocity from 'q' and
+      ;; 'dq' by an alternate method.
+      ;;
+      ;; Convert 'q' back to a rotation matrix.
+      ;;
+      <a href="cspice_q2m.html">cspice_q2m</a>, q, m
+
+      ;;
+      ;; Convert 'q' and 'dq' to a rotation derivative matrix.  This
+      ;; somewhat messy procedure is based on differentiating the
+      ;; formula for deriving a rotation from a quaternion, then
+      ;; substituting components of 'q' and 'dq' into the derivative
+      ;; formula.
+      ;;
+
+      dm = dblarr(3,3)
+
+      dm[0,0]  =  -4.d0  * (   q[2]*dq[2]  +  q[3]*dq[3]  )
+
+      dm[1,0]  =   2.d0  * (   q[1]*dq[2]  +  q[2]*dq[1]  $
+                             - q[0]*dq[3]  -  q[3]*dq[0]  )
+
+      dm[2,0]  =   2.d0  * (   q[1]*dq[3]  +  q[3]*dq[1]  $
+                             + q[0]*dq[2]  +  q[2]*dq[0]  )
+
+      dm[0,1]  =   2.d0  * (   q[1]*dq[2]  +  q[2]*dq[1]  $
+                             + q[0]*dq[3]  +  q[3]*dq[0]  )
+
+      dm[1,1]  =  -4.d0  * (   q[1]*dq[1]  +  q[3]*dq[3]  )
+
+      dm[2,1]  =   2.d0  * (   q[2]*dq[3]  +  q[3]*dq[2]  $
+                             - q[0]*dq[1]  -  q[1]*dq[0]  )
+
+      dm[0,2]  =   2.d0  * (   q[3]*dq[1]  +  q[1]*dq[3]  $
+                             - q[0]*dq[2]  -  q[2]*dq[0]  )
+
+      dm[1,2]  =   2.d0  * (   q[2]*dq[3]  +  q[3]*dq[2]  $
+                             + q[0]*dq[1]  +  q[1]*dq[0] )
+
+      dm[2,2]  =  -4.d0  * (   q[1]*dq[1]  +  q[2]*dq[2]  )
+
+      xtrans = dblarr(6,6)
+
+      ;;
+      ;; Upper left block: 
+      ;;
+      xtrans[0,0] = m[*,0]
+      xtrans[0,1] = m[*,1]
+      xtrans[0,2] = m[*,2]
+
+      ;;
+      ;; Lower left block: 
+      ;;
+      xtrans[0,3] = dm[*,0]
+      xtrans[0,4] = dm[*,1]
+      xtrans[0,5] = dm[*,2]
+
+      ;;
+      ;; Lower right block: 
+      ;;
+      xtrans[3,3] = m[*,0]
+      xtrans[3,4] = m[*,1]
+      xtrans[3,5] = m[*,2]
+
+      ;;
+      ;; Now use <a href="cspice_xf2rav.html">cspice_xf2rav</a> to produce the expected angular velocity.
+      ;; 
+      <a href="cspice_xf2rav.html">cspice_xf2rav</a>, xtrans, mout, avx
+         
+      ;;
+      ;; The results should match to nearly full double precision.
+      ;;
+      print, &quot;Original angular velocity     : &quot;, expav
+      print, &quot;<b>cspice_qdq2av</b> angular velocity: &quot;, av
+      print, &quot;<a href="cspice_xf2rav.html">cspice_xf2rav</a> angular velocity: &quot;, avx
+
+   IDL outputs:
+   
+      Original angular velocity     :   1.0000000   2.0000000   3.0000000
+      <b>cspice_qdq2av</b> angular velocity:   1.0000000   2.0000000   3.0000000
+      <a href="cspice_xf2rav.html">cspice_xf2rav</a> angular velocity:   1.0000000   2.0000000   3.0000000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   About SPICE quaternions 
+   ======================= 
+ 
+   There are (at least) two popular &quot;styles&quot; of quaternions; these 
+   differ in the layout of the quaternion elements, the definition 
+   of the multiplication operation, and the mapping between the set 
+   of unit quaternions and corresponding rotation matrices. 
+ 
+   SPICE-style quaternions have the scalar part in the first 
+   component and the vector part in the subsequent components. The 
+   SPICE convention, along with the multiplication rules for SPICE 
+   quaternions, are those used by William Rowan Hamilton, the 
+   inventor of quaternions. 
+ 
+   Another common quaternion style places the scalar component 
+   last.  This style is often used in engineering applications. 
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/rotation.html">ROTATIONS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 06-NOV-2005, EDW (JPL)
+
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   angular velocity from  quaternion and derivative 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

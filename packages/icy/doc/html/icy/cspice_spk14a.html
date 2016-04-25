@@ -1,0 +1,249 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spk14a</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spk14a</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPK14A adds data to a type 14 SPK segment. Also
+   reference <a href="cspice_spk14b.html">cspice_spk14b</a> and <a href="cspice_spk14e.html">cspice_spk14e</a>.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/spk14a_c.html">spk14a_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+      
+      handle   the integer referring to an SPK file opened
+               with write access
+      ncsets   the integer number of Chebyshev coefficient sets
+               defined in 'coeffs'
+      coeffs   an array of double precision values containing the
+               time-ordered Chebyshev coefficients to write
+               to the SPK
+      epochs   an array of double precision values containing the
+               strictly increasing initial epoch corresponding 
+               to the coefficients in 'coeffs' (the i'th epoch 
+               corresponds to the i'th coefficient)
+   
+   the call:
+   
+      <b>cspice_spk14a</b>, handle, ncsets, coeffs, epochs
+   
+   adds the data to the SPK file referred to by 'handle'.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+     
+      ;;
+      ;; Create an SPK type 14. First create a segment 
+      ;; identifier.
+      ;; 
+      body      = 3
+      center    = 10
+      ref       = 'J2000'  
+      segid     = 'SPK type 14 test segment'
+      SPK14     = 'test14.bsp'
+      N_RECORDS = 4
+      CHBDEG    = 2
+       
+      ;;
+      ;; Define the coefficients.
+      ;;
+      discreteEpochs = [ 100.d, 200.d, 300.d, 400.d, 500.d, $ 
+                         600.d, 700.d, 800.d, 900.d         $
+                       ]
+       
+      ChebyRecords14 = [                            $
+                        150.0d,                     $
+                        50.0d,                      $
+                        1.0101d, 1.0102d, 1.0103d,  $
+                        1.0201d, 1.0202d, 1.0203d,  $
+                        1.0301d, 1.0302d, 1.0303d,  $
+                        1.0401d, 1.0402d, 1.0403d,  $
+                        1.0501d, 1.0502d, 1.0503d,  $
+                        1.0601d, 1.0602d, 1.0603d   $
+                       ,                            $
+                        250.0d,                     $
+                        50.0d,                      $
+                        2.0101d, 2.0102d, 2.0103d,  $
+                        2.0201d, 2.0202d, 2.0203d,  $
+                        2.0301d, 2.0302d, 2.0303d,  $
+                        2.0401d, 2.0402d, 2.0403d,  $
+                        2.0501d, 2.0502d, 2.0503d,  $
+                        2.0601d, 2.0602d, 2.0603d   $
+                       ,                            $
+                        350.0d,                     $
+                        50.0d,                      $
+                        3.0101d, 3.0102d, 3.0103d,  $
+                        3.0201d, 3.0202d, 3.0203d,  $
+                        3.0301d, 3.0302d, 3.0303d,  $
+                        3.0401d, 3.0402d, 3.0403d,  $
+                        3.0501d, 3.0502d, 3.0503d,  $
+                        3.0601d, 3.0602d, 3.0603d   $
+                       ,                            $
+                        450.0d,                     $
+                        50.0d,                      $
+                        4.0101d, 4.0102d, 4.0103d,  $
+                        4.0201d, 4.0202d, 4.0203d,  $
+                        4.0301d, 4.0302d, 4.0303d,  $
+                        4.0401d, 4.0402d, 4.0403d,  $
+                        4.0501d, 4.0502d, 4.0503d,  $
+                        4.0601d, 4.0602d, 4.0603d   $
+                     ]
+    
+      ;;
+      ;; Open a new SPK file.
+      ;;
+      if ( <a href="cspice_exists.html">cspice_exists</a> (SPK14) ) then begin
+         file_delete, SPK14 
+      endif
+      <a href="cspice_spkopn.html">cspice_spkopn</a>, SPK14, 'Type 14 SPK internal file name.', 4, handle
+     
+      ;;
+      ;; Create a type 14 segment.
+      ;;
+      ;; Begin the segment
+      ;;
+      <a href="cspice_spk14b.html">cspice_spk14b</a>, handle,                      $
+                     segid,                       $
+                     body,                        $
+                     center,                      $
+                     ref,                         $
+                     discreteEpochs[0],           $
+                     discreteEpochs[N_RECORDS],   $
+                     CHBDEG
+        
+      ;;
+      ;; Add the data.
+      ;;
+      <b>cspice_spk14a</b>, handle,           $
+                     N_RECORDS,        $
+                     ChebyRecords14,   $
+                     discreteEpochs
+       
+      ;;
+      ;; End the segment.
+      ;;
+      <a href="cspice_spk14e.html">cspice_spk14e</a>, handle
+       
+      ;; 
+      ;; SAFELY close the SPK file.
+      ;;
+      <a href="cspice_spkcls.html">cspice_spkcls</a>, handle
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   add data to a type_14 spk segment 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

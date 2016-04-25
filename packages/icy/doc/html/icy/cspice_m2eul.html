@@ -1,0 +1,254 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_m2eul</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_m2eul</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_M2EUL factors a rotation matrix into a product of 
+   three rotations about specified coordinate axes.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/m2eul_c.html">m2eul_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      r        a 3x3 double precision rotation matrix to factor as
+               a product of three rotations about a specified
+               coordinate axes.  The angles of these rotations are
+               called &quot;Euler angles&quot;.
+   
+      axis3
+      axis2
+      axis1   are the indices of the rotation axes of the
+              &quot;factor&quot; rotations, whose product is 'r'.  'r' is
+              factored as
+
+                 r = [ angle3 ]     [ angle2 ]     [ angle1 ]
+                               axis3          axis2          axis1
+
+              The axis numbers must belong to the set {1, 2, 3}.
+              The second axis number MUST differ from the first
+              and third axis numbers.
+   
+   the call:
+   
+      <b>cspice_m2eul</b>, r, axis3, axis2, axis1, angle3, angle2, angle1
+   
+   returns:
+   
+      angle3
+      angle2
+      angle1    a set of double precision Euler angles 
+                measured where the angle satisfy
+   
+                   r = [ angle3 ]     [ angle2 ]     [ angle1 ]
+                                 axis3           axis2          axis1
+   
+               The range of 'angle3' and 'angle1' is (-pi, pi].
+
+               The range of 'angle2' depends on the exact set of
+               axes used for the factorization.  For
+               factorizations in which the first and third axes
+               are the same,
+
+                  r = [R]  [S]  [T]
+                         a    b    a
+
+               the range of 'angle2' is [0, pi].
+
+               For factorizations in which the first and third
+               axes are different,
+
+                  r = [R]  [S]  [T] ,
+                         a    b    c
+
+               the range of angle2 is [-pi/2, pi/2].
+
+               For rotations such that 'angle3' and 'angle1' are not
+               uniquely determined, 'angle3' will always be set to
+               zero; 'angle1' is then uniquely determined.
+   
+      Note, the call sequence:
+   
+         <b>cspice_m2eul</b>, r, axis3, axis2, axis1, angle3, angle2, angle1
+         <a href="cspice_eul2m.html">cspice_eul2m</a>, angle3, angle2, angle1, axis3, axis2, axis1, r
+   
+      preserves 'r' to round-off error.
+   
+      Yet, the call sequence:
+   
+         <a href="cspice_eul2m.html">cspice_eul2m</a>, angle3, angle2, angle1, axis3, axis2, axis1, r
+         <b>cspice_m2eul</b>, r, axis3, axis2, axis1, angle3, angle2, angle1
+     
+      preserves 'angle3', 'angle2', and 'angle1' only if the initial
+      values of the angle existed within the range of <b>cspice_m2eul</b>'s
+      output.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+      ;;
+      ;; Conversion of instrument pointing from a matrix representation
+      ;; to Euler angles:
+      ;; 
+      ;; Suppose we want to find camera pointing in alpha, delta, and
+      ;; kappa, given the inertial-to-camera coordinate transformation
+      ;; 
+
+      ticam = [                                                               $
+       [ 0.49127379678135830d,   0.50872620321864170d, 0.70699908539882417d], $
+       [ -0.50872620321864193d, -0.49127379678135802d, 0.70699908539882428d], $
+       [  0.70699908539882406d, -0.70699908539882439d, 0.01745240643728360d] ]
+
+      ;;
+      ;; We want to find angles alpha, delta, kappa such that
+      ;;
+      ;;
+      ;;   ticam  =  [ kappa ]  [ pi/2 - delta ]  [ pi/2 + alpha ]
+      ;;                      3                 1                 3
+      ;;
+      <b>cspice_m2eul</b>, ticam, 3, 1, 3, kappa, ang2, ang1
+
+      alpha  =  ang1            - <a href="cspice_halfpi.html">cspice_halfpi</a>()
+      delta  =  <a href="cspice_halfpi.html">cspice_halfpi</a>() - ang2
+
+      ;;
+      ;;  calculates the desired angles.  If we wish to make sure that
+      ;; alpha, delta, and kappa are in the ranges [0, 2pi),
+      ;; [-pi/2, pi/2], and [0, 2pi) respectively, we may add the code
+      ;;
+      if ( alpha LT 0.d ) then begin
+       alpha = alpha + <a href="cspice_twopi.html">cspice_twopi</a>()
+      endif
+
+      if ( kappa LT 0.d ) then begin
+         kappa = kappa + <a href="cspice_twopi.html">cspice_twopi</a>()
+      endif
+
+      print, <a href="cspice_dpr.html">cspice_dpr</a>() * alpha, <a href="cspice_dpr.html">cspice_dpr</a>() * delta, <a href="cspice_dpr.html">cspice_dpr</a>() * kappa
+      
+   IDL outputs:
+   
+             315.00000       1.0000000       45.000000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/rotation.html">ROTATION.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.2, 25-JUN-2006, EDW (JPL)
+
+      Added example code and output to Examples section.
+      Expanded I/O section.
+
+   -Icy Version 1.0.1, 09-DEC-2005, EDW (JPL)
+
+      Added Examples section.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   matrix to euler angles
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,347 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ekucei</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ekucei</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EKUCEI updates an integer column entry in a
+   specified EK record.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ekucei_c.html">ekucei_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the scalar integer referring to an EK file open for
+               write access.
+
+      segno    the scalar integer indicating EK segment number
+               of the record of interest.
+
+      recno    the scalar integer identifying the index for record
+               of interest.
+
+      column   the string scalar name of the column for the
+               record of interest.
+
+      nvals    the integer number of entries from 'ivals' to update.
+
+      ivals    an array of integer values containing the
+               data values to update to the record in 'column'.
+
+                  Note: 'nvals' specifies the number of 'ivals'
+                  entries written to the updated record.
+
+      isnull   a scalar boolean flagging whether the entry is null
+
+   the call:
+
+      <b>cspice_ekucei</b>, handle, segno, recno, `column`, $
+                     nvals, ivals, isnull
+
+   updates 'nvals' of 'ivals' to column 'column' in segment 'segno',
+   record 'recno', of the EK file referred to by 'handle'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+
+      ;;
+      ;; Constants
+      ;;
+      EKNAME = &quot;ekucei.ek&quot;
+      IFNAME = &quot;Test EK&quot;
+      NCOLS  = 2
+      NROWS  = 6
+      NRESVC = 0
+      TABLE  = &quot;MIXED_DATA&quot;
+      CVLEN  = 81
+      MAXVAL = 10
+      ivals  = intarr( MAXVAL )
+
+      ;;
+      ;; Open a new EK file.  For simplicity, we won't
+      ;; reserve space for the comment area, so the
+      ;; number of reserved comment characters is zero.
+      ;; The constant IFNAME is the internal file name.
+      ;;
+      if ( <a href="cspice_exists.html">cspice_exists</a> (EKNAME) ) then begin
+         file_delete, EKNAME
+      endif
+
+      <a href="cspice_ekopn.html">cspice_ekopn</a>, EKNAME, IFNAME, NRESVC, handle
+
+      ;;
+      ;;   Set up the table and column names and declarations
+      ;;   for the MIXED_DATA segment.  We'll index all of
+      ;;   the columns.  All columns are scalar, so we omit
+      ;;   the size declaration.
+      ;;
+      cdecls = strarr(NCOLS)
+      cnames = strarr(NCOLS)
+
+      cnames[0] = &quot;INT_COL_1&quot;
+      cdecls[0] = &quot;DATATYPE = INTEGER, INDEXED  = TRUE,&quot;+$
+                  &quot; NULLS_OK = TRUE&quot;
+
+      cnames[1] = &quot;INT_COL_2&quot;
+      cdecls[1] = &quot;DATATYPE = INTEGER, SIZE = VARIABLE,&quot;+$
+                  &quot; NULLS_OK = TRUE&quot;
+
+      ;;
+      ;; Start the segment.
+      ;;
+      <a href="cspice_ekbseg.html">cspice_ekbseg</a>, handle, TABLE, NCOLS, cnames, cdecls, segno
+
+      for i = 0, (NROWS-1) do begin
+
+         <a href="cspice_ekappr.html">cspice_ekappr</a>, handle, segno, recno
+
+         ivals[0] = i
+         isnull   =  ( i EQ 1 )
+         <a href="cspice_ekacei.html">cspice_ekacei</a>, handle, segno,  recno,  cnames[0], $
+                        1,      ivals,  isnull
+
+         ;;
+         ;; Array-valued columns follow.
+         ;;
+         ivals[0] = 10*i
+         ivals[1] = (10*i) + 1
+         <a href="cspice_ekacei.html">cspice_ekacei</a>, handle, segno,  recno,  cnames[1], $
+                        2,      ivals,  isnull
+
+      endfor
+
+      ;;
+      ;; End the file.
+      ;;
+      <a href="cspice_ekcls.html">cspice_ekcls</a>, handle
+
+
+      ;;
+      ;; Open the EK for write access.
+      ;;
+      <a href="cspice_ekopw.html">cspice_ekopw</a>, EKNAME, handle
+
+      ;;
+      ;; Negate the values in the odd-numbered records
+      ;; using the update routines.&quot;
+      ;;
+      for i = 1, (NROWS-1), 2 do begin
+
+         recno    = i
+         isnull   =  ( i EQ 1 )
+
+         ivals[0] = -i
+         <b>cspice_ekucei</b>, handle, segno,  recno,  cnames[0], $
+                        1,      ivals,  isnull
+
+         ;;
+         ;; Array-valued columns follow.
+         ;;
+         ivals[0] = -(10*i)
+         ivals[1] = -((10*i) + 1)
+         <b>cspice_ekucei</b>, handle, segno,  recno,  cnames[1], $
+                        2,      ivals,  isnull
+
+      endfor
+
+      ;;
+      ;; End the file.
+      ;;
+      <a href="cspice_ekcls.html">cspice_ekcls</a>, handle
+
+
+      ;;
+      ;; Open the created file. Show the values added.
+      ;;
+      <a href="cspice_ekopr.html">cspice_ekopr</a>, EKNAME, handle
+
+      for i = 0, (NROWS-1) do begin
+
+         <a href="cspice_ekrcei.html">cspice_ekrcei</a>, handle, segno, i, cnames[0], $
+                        ivals, isnull
+
+         if ( NOT isnull ) then begin
+            print, 'Data from column: ',cnames[0],'   record number: ',i
+            print, ivals
+            print
+         endif
+
+         ;;
+         ;; Array-valued columns follow.
+         ;;
+         <a href="cspice_ekrcei.html">cspice_ekrcei</a>, handle, segno, i, cnames[1], $
+                         ivals, isnull
+
+         if ( NOT isnull ) then begin
+            print, 'Data from column: ',cnames[1], '   record number: ',i
+            print, ivals
+            print
+         endif
+
+      endfor
+
+      ;;
+      ;; End the file.
+      ;;
+      <a href="cspice_ekcls.html">cspice_ekcls</a>, handle
+
+   IDL outputs:
+
+      Data from column: INT_COL_1   record number:        0
+              0
+
+      Data from column: INT_COL_2   record number:        0
+              0           1
+
+      Data from column: INT_COL_1   record number:        2
+              2
+
+      Data from column: INT_COL_2   record number:        2
+             20          21
+
+      Data from column: INT_COL_1   record number:        3
+             -3
+
+      Data from column: INT_COL_2   record number:        3
+            -30         -31
+
+      Data from column: INT_COL_1   record number:        4
+              4
+
+      Data from column: INT_COL_2   record number:        4
+             40          41
+
+      Data from column: INT_COL_1   record number:        5
+             -5
+
+      Data from column: INT_COL_2   record number:        5
+            -50         -51
+
+   Note record 1 does not appear due to setting the 'isnull' flag
+   to true for that record.
+
+   Notice the odd value record numbers have negative values
+   as a result of the update calls.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ek.html">EK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 13-JUN-2010, EDW (JPL)
+
+      Minor edit to code comments eliminating typo.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   replace integer entry in an EK column
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:30 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,360 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_et2lst</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_et2lst</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_ET2LST computes the local solar time for an object on the surface of 
+   a body at a specified longitude and ephemeris epoch.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/et2lst_c.html">et2lst_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+
+      et         the double precision scalar or N-vector ephemeris epoch 
+                 expressed in TDB seconds past the J2000 epoch at which 
+                 a local time is desired. 
+
+      body       the scalar integer NAIF ID-code of a body on which local 
+                 time is to be measured. 
+
+      lon        the scalar double precision longitude (either 
+                 planetocentric or planetographic) in radians of the
+                 site on the surface of body for which local time should be 
+                 computed. 
+
+      type       the scalar string describing the form of longitude supplied 
+                 by the variable 'lon'. Allowed values:
+                   
+                    &quot;PLANETOCENTRIC&quot;
+                    &quot;PLANETOGRAPHIC&quot;
+                    
+                 Note the case of the letters in type is insignificant.
+                 Both &quot;PLANETOCENTRIC&quot; and &quot;planetocentric&quot; are recognized.
+                 Leading and trailing blanks in type are not significant.
+
+   the call:
+
+      <b>cspice_et2lst</b>, et, body, lon, type, hr, mn, sc, time, ampm
+   
+   returns:
+
+      hr         the scalar integer or N-vector local &quot;hour&quot; of the site
+                 specified at the epoch 'et'. Note that an &quot;hour&quot; of local 
+                 time does not have the same duration as an hour measured by
+                 conventional clocks. It is simply a representation of 
+                 an angle.
+
+      mn         the scalar integer or N-vector number of &quot;minutes&quot; 
+                 past the hour of the local time of the site at the epoch
+                 'et'. Again note that a &quot;local minute&quot; is not the same 
+                 as a minute you would measure with conventional clocks.
+
+      sc         the scalar integer or N-vector number of &quot;seconds&quot; past 
+                 the minute of the local time of the site at the epoch 'et'.
+                 Again note that a &quot;local second&quot; is not the same as a 
+                 second you would measure with conventional clocks.
+
+      time       the scalar or N-vector of strings expressing the local time 
+                 on a &quot;24 hour&quot; local clock.
+
+      ampm       the scalar or N-vector of strings expressing the local time
+                 on a &quot;12 hour&quot; local clock together with the traditional 
+                 AM/PM label to indicate whether the sun has crossed the 
+                 local zenith meridian.
+
+                 'hr', 'mn', 'sc', 'time', and 'ampm' &quot;returns with the same
+                 measure of vectorization, N, as 'et'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+   
+      ;;
+      ;; Define an arbitrary ephemeris time,
+      ;; (July 4 2004 18:00:00) target body, 
+      ;; longitude (rads) and, the type of longitude.
+      ;;
+      et   = 142236064.18399799d
+      body = 499
+      lon  = 326.17d * <a href="cspice_rpd.html">cspice_rpd</a>()
+      type = 'PLANETOCENTRIC'
+      SIZE = 5
+
+      ;;
+      ;; Load an SPK, PCK and leapsecond file.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+
+      ;;
+      ;; Calculate the local solar time defined by the inputs.
+      ;;
+      <b>cspice_et2lst</b>, et, body, lon, type, $
+                                hr,  mn, sc , time, ampm
+
+      print, 'Scalar:'
+      print, 'ET       : ', et
+      print, 'Body     : ', body
+      print, 'Longitude: ', lon
+      print, 'Type     : ', type
+      print, 'LST Hour : ', hr
+      print, 'LST Min  : ', mn
+      print, 'LST Sec  : ', sc
+      print, 'LST Time : ', time
+      print, 'LST AMPM : ', ampm
+      print
+
+      ;;
+      ;; Convert the array of ephemeris times 'et' to
+      ;; arrays of local solar time values. 'et' ranges
+      ;; from value 142236064.18399799 in steps of
+      ;; 10000 ephemeris seconds.
+      ;;
+      et = dindgen(SIZE)*10000.d + 142236064.18399799d
+
+      <b>cspice_et2lst</b>, et, body, lon, type, $
+                                hr,  mn, sc , time, ampm
+
+      print, 'Vector:'
+      for i=0, (SIZE-1) do begin
+         print, 'ET       : ', et[i]
+         print, 'LST Hour : ', hr[i]
+         print, 'LST Min  : ', mn[i]
+         print, 'LST Sec  : ', sc[i]
+         print, 'LST Time : ', time[i]
+         print, 'LST AMPM : ', ampm[i]
+         print
+      endfor
+
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   IDL outputs:
+
+      Scalar:
+      ET       :    1.4223606e+08
+      Body     :      499
+      Longitude:        5.6927404
+      Type     : PLANETOCENTRIC
+      LST Hour :           17
+      LST Min  :           30
+      LST Sec  :           38
+      LST Time : 17:30:38
+      LST AMPM : 05:30:38 P.M.
+
+      Vector:
+      ET       :    1.4223606e+08
+      LST Hour :           17
+      LST Min  :           30
+      LST Sec  :           38
+      LST Time : 17:30:38
+      LST AMPM : 05:30:38 P.M.
+
+      ET       :    1.4224606e+08
+      LST Hour :           20
+      LST Min  :           12
+      LST Sec  :           52
+      LST Time : 20:12:52
+      LST AMPM : 08:12:52 P.M.
+
+      ET       :    1.4225606e+08
+      LST Hour :           22
+      LST Min  :           55
+      LST Sec  :            7
+      LST Time : 22:55:07
+      LST AMPM : 10:55:07 P.M.
+
+      ET       :    1.4226606e+08
+      LST Hour :            1
+      LST Min  :           37
+      LST Sec  :           21
+      LST Time : 01:37:21
+      LST AMPM : 01:37:21 A.M.
+
+      ET       :    1.4227606e+08
+      LST Hour :            4
+      LST Min  :           19
+      LST Sec  :           36
+      LST Time : 04:19:36
+      LST AMPM : 04:19:36 A.M.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Regarding planetographic longitude
+   ----------------------------------
+
+   In the planetographic coordinate system, longitude is defined using
+   the spin sense of the body.  Longitude is positive to the west if
+   the spin is prograde and positive to the east if the spin is
+   retrograde.  The spin sense is given by the sign of the first degree
+   term of the time-dependent polynomial for the body's prime meridian
+   Euler angle &quot;W&quot;:  the spin is retrograde if this term is negative
+   and prograde otherwise.  For the sun, planets, most natural
+   satellites, and selected asteroids, the polynomial expression for W
+   may be found in a SPICE PCK kernel.
+
+   The earth, moon, and sun are exceptions: planetographic longitude
+   is measured positive east for these bodies.
+
+   If you wish to override the default sense of positive planetographic
+   longitude for a particular body, you can do so by defining the
+   kernel variable
+
+      BODY&lt;body ID&gt;_PGR_POSITIVE_LON
+
+   where &lt;body ID&gt; represents the NAIF ID code of the body. This
+   variable may be assigned either of the values
+
+      'WEST'
+      'EAST'
+
+   For example, you can have this routine treat the longitude of the
+   earth as increasing to the west using the kernel variable assignment
+
+      BODY399_PGR_POSITIVE_LON = 'WEST'
+
+   Normally such assignments are made by placing them in a text kernel
+   and loading that kernel via <a href="cspice_furnsh.html">cspice_furnsh</a>.
+    
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.3, 05-JAN-2011, EDW (JPL)
+
+      Corrected header typo, furnsh_c replaced with <a href="cspice_furnsh.html">cspice_furnsh</a>.
+
+   -Icy Version 1.0.2, 29-JAN-2009, EDW (JPL)
+
+      Minor edits to header text.
+      
+      Replace argument description comment
+
+         &quot;returns with the same order&quot;
+      
+      with
+      
+         &quot;returns with the same measure of vectorization&quot;
+      
+   -Icy Version 1.0.1, 07-NOV-2005, EDW (JPL)
+
+      The treatment of planetographic longitude has been
+      updated in et2lst_c.c to be consistent with the 
+      SPICE planetographic/rectangular coordinate conversion
+      routines. The effect of this change is that  the 
+      default sense of positive longitude for the moon is 
+      now east; also, the default sense of positive 
+      planetographic longitude now may be overridden for
+      any body.
+   
+   -Icy Version 1.0.0, 20-SEP-2004, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   Compute the local time for a point on a body. 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:30 2014</pre>
+
+</body>
+</html>
+

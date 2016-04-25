@@ -1,0 +1,8 @@
+mms*_dfg_srvy_gsm_dmpa; Bx, By, Bz
+mms*_edp_fast_dce_dsl
+mms*_edi_amb_pa0_raw_counts
+mms*_edi_amb_pa180_raw_counts
+;mms*_edi_amb_gdu1_raw_counts1
+;mms*_edi_amb_gdu2_raw_counts1
+;mms*_edi_pitch_gdu1
+;mms*_edi_pitch_gdu2

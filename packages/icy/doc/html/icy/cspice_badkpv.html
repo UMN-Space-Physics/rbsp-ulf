@@ -1,0 +1,313 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_badkpv</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_badkpv</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_BADKPV determines if a kernel pool variable is present and if so 
+   that it has the correct size and type. 
+   
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/badkpv_c.html">badkpv_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+
+      caller   the scalar string name of the routine calling this routine
+               to check correctness of kernel pool variables.
+
+      name     the scalar string name of a kernel pool variable that the 
+               calling program expects to be present in the 
+               kernel pool. 
+
+      comp     the scalar character comparison operator to use when 
+               comparing the number of components of the kernel pool 
+               variable specified by name with the integer size.  If dim 
+               is the actual size of the kernel pool variable then 
+               badkpv_c will check the sentence 
+
+                  dim comp size 
+
+               is a true statement.  If it is not a true statement 
+               an error will be signaled. 
+
+               Allowed values for comp and their meanings are: 
+
+                  &quot;=&quot;      dim == size 
+                  &quot;&lt;&quot;      dim &lt;  size 
+                  &quot;&gt;&quot;      dim &gt;  size 
+                  &quot;=&gt;&quot;     dim &gt;= size 
+                  &quot;&lt;=&quot;     dim &lt;= size 
+
+      size     a scalar integer to compare with the actual 
+               number of components of the kernel pool variable 
+               specified by 'name'. 
+
+      divby    a scalar integer that is one of the factors of the 
+               actual dimension of the specified kernel pool variable. 
+               In other words, it is expected that divby evenly 
+               divides the actual dimension of name. In those 
+               cases in which the factors of the dimension of name 
+               are not important, set divby to 1 in the calling 
+               program. 
+
+      type     a scalar character describing the kernel pool variable's
+               expected type. Recognized values are 
+
+                'C' for character type 
+                'N' for numeric type (integer and double precision) 
+
+               The case of 'type' is insignificant.  If the value 
+               is not one of the 2 values given above 
+               no check for the type of the variable will be 
+               performed. 
+
+   the call:
+
+      <b>cspice_badkpv</b>, `caller`, `name`, `comp`, size, divby, `type`
+
+   returns:
+   
+      The procedure does not return a value. The call signals a SPICE error
+      if the kernel pool variable lacks the described properties, otherwise
+      the call has not effect.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Load a kernel containing the variable assignments:
+      ;; 
+      ;;   CTEST_VAL = ('LARRY', 'MOE', 'CURLY' )
+      ;;
+      ;;   ITEST_VAL = ( 3141, 186, 282 )
+      ;;
+      ;;   DTEST_VAL = ( 3.1415, 186. , 282.397 )
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, 'badkpv_t.ker'
+
+      ;;
+      ;; Create an error handler.
+      ;;
+      catch, err
+
+      ;;
+      ;; Wrap the call, providing an output message on error.
+      ;;
+      if err eq 0 then begin
+   
+         ;;
+         ;; Execute the call. If an error occurs, the first statement
+         ;; after &quot;catch, err&quot; executes.
+         ;;
+         <b>cspice_badkpv</b>, 'BADKPV_T', 'CTEST_VAL', '=', 3, 1, 'C'
+         print, 'Expected form of variable CTEST_VAL found in kernel pool.'
+      
+      endif else begin
+
+         ;;
+         ;; <b>cspice_badkpv</b> signaled an error. Output the error message.
+         ;;
+         print, 'Expected form of variable CTEST_VAL not found in kernel pool.'
+         print, !Error_State.Msg
+
+      endelse
+
+      ;;
+      ;; Cancel the error handler.
+      ;;
+      catch, /cancel
+      print, ' ' 
+   
+      ;;
+      ;; Perform another run in the same manner as above. Create an error 
+      ;; handler respond if an error signals.
+      ;;
+      catch, err
+
+      if err eq 0 then begin
+   
+         ;;
+         ;; Check for the double precision array, improperly indicate the
+         ;; array has type character.
+         ;;
+         <b>cspice_badkpv</b>, 'BADKPV_T', 'DTEST_VAL', '=', 3, 1, 'C'
+         print, 'Expected form of variable DTEST_VAL found in kernel pool.'
+
+      endif else begin
+
+         ;;
+         ;; Output error information.
+         ;;
+         print, 'Expected form of variable DTEST_VAL NOT found in kernel pool.'
+         print, !Error_State.Msg
+
+      endelse
+
+      ;;
+      ;; Cancel the error handler.
+      ;;
+      catch, /cancel
+      print, ' ' 
+
+      ;;
+      ;; Another test.
+      ;;
+      catch, err
+
+      if err eq 0 then begin
+   
+         ;;
+         ;; Check for the integer array, improperly indicate the size as 2.
+         ;;
+         <b>cspice_badkpv</b>, 'BADKPV_T', 'ITEST_VAL', '=', 2, 1, 'N'
+         print, 'Expected form of variable ITEST_VAL found in kernel pool.'
+
+      endif else begin
+
+         ;;
+         ;; Output error information.
+         ;;
+         print, 'Expected form of variable ITEST_VAL NOT found in kernel pool.'
+         print, !Error_State.Msg
+
+      endelse
+
+      catch, /cancel
+
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_unload.html">cspice_unload</a>, 'badkpv_t.ker'
+
+   IDL outputs:
+
+      Expected form of variable CTEST_VAL found in kernel pool.
+ 
+      Expected form of variable DTEST_VAL NOT found in kernel pool.
+      CSPICE_BADKPV: SPICE(BADVARIABLETYPE): [badkpv_c-&gt;BADKPV] BADKPV_T: The
+                     kernel pool variable 'DTEST_VAL' must be of type
+                     &quot;CHARACTER&quot;. However, the current type is numeric.
+ 
+      Expected form of variable ITEST_VAL NOT found in kernel pool.
+      CSPICE_BADKPV: SPICE(BADVARIABLESIZE): [badkpv_c-&gt;BADKPV] BADKPV_T: The
+                     kernel pool variable 'ITEST_VAL' is expected to have a
+                     number of components DIM such that the comparison DIM = 2
+                     is TRUE.  However, the current number of components for
+                     'ITEST_VAL' is 3.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 29-AUG-2006, EDW (JPL)
+
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   Check the properties of a kernel pool variable 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

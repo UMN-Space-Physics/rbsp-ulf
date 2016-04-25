@@ -1,0 +1,210 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_vprjpi</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_vprjpi</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_VPRJPI calculates the vector in a specified plane that
+   maps under orthogonal projection to a specified vector in
+   another plane.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/vprjpi_c.html">vprjpi_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      vin      a double precision 3-vector.
+
+      projpl   a SPICE plane structure, describing a SPICE plane that
+               represents the geometric plane containing 'vin'. The structure
+               has the fields:
+
+                 normal:   [3-array double]
+                 constant: [scalar double]
+
+      invpl    a SPICE plane structure, describing a SPICE plane that
+               represents the geometric plane containing the inverse image
+               of 'vin' under orthogonal projection onto 'projpl'.
+               The structure has the fields:
+
+                 normal:   [3-array double]
+                 constant: [scalar double]
+
+   the call:
+
+      <b>cspice_vprjpi</b>, vin, projpl, invpl, vout, found
+
+   returns:
+
+      vout     the double precision 3-vector inverse orthogonal projection
+               of 'vin'. This is the vector lying in the plane 'invpl' whose
+               orthogonal projection onto the plane 'projpl' is 'vin'. 'vout'
+               is valid only when 'found' is true. Otherwise,
+               'vout' is undefined.
+
+      found    a scalar boolean flag, indicating whether the inverse orthogonal
+               projection of 'vin' could be computed. 'found' is true if so,
+               false otherwise.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Construct two planes via <a href="cspice_nvc2pl.html">cspice_nvc2pl</a>. Define the normal
+      ;; vectors and constants for the planes.
+      ;;
+      norm1 = [ 0.d, 0.d, 1.d]
+      norm2 = [ 1.d, 0.d, 1.d]
+      con1  = 1.2d
+      con2  = 0.65d
+
+      ;;
+      ;; Use the normals and constants to create the plane structures,
+      ;; plane1 and plane2.
+      ;;
+      <a href="cspice_nvc2pl.html">cspice_nvc2pl</a>, norm1, con1, plane1
+      <a href="cspice_nvc2pl.html">cspice_nvc2pl</a>, norm2, con2, plane2
+
+      ;;
+      ;; Define a vector in plane1...
+      ;;
+      vec = [ 1.d, 1.d, 0.d]
+
+      ;;
+      ;; Calculate the inverse projection to plane2.
+      ;;
+      <b>cspice_vprjpi</b>, vec, plane1, plane2, vec_iproj, found
+
+      if ( found ) then begin
+         print, 'Found an inverse vector:', vec_iproj
+      endif else begin
+         print, 'Could not find the inverse vector.'
+      endelse
+
+   IDL outputs:
+
+      Found an inverse vector:    1.0000000    1.0000000  -0.35000000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.2, 23-NOV-2010, EDW (JPL)
+
+      Edit to example code comments and 'vec' assignment eliminating typos.
+
+   -Icy Version 1.0.1, 02-MAY-2005, EDW (JPL)
+
+      Corrected typo in description of 'found'.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   vector projection onto plane inverted
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:33 2014</pre>
+
+</body>
+</html>
+

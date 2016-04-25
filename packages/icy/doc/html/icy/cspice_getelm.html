@@ -1,0 +1,367 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_getelm</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_getelm</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_GETELM parses the &quot;lines&quot; of a two-line element set, then 
+   returns the elements in units suitable for use by SPICE software.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/getelm_c.html">getelm_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+
+      frstyr   a scalar integer representing the first year possible for 
+               two-line elements epoch. Since two-line elements allow only 
+               two digits for the year, some conventions must be followed 
+               concerning which century the two digits refer to. 'frstyr' 
+               is the year of the earliest representable elements. The two-digit
+               year is mapped to the year in the interval from 'frstyr' to
+               'frstyr' + 99 that has the same last two digits as the two
+               digit year in the element set.  For example if 'frstyr' is
+               set to 1960 then the two digit years are mapped as shown
+               in the table below:
+ 
+               Two-line       Maps to 
+               element year 
+             
+                00            2000 
+                01            2001 
+                02            2002 
+                 .              . 
+                 .              . 
+                 .              . 
+                58            2058 
+                59            2059 
+               -------------------- 
+                60            1960 
+                61            1961 
+                62            1962 
+                 .              . 
+                 .              . 
+                 .              . 
+                99            1999 
+ 
+               Note that if Space Command should decide to represent
+               years in 21st century as 100 + the last two digits of the
+               year (for example: 2015 is represented as 115) instead of
+               simply dropping the first two digits of the year, this
+               routine will correctly map the year as long as you set
+               frstyr to some value between 1900 and 1999.
+ 
+      lines    a two component string array containing the pair of text lines
+               comprising a Space Command &quot;two-line element&quot; set. These text 
+               lines should have the same as they are presented in the 
+               two-line element files available from Space Command 
+               (formerly NORAD).
+
+   the call:
+
+      <b>cspice_getelm</b>, frstyr, lines, epoch, elems
+   
+   returns:
+
+      epoch   the scalar double precision epoch in TDB seconds past J2000 
+              of the input two-line elements. 
+ 
+      elems   a double precision 10-array containing the elements from
+              the input two-line  set. The elements are in units suitable
+              for use by the Icy routine <a href="cspice_spkw10.html">cspice_spkw10</a>.
+ 
+              Also note that the elements XNDD6O and BSTAR 
+              incorporate the exponential factor present in the 
+              input two-line elements in 'lines'.  (See particulars 
+              below. 
+ 
+                  ELEMS[ 0 ] = XNDT2O in radians/minute**2 
+                  ELEMS[ 1 ] = XNDD6O in radians/minute**3 
+                  ELEMS[ 2 ] = BSTAR 
+                  ELEMS[ 3 ] = XINCL  in radians 
+                  ELEMS[ 4 ] = XNODEO in radians 
+                  ELEMS[ 5 ] = EO 
+                  ELEMS[ 6 ] = OMEGAO in radians 
+                  ELEMS[ 7 ] = XMO    in radians 
+                  ELEMS[ 8 ] = XNO    in radians/minute 
+                  ELEMS[ 9 ] = EPOCH of the elements in seconds 
+                                past ephemeris epoch J2000. 
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Load a kernel set.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '/kernels/<a href= "standard.html">standard.tm</a>'
+
+      SPK = 'dmsp.bsp'
+
+      ;;
+      ;; Define the NAIF object ID and the corresponding Two
+      ;; Line Element set.
+      ;;
+
+      ID  = -118123L
+
+      TLE = [ '1 18123U 87 53  A 87324.61041692 -.00000023  ' + $ 
+                                  '00000-0 -75103-5 0 00675',   $
+              '2 18123  98.8296 152.0074 0014950 168.7820 '   + $
+                                '191.3688 14.12912554 21686',   $
+              '1 18123U 87 53  A 87326.73487726  .00000045  ' + $ 
+                                  '00000-0  28709-4 0 00684',   $
+              '2 18123  98.8335 154.1103 0015643 163.5445 '   + $
+                                '196.6235 14.12912902 21988',   $
+              '1 18123U 87 53  A 87331.40868801  .00000104  ' + $ 
+                                  '00000-0  60183-4 0 00690',   $
+              '2 18123  98.8311 158.7160 0015481 149.9848 '   + $
+                                '210.2220 14.12914624 22644',   $
+              '1 18123U 87 53  A 87334.24129978  .00000086  ' + $ 
+                                  '00000-0  51111-4 0 00702',   $
+              '2 18123  98.8296 161.5054 0015372 142.4159 '   + $
+                                '217.8089 14.12914879 23045',   $
+              '1 18123U 87 53  A 87336.93227900 -.00000107  ' + $ 
+                                  '00000-0 -52860-4 0 00713',   $
+              '2 18123  98.8317 164.1627 0014570 135.9191 '   + $
+                                '224.2321 14.12910572 23425',   $
+              '1 18123U 87 53  A 87337.28635487  .00000173  ' + $ 
+                                  '00000-0  10226-3 0 00726',   $
+              '2 18123  98.8284 164.5113 0015289 133.5979 '   + $
+                                '226.6438 14.12916140 23475',   $
+              '1 18123U 87 53  A 87339.05673569  .00000079  ' + $ 
+                                  '00000-0  47069-4 0 00738',   $
+              '2 18123  98.8288 166.2585 0015281 127.9985 '   + $
+                                '232.2567 14.12916010 24908',   $
+              '1 18123U 87 53  A 87345.43010859  .00000022  ' + $ 
+                                  '00000-0  16481-4 0 00758',   $
+              '2 18123  98.8241 172.5226 0015362 109.1515 '   + $
+                                '251.1323 14.12915487 24626',   $
+              '1 18123U 87 53  A 87349.04167543  .00000042  ' + $ 
+                                  '00000-0  27370-4 0 00764',   $
+              '2 18123  98.8301 176.1010 0015565 100.0881 '   + $
+                                   '260.2047 14.12916361 25138' ]
+
+      ;;
+      ;; The constants as listed in geophysical.ker.
+      ;;
+      CONSTS = [  1.082616D-3,  $
+                 -2.53881D-6,   $
+                 -1.65597D-6,   $
+                 7.43669161D-2, $
+                 120.D,         $
+                 78.D,          $
+                 6378.135D,     $
+                 1.D ]
+
+      ;;
+      ;; Create the arrays for the element data.
+      ;;
+      epoch_x = dblarr( 9  )
+      elems_x = dblarr( 90 )
+
+      if <a href="cspice_exists.html">cspice_exists</a>(SPK) then file_delete, SPK
+
+      ;;
+      ;; Convert the Two-Line Elements lines to the
+      ;; element sets.
+      ;;
+      j = 0 
+      for i=0,16,2 do begin
+
+         lines = [ TLE[i], TLE[i+1] ]
+      
+         <b>cspice_getelm</b>, 1950L, lines, epoch, elems
+   
+         epoch_x[i/2]           = epoch
+         elems_x[0+j*10:9+j*10] = elems
+         j                      = j + 1
+      endfor
+
+
+      ;;
+      ;; Define the beginning and ending time range
+      ;; +/- 12 hours from the first and last epochs
+      ;; respectively.
+      ;;
+      first = epoch_x[0] - 0.5D0*<a href="cspice_spd.html">cspice_spd</a>()
+      last  = epoch_x[8] + 0.5D0*<a href="cspice_spd.html">cspice_spd</a>()
+ 
+
+      ;;
+      ;; Create a new SPK file.
+      ;;
+      <a href="cspice_spkopn.html">cspice_spkopn</a>, SPK, 'TEST_FILE', 1000L, handle
+
+      ;;
+      ;; Add the data for the type 10 segment to the new SPK.
+      ;;
+      <a href="cspice_spkw10.html">cspice_spkw10</a>, handle, ID, 399L, 'j2000', first, last, $
+                     'DMSP F8', consts, 9L, elems_x, epoch_x
+
+
+      ;;   
+      ;; Safely close the SPK.
+      ;; 
+      <a href="cspice_spkcls.html">cspice_spkcls</a>, handle
+
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine parses a Space Command Two-line element set and returns
+   the orbital elements properly scaled and in units suitable for use
+   by other SPICE software.  Input elements look like the following
+ 
+--------------------------------------------------------------------- 
+1 22076U 92052A   97173.53461370 -.00000038  00000-0  10000-3 0   594 
+2 22076  66.0378 163.4372 0008359 278.7732  81.2337 12.80930736227550 
+--------------------------------------------------------------------- 
+^ 
+123456789012345678901234567890123456789012345678901234567890123456789 
+         1         2         3         4         5         6 
+ 
+   The &quot;raw&quot; elements in the first and second lines are marked below.
+   Note that in several instances exponents and decimal points are
+   implied.  Also note that input units are degrees, degrees/day**n and
+   revolutions/day.
+ 
+ 
+                    DAY OF YEAR             NDD60    BSTAR 
+                    vvvvvvvvvvvv            vvvvvv   vvvvvv 
+--------------------------------------------------------------------- 
+1 22076U 92052A   97173.53461370 -.00000038  00000-0  10000-3 0   594 
+--------------------------------------------------------------------- 
+                  ^^             ^^^^^^^^^^       ^^       ^^ 
+                  YEAR             NDT20          IEXP     IBEXP 
+ 
+ 
+ 
+   The &quot;raw&quot; elements in the second line are marked below 
+                 NODE0            OMEGA             N0 
+                 vvvvvvvv         vvvvvvvv          vvvvvvvvvvv 
+--------------------------------------------------------------------- 
+2 22076  66.0378 163.4372 0008359 278.7732  81.2337 12.80930736227550 
+--------------------------------------------------------------------- 
+        ^^^^^^^^          ^^^^^^^          ^^^^^^^^ 
+        Inclination       Eccentricity     M0 
+ 
+   This routine extracts these values &quot;inserts&quot; the implied 
+   decimal points and exponents and then converts the inputs 
+   to units of radians, radians/minute, radians/minute**2, and 
+   radians/minute**3 
+
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 04-DEC-2007, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   Parse two-line elements 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:30 2014</pre>
+
+</body>
+</html>
+

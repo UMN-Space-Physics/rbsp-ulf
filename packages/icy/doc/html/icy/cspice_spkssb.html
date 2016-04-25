@@ -1,0 +1,211 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkssb</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkssb</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKSSB returns the geometric state (position and 
+   velocity) of a target body relative to the solar system 
+   barycenter. 
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/spkssb_c.html">spkssb_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      targ    the string name or ID of the target body (the
+              observed body)
+              
+      et      the double precision ephemeris time (ET) epoch
+              for the observation of interest
+              
+      ref     the string name of the reference frame in
+              which to output the state 6-vector
+   
+   the call:
+   
+      <b>cspice_spkssb</b>, targ, et, ref, starg
+   
+   returns:
+   
+      starg   a double precision 6-vector containing the position 
+              and velocity of 'targ' relative to the Solar System 
+              Barycenter at time 'et'.
+   
+   Note: The state vector returned by <b>cspice_spkssb</b> represents the
+   geometric state of the target from the Solar System Barycenter.
+   The routine applies no corrections to account for stellar 
+   aberration or the finite speed of light.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Load a set of kernels: an SPK file, a PCK
+      ;; file and a leapseconds file. Use a meta
+      ;; kernel for convenience.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+         
+      ;;
+      ;; Define parameters for a state lookup:
+      ;;
+      ;; Return the state vector of Mars (499)
+      ;; and Earth (399) with respect to the Solar System
+      ;; Barycenter in the J2000 frame at epoch
+      ;; July 4, 2003 11:00 AM PST.
+      ;;
+      targ1  = 499
+      epoch  = 'July 4, 2003 11:00 AM PST'
+      frame  = 'J2000'
+      targ2  = 399
+         
+      ;;
+      ;; Convert the epoch to ephemeris time.
+      ;;
+      <a href="cspice_str2et.html">cspice_str2et</a>, epoch, et
+         
+      ;;
+      ;; Look-up the states for the defined parameters.
+      ;;
+      <b>cspice_spkssb</b>, targ1, et, frame, state1
+      <b>cspice_spkssb</b>, targ2, et, frame, state2
+   
+      ;;
+      ;; What measure of distance separates the two bodies
+      ;; at epoch.
+      ;;
+      dist = <a href="cspice_vdist.html">cspice_vdist</a>( state1[0:2], state2[0:2] )
+   
+      print, 'The absolute distance (KM)      : ', dist
+      print, 'between Mars and Earth at epoch : ', epoch
+   
+   IDL outputs:
+   
+      The absolute distance (KM)      :        80854820.
+      between Mars and Earth at epoch : July 4, 2003 11:00 AM PST
+   
+   Note, an <a href="cspice_spkgeo.html">cspice_spkgeo</a> call equivalent to the two <b>cspice_spkssb</b>
+   calls:
+   
+      <a href="cspice_spkgeo.html">cspice_spkgeo</a>, targ1, et, frame, targ2, state, ltime
+      dist = norm( state[0:2] )
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+   <a href="../req/frames.html">FRAMES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   state relative to solar system barycenter 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

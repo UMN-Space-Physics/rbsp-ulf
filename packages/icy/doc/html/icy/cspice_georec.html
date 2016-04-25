@@ -1,0 +1,287 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_georec</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_georec</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_GEOREC converts geodetic coordinates to rectangular 
+   coordinates.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/georec_c.html">georec_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+       lon   a double precision scalar or N-vector describing 
+             the geodetic longitude measured in radians.
+
+       lat   a double precision scalar or N-vector describing
+             the geodetic latitude measured in radians.
+
+       alt   a double precision scalar or N-vector describing 
+             the altitude above the reference spheroid.
+   
+       re    the scalar, double precision equatorial radius of 
+             the body of interest.
+ 
+       f     the scalar, double precision flattening coefficient
+             of the body, a dimensionless value defined as:
+   
+                    equatorial_radius - polar_radius
+                    --------------------------------
+                           equatorial_radius
+   
+   the call:
+   
+      <b>cspice_georec</b>, lon, lat, alt, re, f, rectan
+
+   returns:
+
+      rectan   a double precision 3-vector or 3xN array
+               containing the rectangular coordinates of the 
+               position or set of positions.
+
+               'rectan' returns with the same measure of vectorization (N)
+               as 'lon', 'lat', and 'alt'.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Load the standard kernel set.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+
+      ;;
+      ;; Retrieve the triaxial radii of the earth
+      ;;
+      <a href="cspice_bodvrd.html">cspice_bodvrd</a>, 'EARTH', 'RADII', 3, radii
+
+      ;;
+      ;; Calculate the flatness coefficient. Set a latitude,
+      ;; longitude, altitude coordinate set at 118 west,
+      ;; 32 North, 0 altitude (convert the angular measures
+      ;; to radians).
+      ;;
+      flat = (radii[0] - radii[2])/radii[0]
+      lon  = 118.d * <a href="cspice_rpd.html">cspice_rpd</a>()
+      lat  = 32.d  * <a href="cspice_rpd.html">cspice_rpd</a>()
+      alt  = 0.d
+
+      <b>cspice_georec</b>, lon, lat, alt, radii[0], flat,x
+      
+      print, 'Scalar:'
+      print, FORMAT='( F12.6,3x, F12.6,3x, F12.6)', x
+      print
+
+      ;;
+      ;; Using the equatorial radius of the Clark66 spheroid
+      ;; (CLARKR = 6378.2064 km) and the Clark 66 flattening
+      ;; factor (CLARKF = 1.0 / 294.9787 ) convert to
+      ;; body fixed rectangular coordinates.
+      ;;
+      CLARKR = 6378.2064d
+      CLARKF = 1.d/294.9787d
+
+      ;;
+      ;; Define vectors of longitudes, latitudes, and altitudes.
+      ;;
+      lon = [  0.d, $
+               0.d, $
+              90.d, $ 
+               0.d, $
+             180.d, $
+             -90.d, $
+               0.d, $
+              45.d, $
+               0.d, $
+              90.d, $
+              45.d  ]
+
+      lat = [    90.d      , $
+                 88.677225d, $
+                 88.677225d, $
+                 90.d      , $
+                 88.677225d, $
+                 88.677225d, $
+                -90.d      , $
+                 88.129144d, $
+                 88.707084d, $
+                 88.707084d, $
+                 88.171393d  ]
+
+      alt = [ -6356.5838d  , $
+              -6356.572258d, $
+              -6356.572258d, $
+              -6355.5838d  , $
+              -6356.572258d, $ 
+              -6356.572258d, $
+              -6355.5838d  , $
+              -6356.560715d, $
+              -6355.572518d, $
+              -6355.572518d, $
+              -6355.561236d  ]
+
+      ;;
+      ;; Convert angular measures to radians.
+      ;;
+      lon = lon*<a href="cspice_rpd.html">cspice_rpd</a>()
+      lat = lat*<a href="cspice_rpd.html">cspice_rpd</a>()
+
+      ;;
+      ;; Calculate then output the rectangular coordinates.
+      ;;
+      <b>cspice_georec</b>,  lon, lat, alt, CLARKR, CLARKF, x
+
+      print, 'Vector:'
+      print, FORMAT='( F12.6,3x, F12.6,3x, F12.6)', x
+
+   IDL outputs:
+   
+      Scalar:
+      -2541.748162    4780.333036    3360.428190
+
+      Vector:
+          0.000000       0.000000       0.000000
+          1.000000       0.000000      -0.000000
+          0.000000       1.000000      -0.000000
+          0.000000       0.000000       1.000000
+         -1.000000       0.000000      -0.000000
+          0.000000      -1.000000      -0.000000
+          0.000000       0.000000      -1.000000
+          1.000000       1.000000       0.000000
+          1.000000       0.000000       1.000000
+          0.000000       1.000000       1.000000
+          1.000000       1.000000       1.000000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.1.1, 05-FEB-2008, EDW (JPL)
+
+      Edited I/O section, replaced comment
+      
+         &quot;returns with the same order&quot;
+      
+      with
+      
+         &quot;returns with the same measure of vectorization&quot;
+      
+   -Icy Version 1.1.0, 12-SEP-2004, EDW (JPL)
+
+       Added capability to process vectors 'lon',
+       'lat', and 'alt' as input returning 
+       vector 'rectan' on output.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   geodetic to rectangular coordinates
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:30 2014</pre>
+
+</body>
+</html>
+

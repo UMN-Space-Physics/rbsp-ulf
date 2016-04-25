@@ -1,0 +1,204 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_surfpt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_surfpt</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SURFPT determines the intersection of a line-of-sight vector with
+   the surface of an ellipsoid.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/surfpt_c.html">surfpt_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      positn   the double precision position 3-vector position
+               of an observer with respect to the center of an
+               ellipsoid expressed in the body fixed coordinates of 
+               the ellipsoid
+   
+      u        the double precision direction 3-vector emanating from
+               'positn'
+               
+      a,       the scalar double precision values of the ellipsoid's 
+      b,       triaxial radii ellipsoid, where:
+      c
+                  'a' is length in kilometers of the semi-axis of the ellipsoid
+                   parallel to the x-axis of the body-fixed reference frame 
+   
+                  'b' is length in kilometers of the semi-axis of the ellipsoid
+                   parallel to the y-axis of the body-fixed reference frame 
+   
+                  'c' is length in kilometers of the semi-axis of the ellipsoid
+                   parallel to the z-axis of the body-fixed reference frame 
+   
+   the call:
+   
+      <b>cspice_surfpt</b>, positn, view, a, b, c, point, found
+   
+   returns:
+   
+      point   a double precision 3-vector defining the location
+              on the ellipsoid at which the 'view' intercepts
+              the ellipsoid if the interception exists, 'point' returns
+              (0.d, 0.d, 0.d) if 'u' does not intersect the ellipsoid
+       
+      found   a boolean indicating whether the intersection
+              between the ellipse and 'view' exists (TRUE) or
+              not (FALSE)
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Define the radii of an ellipsoid.
+      ;;
+      a  =  1.d
+      b  =  2.d
+      c  =  3.d
+   
+      ;;
+      ;; Define a reference point and a view vector
+      ;;
+      positn = [  2.d, 0.d, 0.d ]
+      u      = [ -1.d, 0.d, 0.d ]
+   
+      ;;
+      ;; Where on the ellipsoid surface (if anywhere) does
+      ;; 'u' intersect the ellipsoid if looking from 'positn'. 
+      ;;
+      <b>cspice_surfpt</b>, positn, u, a, b, c, point, found
+      
+      if ( found ) then begin
+         print, &quot;The look vector            : &quot;, u
+         print, &quot;at position                : &quot;, positn
+         print, &quot;intersects the ellipsoid at: &quot;, point
+      endif else begin
+         print, &quot;Found no interception point on ellipse.&quot;
+      endelse
+   
+   IDL outputs:
+   
+      The look vector            :   -1.0000000   0.0000000   0.0000000
+      at position                :    2.0000000   0.0000000   0.0000000
+      intersects the ellipsoid at:    1.0000000   0.0000000   0.0000000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ellipses.html">ELLIPSES.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   line of sight intercept with body 
+   point of intersection between ray and ellipsoid 
+   surface point of intersection of ray and ellipsoid 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

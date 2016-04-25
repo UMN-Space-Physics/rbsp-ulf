@@ -1,0 +1,757 @@
+<HTML>
+<HEAD>
+<TITLE> Windows Required Reading </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>Windows Required Reading</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#Windows Required Reading">Windows Required Reading</A>
+      <A HREF="#Abstract">Abstract</A>
+      <A HREF="#Introduction">Introduction</A>
+         <A HREF="#Basic Concepts">Basic Concepts</A>
+      <A HREF="#The window data type">The window data type</A>
+      <A HREF="#References">References</A>
+   <A HREF="#Window Procedures">Window Procedures</A>
+      <A HREF="#Initialization Procedures">Initialization Procedures</A>
+      <A HREF="#Unary Procedures">Unary Procedures</A>
+      <A HREF="#Binary Procedures">Binary Procedures</A>
+      <A HREF="#Complement Procedures">Complement Procedures</A>
+      <A HREF="#Comparison Procedures">Comparison Procedures</A>
+   <A HREF="#Summary">Summary</A>
+   <A HREF="#Appendix: Document Revision History">Appendix: Document Revision History</A>
+         <A HREF="#Febuary 6, 2009 (EDW)">Febuary 6, 2009 (EDW)</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="Windows Required Reading"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Windows Required Reading
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2010 MAY 18 by B. V. Semenov.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   SPICE Toolkits define the SPICE data type "window" for use in the
+   manipulation of continuous intervals on the real line. Corresponding
+   window procedures in Icy are designed to simplify the use of this data
+   type.
+<P>
+ 
+<BR><BR>
+<A NAME="Introduction"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Introduction
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   By definition, a window is a double precision SPICE cell that contains
+   zero or more intervals.
+<P>
+ 
+   An interval is an ordered pair of numbers,
+<P>
+ 
+<PRE>
+   [ a(i), b(i) ]
+</PRE>
+   such that
+<P>
+ 
+<PRE>
+   a(i)  &lt;  b(i)
+         -
+</PRE>
+   The intervals within a window are both ordered and disjoint. That is,
+   the beginning of each interval is greater than the end of the previous
+   interval:
+<P>
+ 
+<PRE>
+   b(i)  &lt;  a(i+1)
+</PRE>
+   This restriction is enforced primarily because it allows efficient
+   window operations.
+<P>
+ 
+   The intervals stored in windows typically represent intervals of time
+   (seconds, days, or centuries past a reference epoch). However, windows
+   can represent any kinds of intervals.
+<P>
+ 
+<BR><BR>
+<A NAME="Basic Concepts"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Basic Concepts
+</H3><P><BR><BR>
+   ``size'' - The maximum number of elements storable in a SPICE cell.
+   Cells are created with a constant size.
+<P>
+ 
+   ``cardinality - The number of elements stored in a cell. ``cardinality''
+   describes how much of ``size'' is used. ``cardinality'' satisfies the
+   relationship:
+<P>
+ 
+<PRE>
+      cardinality &lt; size
+                  -
+</PRE>
+   ``measure'' - the measure of an interval is the length of the interval,
+   that is the difference of its endpoints:
+<P>
+ 
+<PRE>
+   m(i) = b(i) - a(i)
+</PRE>
+   Note that the singleton interval
+<P>
+ 
+<PRE>
+   [ a(i), a(i) ]
+</PRE>
+   has measure zero. The window
+<P>
+ 
+<PRE>
+   [1,2], [4,9], [16,16]
+</PRE>
+   contains intervals of measure 1, 5, and 0 respectively.
+<P>
+ 
+   The concept of measure extends readily to the gaps between adjacent
+   intervals. In the example above, the window contains gaps of measure 2
+   and 7. Intervals separated by gaps of measure zero or less are said to
+   overlap. Overlapping intervals created by the window procedures are
+   merged as soon as they are created.
+<P>
+ 
+   Finally, the measure of a window is the sum of the measures of its
+   intervals. In the example above, the measure of the window is 6. Note
+   that a floating point window containing only singletons has measure
+   zero.
+<P>
+ 
+<BR><BR>
+<A NAME="The window data type"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> The window data type
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   SPICE windows are a form of the SPICE cell data type [1], so any
+   restriction that applies to the use of cells applies to the use of
+   windows as well. The implementation of a SPICE window differs according
+   to the Toolkit language.
+<P>
+ 
+   The Icy implementation of SPICE windows consists of double precision
+   cells created and initialized to empty using the <a href="../icy/cspice_celld.html">cspice_celld</a> function.
+<P>
+ 
+   Example:
+<P>
+ 
+<PRE>
+      ;;
+      ;; Define the cell 'win' to use as a window. Select a value
+      ;; for the cell size.
+      ;;
+      MAXSIZ = 8
+ 
+      ;;
+      ;; This window can hold eight (MAXSIZ = 8) double precision
+      ;; values, thus four intervals.
+      ;;
+      win = <a href="../icy/cspice_celld.html">cspice_celld</a>( MAXSIZ )
+</PRE>
+   The <a href="../icy/cspice_celld.html">cspice_celld</a> call creates a cell as an anonymous IDL structure
+   assigned to variable `win' with maximum cardinality `MAXSIZE'.
+<P>
+ 
+   The cell size, MAXSIZ, must have an even value to use the cell as a
+   window. Two values defines a window interval, so a window of N intervals
+   requires a cell of size 2*N.
+<P>
+ 
+   SPICE windows, when appearing as arguments to the Icy window functions,
+   must have been created from the <a href="../icy/cspice_celld.html">cspice_celld</a> call. The cell structure
+   has fields corresponding to a CSPICE SpiceCell format:
+<P>
+ 
+<PRE>
+      OFFSET     A 9-vector of IDL_MEMINT offsets for each of the
+                 structure fields with respect to the beginning of the
+                 structure.
+ 
+                 Element 0 of the array contains the offset to the DTYPE
+                 field; element 1 of the array contains the offset to
+                 the LENGTH field, etc.
+ 
+                 This array has no function in a window sense.
+                 The Icy windows implementation uses the 'OFFSET'
+                 values to locate data fields within the IDL structure.
+ 
+      DTYPE      Data type of cell: an integer scalar defining the type
+                 of data stored in the cell data array.
+ 
+      LENGTH     For character cells, the integer scalar declared length
+                 of the cell's string array.
+ 
+      SIZE       An integer scalar defining the maximum number of data
+                 items that can be stored in the cell's data array.
+ 
+      CARD       The cell's "cardinality": the integer scalar defining
+                 the number of data items currently present in the cell
+ 
+                 Note CARD &lt;= SIZE.
+ 
+                 This field has value 0 after cell creation.
+ 
+      ISSET      A boolean scalar flag indicating whether the cell is a
+                 SPICE set. Sets have no duplicate data items, and their
+                 data items are stored in increasing order.
+ 
+      ADJUST     A boolean scalar flag indicating whether the cell's
+                 data area has adjustable size.  Adjustable size cell
+                 data areas are not currently implemented.
+ 
+      INIT       A boolean scalar flag indicating whether the cell is
+                 initialized.
+ 
+      BASE       The array of type DTYPE with 'SIZE' + 'DATA' elements
+                 (an N-vector, N = SIZE + DATA)
+ 
+      DATA       The offset from the first element of the 'BASE' array
+                 to the cell data. This field has value
+                 SPICE_CELL_CTRLSZ (defined in SpiceCel.h), referred to
+                 as the control segment size.
+</PRE>
+   Any of the general cell procedures in Icy may be used with windows. For
+   example, the function cspice_cardd may be used to determine the number
+   of endpoints (that is, twice the number of intervals) in a window.
+<P>
+ 
+   All errors are reported using standard Icy error handling.
+<P>
+ 
+   With the exception of the initialization procedures, all window
+   procedures assume that input cells do contain valid windows---that is,
+   ordered and distinct sets of endpoints. The windows subsystem may not
+   signal errors resulting from attempts to operate on invalid windows.
+<P>
+ 
+<BR><BR>
+<A NAME="References"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> References
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+<DL><DT>
+<B>
+ [1]
+</B><BR><BR>
+<DD>
+ CELLS Required Reading (<a href="../req/cells.html"><a href="../req/cells.html">cells.req</a></a>).<BR>
+</DL>
+<DL><DT>
+<B>
+ [2]
+</B><BR><BR>
+<DD>
+ Icy Required Reading (<a href="../req/icy.html"><a href="../req/icy.html">icy.req</a></a>).<BR>
+</DL>
+<BR><BR>
+<A NAME="Window Procedures"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Window Procedures
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The window procedures in Icy fall into the following categories.
+<P>
+ 
+<UL>
+<TT>--</TT> Initialization
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Unary
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Binary
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Complement
+<BR><BR></UL>
+<UL>
+<TT>--</TT> Comparison
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Initialization Procedures"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Initialization Procedures
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   <a href="../icy/cspice_wnvald.html">cspice_wnvald</a> takes as input a double precision SPICE cell containing
+   pairs of endpoints and validates it to form a window. The calling
+   sequence is shown below.
+<P>
+ 
+<PRE>
+   <a href="../icy/cspice_wnvald.html">cspice_wnvald</a>, size, n, window
+</PRE>
+   On input, `window' is a cell of size `size' containing `n' endpoints.
+   During validation, the intervals are ordered, and overlapping intervals
+   are merged. On output, the cardinality of `window' is the number of
+   endpoints remaining, and the window is ready for use with any of the
+   window procedures.
+<P>
+ 
+   Because validation is done in place, there is no chance of overflow.
+   However, other errors may be detected. For example, if the left endpoint
+   of any interval is greater than the corresponding right endpoint,
+   <a href="../icy/cspice_wnvald.html">cspice_wnvald</a> signals an error.
+<P>
+ 
+   Validation is primarily useful for ordering and merging intervals added
+   to a cell by <a href="../icy/cspice_appndd.html">cspice_appndd</a>, or directly assigned to the cell.
+<P>
+ 
+   Building a large window is done most efficiently by assigning the window
+   elements and then calling <a href="../icy/cspice_wnvald.html">cspice_wnvald</a>. Building up the window by
+   repeated insertion requires repeated ordering operations; <a href="../icy/cspice_wnvald.html">cspice_wnvald</a>
+   does a single ordering operation.
+<P>
+ 
+<BR><BR>
+<A NAME="Unary Procedures"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Unary Procedures
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Each unary procedure operates on a single window. Six unary operations
+   are supported, each of which alters the contents of the input window.
+   The calling sequences are shown below.
+<P>
+ 
+<PRE>
+   <a href="../icy/cspice_wncond.html">cspice_wncond</a>, left, right, window     { Contract }
+ 
+   <a href="../icy/cspice_wnexpd.html">cspice_wnexpd</a>, left, right, window     { Expand }
+ 
+   <a href="../icy/cspice_wnextd.html">cspice_wnextd</a>, side, window            { Extract }
+ 
+   <a href="../icy/cspice_wnfild.html">cspice_wnfild</a>, small, window           { Fill }
+ 
+   <a href="../icy/cspice_wnfltd.html">cspice_wnfltd</a>, small, window           { Filter }
+ 
+   <a href="../icy/cspice_wninsd.html">cspice_wninsd</a>, left, right, window     { Insert }
+</PRE>
+   Each of the unary window procedures works in place. That is, only one
+   window, `window', appears in each calling sequence, serving as both
+   input and output. Windows whose original contents need to be preserved
+   should be copied prior to calling any of the unary procedures.
+<P>
+ 
+   <a href="../icy/cspice_wninsd.html">cspice_wninsd</a> inserts the interval whose endpoints are `left' and
+   `right' into `window'. If the input interval overlaps any of the
+   intervals in the window, the intervals are merged. Thus, the cardinality
+   of `window' can actually decrease as the result of an insertion.
+<P>
+ 
+   <a href="../icy/cspice_wnexpd.html">cspice_wnexpd</a> and <a href="../icy/cspice_wncond.html">cspice_wncond</a> expand (lengthen) and contract (shorten)
+   each of the intervals in `window'. The adjustments are not necessarily
+   symmetric. That is, <a href="../icy/cspice_wnexpd.html">cspice_wnexpd</a> works by subtracting `left' units from
+   the left endpoint of each interval and adding `right' units to the right
+   endpoint of each interval. <a href="../icy/cspice_wncond.html">cspice_wncond</a> is the same as `exp' with the
+   signs of the arguments reversed, and is primarily provided for clarity
+   in coding. (Expansion by negative increments is a messy concept.)
+   Intervals are merged when expansion causes them to overlap. Intervals
+   are dropped when they are contracted by amounts greater than their
+   measures.
+<P>
+ 
+   <a href="../icy/cspice_wnfltd.html">cspice_wnfltd</a> and <a href="../icy/cspice_wnfild.html">cspice_wnfild</a> remove small intervals and small gaps
+   between adjacent intervals. Both procedures take as input a minimum
+   measure, `small'. <a href="../icy/cspice_wnfltd.html">cspice_wnfltd</a> filters out (drops) intervals with
+   measures less than or equal to `small', while <a href="../icy/cspice_wnfild.html">cspice_wnfild</a> merges
+   adjacent intervals separated by gaps with measures less than or equal to
+   `small'.
+<P>
+ 
+   Depending on the value of `side', <a href="../icy/cspice_wnextd.html">cspice_wnextd</a> extracts the left or
+   right endpoints of each interval in `window'. The resulting window
+   contains only the singleton intervals
+<P>
+ 
+<PRE>
+   [ a(1), a(1) ], ..., [ a(n), a(n) ]
+</PRE>
+   or
+<P>
+ 
+<PRE>
+   [ b(1), b(1) ], ..., [ b(n), b(n) ]
+</PRE>
+<BR><BR>
+<A NAME="Binary Procedures"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Binary Procedures
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Binary procedures operate on two input windows to produce a third
+   (distinct) output window. Three major binary operations are supported.
+   The calling sequences are shown below.
+<P>
+ 
+<PRE>
+   <a href="../icy/cspice_wnunid.html">cspice_wnunid</a>, a, b, c       { Union }
+ 
+   <a href="../icy/cspice_wnintd.html">cspice_wnintd</a>, a, b, c       { Intersection }
+ 
+   <a href="../icy/cspice_wndifd.html">cspice_wndifd</a>, a, b, c       { Difference }
+</PRE>
+   In contrast with the unary procedures, none of the binary procedures
+   work in place. The output window, `c', must be distinct from both of the
+   input windows, `a' and `b'. We will have more to say about this later
+   on.
+<P>
+ 
+   <a href="../icy/cspice_wnunid.html">cspice_wnunid</a> places the union of `a' and `b' into `c'. The union of two
+   windows contains every point that is contained in the first window, or
+   in the second window, or in both windows.
+<P>
+ 
+   <a href="../icy/cspice_wnintd.html">cspice_wnintd</a> places the intersection of `a' and `b' into `c'. The
+   intersection of two windows contains every point that is contained in
+   the first window AND in the second.
+<P>
+ 
+   <a href="../icy/cspice_wndifd.html">cspice_wndifd</a> places the difference of `a' and `b' into `c'. The
+   difference of two windows contains every point that is contained in the
+   first window, but NOT in the second.
+<P>
+ 
+   In each case, if the output window, `c', is not large enough to hold the
+   result of the operation, as many intervals as will fit are inserted into
+   the window, and a SPICE error is signaled. (You can control the effect
+   of this error on your program; refer to Error Required Reading.)
+<P>
+ 
+   In each of the binary procedures, the output window must be distinct
+   from both of the input windows. All three of the binary operations can,
+   in principle, be performed in place, but not all can be performed
+   efficiently. Consequently, for the sake of consistency, none of the
+   procedures work in place. For example, the following calls are invalid.
+<P>
+ 
+<PRE>
+   <a href="../icy/cspice_wnintd.html">cspice_wnintd</a>, a, b, a
+ 
+   <a href="../icy/cspice_wnintd.html">cspice_wnintd</a>, a, b, b
+ 
+</PRE>
+   In each of the examples above, whether or not the procedure signals an
+   error, the results will almost certainly be wrong. Nearly the same
+   effect can be achieved, however, by placing the result into a temporary
+   window, which can be immediately copied back into one of the input
+   windows, as shown below.
+<P>
+ 
+<PRE>
+   <a href="../icy/cspice_wnintd.html">cspice_wnintd</a>, a, b, temp
+ 
+   a = temp
+</PRE>
+<BR><BR>
+<A NAME="Complement Procedures"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Complement Procedures
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   <a href="../icy/cspice_wncomd.html">cspice_wncomd</a> determines the complement of a window with respect to an
+   interval. The calling sequence is
+<P>
+ 
+<PRE>
+   <a href="../icy/cspice_wncomd.html">cspice_wncomd</a>, left, right, a, c     { Complement }
+</PRE>
+   As with the binary procedures, the output window, `c', must be distinct
+   from the input window, `a'.
+<P>
+ 
+   Mathematically, the complement of a window contains those points that
+   are not contained in the window. That is, the complement of the set of
+   closed intervals
+<P>
+ 
+<PRE>
+   [ a(1), b(1) ], [ a(2), b(2) ], ..., [ a(n), b(n) ]
+</PRE>
+   is the set of open intervals
+<P>
+ 
+<PRE>
+   ( -inf, a(1) ), ( b(1), a(2) ), ..., ( b(n), +inf )
+</PRE>
+   Not all computer languages offer a satisfactory way to represent
+   infinity, so <a href="../icy/cspice_wncomd.html">cspice_wncomd</a> must take the complement with respect to a
+   finite interval.
+<P>
+ 
+   Since the results of a window procedure must be another window,
+   <a href="../icy/cspice_wncomd.html">cspice_wncomd</a> returns the closure of the set theoretical complement. In
+   short, the double precision complement of the window
+<P>
+ 
+<PRE>
+   [ a(1), b(1) ], [ a(2), b(2) ], ..., [ a(n), b(n) ]
+</PRE>
+   with respect to the interval from `left' to `right' is the intersection
+   of the windows
+<P>
+ 
+<PRE>
+   ( -inf, a(1) ], [ b(1), a(2) ], ..., [ b(n), +inf )
+</PRE>
+   and [ `left', `right' ].
+<P>
+ 
+   Intervals of measure zero (singleton intervals) in the original window
+   are replaced by gaps of measure zero, which are filled. Thus,
+   complementing a window twice does not necessarily yield the original
+   window.
+<P>
+ 
+<BR><BR>
+<A NAME="Comparison Procedures"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Comparison Procedures
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Comparison procedures allow the contents of windows to be compared
+   against the contents of other windows. There are four comparison
+   procedures: three logical functions and one procedure. The calling
+   sequences are shown below.
+<P>
+ 
+<PRE>
+   <a href="../icy/cspice_wnelmd.html">cspice_wnelmd</a>( point, window )                    { Element }
+ 
+   <a href="../icy/cspice_wnincd.html">cspice_wnincd</a>( left, right, window )              { Inclusion }
+ 
+   <a href="../icy/cspice_wnreld.html">cspice_wnreld</a>( a, op, b )                         { Relation }
+ 
+   <a href="../icy/cspice_wnsumd.html">cspice_wnsumd</a>, window, meas,     avg,  $
+                  stddev, shortest, longest          { Summary }
+</PRE>
+   <a href="../icy/cspice_wnelmd.html">cspice_wnelmd</a> returns true if the input point, `point', is an element of
+   the input window, `window'---that is, whenever the point lies within one
+   of the intervals of the window.
+<P>
+ 
+   Similarly, <a href="../icy/cspice_wnincd.html">cspice_wnincd</a> is true whenever the input interval, from
+   `left' to `right', is included in the input window, `window'---that is,
+   whenever the interval lies entirely within one of the intervals of the
+   window.
+<P>
+ 
+   <a href="../icy/cspice_wnreld.html">cspice_wnreld</a> is true whenever a specified relationship between the
+   input windows, `a' and `b', is satisfied. Each relationship corresponds
+   to a comparison operator, `op'. The complete set of operators recognized
+   by <a href="../icy/cspice_wnreld.html">cspice_wnreld</a> is shown below.
+<P>
+ 
+<PRE>
+   '='          is equal to (contains the same intervals as)
+   '&lt;&gt;'         is not equal to
+   '&lt;='         is a subset of
+   '&lt;'          is a proper subset of
+   '&gt;='         is a superset of
+   '&gt;'          is a proper superset of
+</PRE>
+   For example, the expression
+<P>
+ 
+<PRE>
+   <a href="../icy/cspice_wnreld.html">cspice_wnreld</a>( needed, '&lt;=', avail )
+ 
+</PRE>
+   is true whenever the window `needed' is a subset of the window `avail'.
+   One window is a subset of another window if each of the intervals in the
+   first window is included in one of the intervals in the second window.
+   In addition, the first window is a proper subset of the second if the
+   second window contains at least one point not contained in the first
+   window. The following pairs of expressions are equivalent.
+<P>
+ 
+<PRE>
+   <a href="../icy/cspice_wnreld.html">cspice_wnreld</a>( a, '&gt;', b )
+   <a href="../icy/cspice_wnreld.html">cspice_wnreld</a>( a, '&lt;', b )
+ 
+   <a href="../icy/cspice_wnreld.html">cspice_wnreld</a>( a, '&gt;=', b )
+   <a href="../icy/cspice_wnreld.html">cspice_wnreld</a>( a, '&lt;=', b )
+</PRE>
+   <a href="../icy/cspice_wnsumd.html">cspice_wnsumd</a> provides a summary of the input window, `window'. It
+   computes the measure of the window, `meas', and the average, `avg', and
+   standard deviation, `stddev', of the measures of the individual
+   intervals in the window. It also returns the indices of the left
+   endpoints of the shortest and longest intervals in the window. All of
+   these quantities and indices are zero if the window contains no
+   intervals.
+<P>
+ 
+   The folowing describes the relation of `shortest' and `longest' to the
+   window data:
+<P>
+ 
+<PRE>
+      data_start = window.data
+      data_end   = data_start + window.card - 1
+      array      = window.base[ data_start:data_end]
+</PRE>
+   The left endpoint of the shortest interval has value:
+<P>
+ 
+<PRE>
+   array[shortest]
+</PRE>
+   The right endpoint of the shortest interval has value:
+<P>
+ 
+<PRE>
+   array[shortest+1]
+</PRE>
+   The left endpoint of the longest interval has value:
+<P>
+ 
+<PRE>
+   array[longest]
+</PRE>
+   The right endpoint of the longest interval has value:
+<P>
+ 
+<PRE>
+   array[longest+1]
+</PRE>
+<BR><BR>
+<A NAME="Summary"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Summary
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The following is a summary of the window procedures in Icy. (DP = double
+   precision)
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_celld.html">cspice_celld</a> - Create a SPICE cell for DP data
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wncard.html">cspice_wncard</a> - Cardinality of a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wncomd.html">cspice_wncomd</a> - Complement a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wncond.html">cspice_wncond</a> - Contract the intervals of a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wndifd.html">cspice_wndifd</a> - Difference two DP windows
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnelmd.html">cspice_wnelmd</a> - Element of a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnexpd.html">cspice_wnexpd</a> - Expand the intervals of a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnextd.html">cspice_wnextd</a> - Extract the endpoints from a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnfetd.html">cspice_wnfetd</a> - Fetch an interval from a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnfild.html">cspice_wnfild</a> - Fill small gaps in a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnfltd.html">cspice_wnfltd</a> - Filter small intervals from a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnincd.html">cspice_wnincd</a> - Included in a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wninsd.html">cspice_wninsd</a> - Insert an interval into a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnintd.html">cspice_wnintd</a> - Intersect two DP windows
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnreld.html">cspice_wnreld</a> - Compare two DP windows
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnsumd.html">cspice_wnsumd</a> - Summary of a DP window
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnunid.html">cspice_wnunid</a> - Union two DP windows
+<BR><BR></UL>
+<UL>
+<TT>&#32;&#32;</TT> <a href="../icy/cspice_wnvald.html">cspice_wnvald</a> - Validate a DP window
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Appendix: Document Revision History"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Appendix: Document Revision History
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+<BR><BR>
+<A NAME="Febuary 6, 2009 (EDW)"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Febuary 6, 2009 (EDW)
+</H3><P><BR><BR>
+   Document edited to conform to current NAIF format for Required Reading
+   Documents. Added descriptions of Icy and Mice window implementations.
+<P>
+ 
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+
+</HTML>

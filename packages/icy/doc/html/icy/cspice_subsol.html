@@ -1,0 +1,314 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_subsol</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_subsol</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SUBSOL determines the coordinates of the sub-solar 
+   point on a target body as seen by a specified observer 
+   at a specified epoch,  optionally corrected for planetary 
+   (light time) and stellar aberrations.
+
+   Deprecated: This routine has been superseded by the routine 
+   <a href="cspice_subslr.html">cspice_subslr</a>. This routine is supported for purposes of
+   backward compatibility only.
+   
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/subsol_c.html">subsol_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      method   the scalar sting specifying the computation method 
+               to be used.  The choices are: 
+ 
+                  'Near point'    The sub-solar point is defined 
+                                  as the nearest point on the 
+                                  target to the sun.  
+ 
+                  'Intercept'     The sub-observer point is defined
+                                  as the target surface intercept of
+                                  the line containing the target's
+                                  center and the sun's center.
+                   
+               In both cases, the intercept computation treats the 
+               surface of the target body as a triaxial ellipsoid. 
+               The ellipsoid's radii must be available in the kernel 
+               pool. 
+ 
+               Neither case nor white space are significant in  
+               method.  For example, the string ' NEARPOINT' is  
+               valid.                  
+ 
+ 
+      target   the scalar sting describing the name of the target body.
+               'target' is case-insensitive, and leading and trailing
+               blanks in 'target' are not significant. Optionally, you 
+               may supply a string containing the integer ID code for 
+               the object. For example both 'MOON' and '301' are legitimate
+               strings that indicate the moon is the target body.
+ 
+               This routine assumes that the target body is modeled by
+               a tri-axial ellipsoid, and that a PCK file containing
+               its radii has been loaded into the kernel pool via
+               <a href="cspice_furnsh.html">cspice_furnsh</a>. 
+ 
+      et       the double precision scalar ephemeris time 
+               expressed as ephemeris seconds past J2000 at which 
+               the sub-solar point on the target body is to be 
+               computed. 
+ 
+      abcorr   the scalar string identifying the aberration corrections to
+               apply when computing the observer-target state.  'abcorr'
+               may be any of the following.
+ 
+                  'NONE'   Apply no correction. Return the 
+                           geometric sub-solar point on the target 
+                           body. 
+ 
+                  'LT'     Correct for planetary (light time) 
+                           aberration.  Both the state and rotation 
+                           of the target body are corrected for one  
+                           way light time from target to observer. 
+ 
+                           The state of the sun relative to the  
+                           target is corrected for one way light 
+                           from the sun to the target; this state 
+                           is evaluated at the epoch obtained by 
+                           retarding et by the one way light time 
+                           from target to observer. 
+ 
+                  'LT+S'   Correct for planetary (light time) and 
+                           stellar aberrations.  Light time  
+                           corrections are the same as in the 'LT' 
+                           case above.  The target state is  
+                           additionally corrected for stellar 
+                           aberration as seen by the observer, and 
+                           the sun state is corrected for stellar 
+                           aberration as seen from the target.  
+ 
+                  'CN'     Converged Newtonian light time correction.
+                           In solving the light time equation, the 'CN'
+                           correction iterates until the solution
+                           converges (three iterations on all supported
+                           platforms). Whether the 'CN+S' solution is
+                           substantially more accurate than the 'LT'
+                           solution depends on the geometry of the
+                           participating objects and on the accuracy of
+                           the input data. In all cases this routine
+                           will execute more slowly when a converged
+                           solution is computed. See the Particulars
+                           section of CSPICE_SPKEZR for a discussion of
+                           precision of light time corrections.
+ 
+                           Light time corrections are applied as in the
+                           'LT' case.
+                     
+                  'CN+S'   Converged Newtonian light time correction
+                           and stellar aberration correction. Light
+                           time and stellar aberration corrections are
+                           applied as in the 'LT+S' case.
+
+      obsrvr   the scalar sting describing the name of the observing body. 
+               This is typically a spacecraft, the earth, or a surface point 
+               on the earth.  `obsrvr' is case-insensitive, and leading and 
+               trailing blanks in `obsrvr' are not significant. 
+               Optionally, you may supply a string containing the 
+               integer ID code for the object.  For example both 
+               'EARTH' and '399' are legitimate strings that indicate 
+               the earth is the observer. 
+   
+   the call:
+   
+      <b>cspice_subsol</b>, method, target, et, abcorr, obsrvr, spoint
+   
+   returns:
+   
+      spoint   the double-precision 3-vector containing the 
+               coordinates of the sub solar point on 'target'
+               as seen by 'obsrvr' relative to the body-fixed 
+               frame of 'target'
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Calculate the location of the sub solar point of the
+      ;; Earth as seen from Mars at a specified epoch. Apply
+      ;; light time correction to compensate for Mars' extreme
+      ;; distance from Earth.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+   
+      ;;
+      ;; First use 'Near Point'
+      ;;
+      <b>cspice_subsol</b>, 'near point', 'earth', 0.d, 'lt+s', 'mars', point
+      print, point
+   
+   IDL outputs:
+   
+       5850.5688    508.36129   -2480.2447
+   
+      ;; 
+      ;; Now 'Intercept'
+      ;;
+      <b>cspice_subsol</b>, 'intercept', 'earth', 0.d, 'lt+s', 'mars', point
+      print, point
+   
+   IDL outputs:
+   
+       5844.5540    507.83866   -2494.3967
+   
+   The difference between the two position vectors results from the 
+   non-spherical shape of earth.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   <b>cspice_subsol</b> computes the sub-solar point on a target body, as seen by 
+   a specified observer. 
+ 
+   There are two different popular ways to define the sub-solar point:
+   &quot;nearest point on target to the sun&quot; or &quot;target surface intercept of
+   line containing target and sun.&quot;  These coincide when the target is
+   spherical and generally are distinct otherwise.
+ 
+   When comparing sub-point computations with results from sources 
+   other than SPICE, it's essential to make sure the same geometric 
+   definitions are used.   
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/frames.html">FRAMES.REQ</a>
+   <a href="../req/pck.html">PCK.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.4, 10-JUL-2014 (NJB)(EDW)
+
+      Discussion of light time corrections was updated. Assertions
+      that converged light time corrections are unlikely to be
+      useful were removed.
+
+   -Icy Version 1.0.3, 18-MAY-2010, BVS (JPL)
+
+      Index line now states that this routine is deprecated.
+
+   -Icy Version 1.0.2, 11-NOV-2008, EDW (JPL)
+
+      Edits to header; Abstract now states that this routine is
+      deprecated.
+ 
+   -Icy Version 1.0.1, 27-MAR-2006, EDW (JPL)
+
+      Corrected typo &quot;non-spherical shape of Mars&quot; to &quot;non-spherical 
+      shape of earth&quot;.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   DEPRECATED sub-solar point 
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

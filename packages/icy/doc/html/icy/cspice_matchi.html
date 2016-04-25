@@ -1,0 +1,225 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_matchi</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_matchi</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_MATCHI returns a boolean indicating whether a string is matched by 
+   a template containing wild cards.  The pattern comparison is 
+   case-insensitive.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/matchi_c.html">matchi_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+       string      the scalar string to test for a match against the input
+                   template 'templ'
+                   
+       templ       the scalar string template to test for a match 
+                   against the 'string; 'templ may contain wild 
+                   cards
+   
+                   The routine ignores leading and trailing spaces in both
+                   the 'string' and the 'templ'
+   
+       wstr        the wild string token used in the input template which
+                   may represent from zero to any number of characters
+   
+       wchr        the wild string token used in the input template which
+                   may represents exactly one character
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      Example(1):
+   
+      ;;
+      ;; Determine if a string has the form
+      ;;
+      ;;     'ABC' + a single character + 'E' + anything 'Z'
+      ;;
+      ;; where '%' indicates a single character wildcard
+      ;; and '*' indicates the glob wildcard.
+      ;;
+      single_char = '%'
+      glob_char   = '*'
+      template    = 'ABC%E*Z'
+   
+      ;;
+      ;; A match to the template. Note, the glob wildcard '*' matches
+      ;; a null condition, in this case no characters between 'E' 
+      ;; 'Z'.
+      ;;
+      string = 'ABCDEZ'
+      match  = <b>cspice_matchi</b>(  string, template, glob_char, single_char )
+   
+      if( match ) then begin 
+         print, &quot;String &quot; + string + &quot; matches the template &quot; + template
+      endif else begin
+         print, &quot;String &quot; + string + &quot; does not match the template &quot; $
+                + template
+      endelse
+   
+   IDL outputs:
+   
+      String ABCDEZ matches the template ABC%E*Z
+   
+   
+      Example(2):
+   
+      Using the above code example, but with a 'string' value:
+   
+      string = 'ABCEZ'
+   
+   IDL outputs:
+   
+      String ABCEZ does not match the template ABC%E*Z
+   
+   'ABCEZ' does not match since no character exists between
+   'C' and 'E'. The single char match matches only on a single
+    character.
+   
+   
+      Example(3):
+   
+      Using the above code example, but with a 'string' value:
+   
+      string = 'ABC E12345Z'
+   
+   IDL outputs:
+   
+      String ABC E12345Z matches the template ABC%E*Z
+   
+   '%' matches on a space.
+   
+   
+      Example(4):
+   
+      Using the above code example, but with a 'string' value:
+   
+      string = 'ABC E12345Z'
+   
+   IDL outputs:
+   
+      String ABC e12345Z matches the template ABC%E*Z
+   
+   A match ignores the case of the characters being matched.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   match string against wildcard template 
+   test whether a string matches a wildcard template 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

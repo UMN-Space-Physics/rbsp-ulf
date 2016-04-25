@@ -1,0 +1,209 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_scpart</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_scpart</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SCPART retrieves the spacecraft clock partition information 
+   from a spacecraft clock kernel file.  
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/scpart_c.html">scpart_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      sc   the scalar NAIF ID for the spacecraft whose clock partition 
+           information is requested 
+   
+   the call:
+   
+      <b>cspice_scpart</b>, sc, pstart, pstop
+   
+   returns:
+   
+      pstart   a double precision array containing the partition start 
+               times represented as encoded ticks
+      pstop    a double precision array containing the partition stop 
+               times represented as encoded ticks 
+   
+   The arrays 'pstart' and 'pstop' have the same vector dimension.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Assign values for the spacecraft ID (Voyager2),
+      ;; and s-clock kernel.
+      ;;
+      SC     = -32
+      SCLK   = '/kernels/voyager2/sclk/vg200004.tsc'
+   
+      ;;
+      ;; Load the kernel files.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, SCLK
+   
+      ;;
+      ;; Retrieve the arrays for start and stop
+      ;; of the partitions as measures in ticks.
+      ;;
+      <b>cspice_scpart</b>, sc, pstart, pstop
+   
+      ;;
+      ;; Obtain the dimension of the arrays 'pstart' &amp; 'pstop'. 
+      ;; Note: nparts becomes a 1-vector, so use nparts[0] for the
+      ;; dimension value.
+      ;;
+      nparts = size(pstart, /dim)
+   
+      ;;
+      ;; Loop over each array value.
+      ;;
+      for i = 0, (nparts[0]-1) do begin
+   
+         print, 'Partition: ', i
+         print, format='(A11,F20.6)', 'Start    : ', pstart[i]
+         print, format='(A11,F20.6)', 'Stop     : ',  pstop[i]
+         print
+   
+      endfor
+   
+   IDL outputs:
+   
+   Partition:        0
+   Start    :        528000.000000
+   Stop     :     192545583.000000
+   
+   Partition:        1
+   Start    :     192545600.000000
+   Stop     :    3145728001.000000
+   
+   Partition:        2
+   Start    :             0.000000
+   Stop     :    2626104831.000000
+   
+   Partition:        3
+   Start    :         24800.000000
+   Stop     :    3145728000.000000
+   
+   Partition:        4
+   Start    :             0.000000
+   Stop     :    3145727999.000000
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/sclk.html">SCLK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   spacecraft_clock partition information 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

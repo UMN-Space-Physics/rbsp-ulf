@@ -1,0 +1,332 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkw10</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkw10</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKW10 writes a type 10 SPK segment to an SPK file
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/spkw10_c.html">spkw10_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      handle   the scalar integer handle of an SPK file opened
+               with write access
+               
+      body     a scalar integer NAIF ID identifying the body 
+               trajectory to record in the SPK file
+               
+      center   the scalar integer NAIF ID for the center of motion 
+               associated with body
+               
+      frame    a scalar string variable holding the reference frame name
+               used to reference the states, e.g. &quot;J2000&quot;
+               
+      first    the scalar double precision starting epoch, in TDB 
+               seconds past J2000, of the ephemeris data
+               
+      last     the scalar double precision ending epoch, in TDB 
+               seconds past J2000, of the ephemeris data
+               
+      segid    the scalar string holding to the segment identifier
+      
+               (an SPK segment identifier may contain up to 40 
+               printing ASCII characters )
+               
+      consts   an 8-vector of double precision geophysical constants 
+               needed for evaluation  of the two line elements sets. 
+               The order of these  constants must be: 
+ 
+               consts[0] = J2 gravitational harmonic for earth 
+               consts[1] = J3 gravitational harmonic for earth 
+               consts[2] = J4 gravitational harmonic for earth 
+               consts[3] = Square root of the GM for earth where GM 
+                           is expressed in earth radii cubed per 
+                           minutes squared 
+               consts[4] = Equatorial radius of the earth in km 
+               consts[5] = Low altitude bound for atmospheric 
+                           model in km 
+               consts[6] = High altitude bound for atmospheric 
+                           model in km 
+               consts[7] = Distance units/earth radius (normally 1) 
+ 
+      n        the scalar integer number of &quot;two-line&quot; element sets  
+               and epochs to be stored in the segment. 
+ 
+      elems    a double precision 10*n-vector of time-ordered 
+               two-line elements  as supplied in NORAD two-line element 
+               files.  The  i'th set of elements (where i ranges 
+               from 1 to n) should be stored as shown here: 
+ 
+                  base = (i-1)*10 
+ 
+                  elems[ base + 0 ] = NDT20 
+                  elems[ base + 1 ] = NDD60 
+                  elems[ base + 2 ] = BSTAR 
+                  elems[ base + 3 ] = INCL 
+                  elems[ base + 4 ] = NODE0 
+                  elems[ base + 5 ] = ECC 
+                  elems[ base + 6 ] = OMEGA 
+                  elems[ base + 7 ] = MO 
+                  elems[ base + 8 ] = NO 
+                  elems[ base + 9 ] = EPOCH 
+ 
+               The meaning of these variables is defined by the 
+               format of the two-line element files available from 
+               NORAD.
+ 
+      epochs   an double precision n-vector of epochs 
+               (ephemeris seconds past J2000) corresponding to the 
+               elements in 'elems'.  The I'th epoch must equal the 
+               epoch of the I'th element set. 'epochs' must form a 
+               strictly increasing sequence. 
+
+   the call:
+   
+      CSPICE_SPKW10, handle, body,   center, frame, first, last, $
+                     segid,  consts, n,      elems, epochs
+   
+      writes to the SPK file referred to by 'handle' a type 10 SPK
+      segment containing the data listed in 'elems'.
+     
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; Load a kernel set.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+
+      SPK = 'dmsp.bsp'
+
+      ;;
+      ;; Define the NAIF object ID and the corresponding Two
+      ;; Line Element set.
+      ;;
+
+      ID  = -118123L
+
+      TLE = [ '1 18123U 87 53  A 87324.61041692 -.00000023  ' + $ 
+                                  '00000-0 -75103-5 0 00675',   $
+              '2 18123  98.8296 152.0074 0014950 168.7820 '   + $
+                                '191.3688 14.12912554 21686',   $
+              '1 18123U 87 53  A 87326.73487726  .00000045  ' + $ 
+                                  '00000-0  28709-4 0 00684',   $
+              '2 18123  98.8335 154.1103 0015643 163.5445 '   + $
+                                '196.6235 14.12912902 21988',   $
+              '1 18123U 87 53  A 87331.40868801  .00000104  ' + $ 
+                                  '00000-0  60183-4 0 00690',   $
+              '2 18123  98.8311 158.7160 0015481 149.9848 '   + $
+                                '210.2220 14.12914624 22644',   $
+              '1 18123U 87 53  A 87334.24129978  .00000086  ' + $ 
+                                  '00000-0  51111-4 0 00702',   $
+              '2 18123  98.8296 161.5054 0015372 142.4159 '   + $
+                                '217.8089 14.12914879 23045',   $
+              '1 18123U 87 53  A 87336.93227900 -.00000107  ' + $ 
+                                  '00000-0 -52860-4 0 00713',   $
+              '2 18123  98.8317 164.1627 0014570 135.9191 '   + $
+                                '224.2321 14.12910572 23425',   $
+              '1 18123U 87 53  A 87337.28635487  .00000173  ' + $ 
+                                  '00000-0  10226-3 0 00726',   $
+              '2 18123  98.8284 164.5113 0015289 133.5979 '   + $
+                                '226.6438 14.12916140 23475',   $
+              '1 18123U 87 53  A 87339.05673569  .00000079  ' + $ 
+                                  '00000-0  47069-4 0 00738',   $
+              '2 18123  98.8288 166.2585 0015281 127.9985 '   + $
+                                '232.2567 14.12916010 24908',   $
+              '1 18123U 87 53  A 87345.43010859  .00000022  ' + $ 
+                                  '00000-0  16481-4 0 00758',   $
+              '2 18123  98.8241 172.5226 0015362 109.1515 '   + $
+                                '251.1323 14.12915487 24626',   $
+              '1 18123U 87 53  A 87349.04167543  .00000042  ' + $ 
+                                  '00000-0  27370-4 0 00764',   $
+              '2 18123  98.8301 176.1010 0015565 100.0881 '   + $
+                                   '260.2047 14.12916361 25138' ]
+
+      ;;
+      ;; The constants as listed in geophysical.ker.
+      ;;
+      CONSTS = [  1.082616D-3,  $
+                 -2.53881D-6,   $
+                 -1.65597D-6,   $
+                 7.43669161D-2, $
+                 120.D,         $
+                 78.D,          $
+                 6378.135D,     $
+                 1.D ]
+
+      ;;
+      ;; Create the arrays for the element data.
+      ;;
+      epoch_x = dblarr( 9  )
+      elems_x = dblarr( 90 )
+
+      if <a href="cspice_exists.html">cspice_exists</a>(SPK) then file_delete, SPK
+
+      ;;
+      ;; Convert the Two Line Elements lines to the
+      ;; element sets.
+      ;;
+      j = 0 
+      for i=0,16,2 do begin
+
+         lines = [ TLE[i], TLE[i+1] ]
+      
+         <a href="cspice_getelm.html">cspice_getelm</a>, 1950L, lines, epoch, elems
+   
+         epoch_x[i/2]           = epoch
+         elems_x[0+j*10:9+j*10] = elems
+         j                      = j + 1
+      endfor
+
+
+      ;;
+      ;; Define the beginning and ending time range
+      ;; +/- 12 hours respectively from the first and 
+      ;; last epochs.
+      ;;
+      first = epoch_x[0] - 0.5D0*<a href="cspice_spd.html">cspice_spd</a>()
+      last  = epoch_x[8] + 0.5D0*<a href="cspice_spd.html">cspice_spd</a>()
+ 
+
+      ;;
+      ;; Create a new SPK file.
+      ;;
+      <a href="cspice_spkopn.html">cspice_spkopn</a>, SPK, 'TEST_FILE', 1000L, handle
+
+      ;;
+      ;; Add the data for the type 10 segment to the new SPK.
+      ;;
+      <b>cspice_spkw10</b>, handle, ID, 399L, 'j2000', first, last, $
+                     'DMSP F8', consts, 9L, elems_x, epoch_x
+
+
+      ;;   
+      ;; Safely close the SPK.
+      ;; 
+      <a href="cspice_spkcls.html">cspice_spkcls</a>, handle
+
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_kclear.html">cspice_kclear</a>
+   
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-NOV-2007, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   write a type_10 spk segment 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

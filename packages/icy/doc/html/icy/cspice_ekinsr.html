@@ -1,0 +1,299 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ekinsr</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ekinsr</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EKINSR inserts a new, empty record into specified EK
+   segment at a specified index.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/ekinsr_c.html">ekinsr_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      handle   the scalar integer referring to an EK file open for 
+               write access
+      segno    the scalar integer indicating the EK segment
+               of interest
+      recno    the scalar integer indicating the index of the
+               record of interest
+   
+   the call:
+   
+      <b>cspice_ekinsr</b>, handle, segno, recno
+   
+   inserts a new record at index 'recno' in EK segment 'segno' from 
+   the EK referred to by 'handle'.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Constants
+      ;;
+      SPICETRUE        = 1B
+      SPICEFALSE       = 0B
+      SPICE_EK_CNAMSZ  = 32
+      SPICE_EK_CSTRLN  = SPICE_EK_CNAMSZ + 1  
+      SPICE_EK_TNAMSZ  = 64
+      SPICE_EK_TSTRLN  = SPICE_EK_TNAMSZ + 1 
+      EKNAME           = &quot;test.ek&quot;
+      IFNAME           = &quot;Test EK&quot;
+      NCOLS            = 1
+      NROWS            = 100
+      NRESVC           = 0
+      TABLE            = &quot;SCALAR_DATA&quot;
+      MAXVAL           = 10
+      
+      ;;
+      ;; Declare memory for the column data.
+      ;;
+      ivals  = intarr( MAXVAL )
+         
+      ;;
+      ;; Open a new EK file.  For simplicity, we won't 
+      ;; reserve space for the comment area, so the 
+      ;; number of reserved comment characters is zero. 
+      ;; The constant IFNAME is the internal file name. 
+      ;;   
+      if ( <a href="cspice_exists.html">cspice_exists</a> (EKNAME) ) then begin
+         file_delete, EKNAME
+      endif
+      
+      ;;
+      ;; Create the new EK.
+      ;;
+      <a href="cspice_ekopn.html">cspice_ekopn</a>, EKNAME, IFNAME, NRESVC, handle
+             
+      ;;
+      ;; Set up the table and column names and declarations 
+      ;; for the SCALAR_DATA segment.
+      ;;
+      cdecls = strarr(NCOLS)
+      cnames = strarr(NCOLS)
+   
+      cnames[0] = &quot;INT_COL_1&quot;
+      cdecls[0] = &quot;DATATYPE = INTEGER, INDEXED  = TRUE, &quot; +$
+                  &quot;NULLS_OK = TRUE&quot;
+   
+      ;;
+      ;; Start the segment.
+      ;;
+      <a href="cspice_ekbseg.html">cspice_ekbseg</a>, handle, TABLE, NCOLS, cnames, cdecls, segno
+      
+      ;;
+      ;; Add NROWS simple data values.
+      ;;
+      for i = 0, (NROWS-1) do begin
+      
+         <a href="cspice_ekappr.html">cspice_ekappr</a>, handle, segno, recno
+      
+         isnull   =  SPICEFALSE
+      
+         ivals[0] = i
+         <a href="cspice_ekacei.html">cspice_ekacei</a>, handle, segno,  recno,  cnames[0], $
+                        1,      ivals,  isnull
+   
+      endfor
+      
+      ;;
+      ;; Summarize the EK.
+      ;;
+      <a href="cspice_ekssum.html">cspice_ekssum</a>, handle,  segno, sum_nrow, sum_ncol, $
+                     tabnam, cnames, cclass  , dtype   , $ 
+                     size  , strlen, indexd  , nullok
+   
+      ;;
+      ;; Display the number of rows and columns in the EK.
+      ;;
+      print, 'Number of rows before delete: ', sum_nrow
+      
+      ;; End the file.
+      ;;
+      <a href="cspice_ekcls.html">cspice_ekcls</a>, handle
+      
+      ;;
+      ;; Update the EK: delete half the records
+      ;; via a <a href="cspice_ekdelr.html">cspice_ekdelr</a> call. First, open the file for 
+      ;; write access.
+      ;;
+      <a href="cspice_ekopw.html">cspice_ekopw</a>, EKNAME, handle
+      
+      ;;
+      ;; Perform the delete. Delete every other record.
+      ;; 
+      for i = 0,  ( (NROWS/2) - 1) do begin
+         <a href="cspice_ekdelr.html">cspice_ekdelr</a>, handle, 0, i
+      endfor
+      
+      ;;
+      ;; Summarize the EK.
+      ;;
+      <a href="cspice_ekssum.html">cspice_ekssum</a>, handle,  segno, sum_nrow, sum_ncol,  $
+                     tabnam, cnames, cclass  , dtype   ,  $ 
+                     size  , strlen, indexd  , nullok
+      
+      ;;
+      ;; Display the number of rows and columns in the EK.
+      ;;
+      print, 'Number of rows after delete : ', sum_nrow
+      
+      ;;
+      ;; Insert new data into the deleted records.
+      ;;
+      for i = 0, ( NROWS - 1 ), 2 do begin
+   
+         recno = i;
+   
+         <b>cspice_ekinsr</b>, handle, segno, recno
+   
+         ivals[0] = i
+         isnull   =  0
+   
+         <a href="cspice_ekacei.html">cspice_ekacei</a>, handle, segno,  recno,  cnames[0], $
+                        1,      ivals,  isnull 
+   
+      endfor
+   
+      ;;
+      ;; Summarize the EK.
+      ;;
+      <a href="cspice_ekssum.html">cspice_ekssum</a>, handle,  segno, sum_nrow, sum_ncol,  $
+                     tabnam, cnames, cclass  , dtype   ,  $ 
+                     size  , strlen, indexd  , nullok
+      
+      ;;
+      ;; Display the number of rows and columns in the EK.
+      ;;
+      print, 'Number of rows after insert : ', sum_nrow
+      
+      ;;
+      ;; End the file.
+      ;;
+      <a href="cspice_ekcls.html">cspice_ekcls</a>, handle
+   
+   IDL outputs:
+   
+      Number of rows before delete:     100
+      Number of rows after delete :      50
+      Number of rows after insert :     100
+   
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/ek.html">EK.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   insert record into EK segment 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

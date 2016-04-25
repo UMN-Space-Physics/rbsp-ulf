@@ -1,0 +1,261 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_conics</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_conics</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CONICS determines the state (position, velocity) of an orbiting 
+   body from a set of elliptic, hyperbolic, or parabolic orbital elements. 
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/conics_c.html">conics_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      elts    a double precision 8-vector containing the conic osculating 
+              elements describing the orbit of a body around a primary. 
+              The elements are, in order:
+   
+                 RP      Perifocal distance.
+                 ECC     Eccentricity.
+                 INC     Inclination.
+                 LNODE   Longitude of the ascending node.
+                 ARGP    Argument of periapse.
+                 M0      Mean anomaly at epoch.
+                 T0      Epoch.
+                 MU      Gravitational parameter.
+   
+                 Units are km, rad, rad/sec, km**3/sec**2.  
+   
+                 The epoch T0 is given in ephemeris seconds past J2000. 
+                 T0 is the instant at which the state of the body is 
+                 specified by the elements. 
+   
+      et      the scalar double precision time in ephemeris seconds past
+              J2000 at which the state of the orbiting body is to be 
+              determined
+   
+   the call:
+   
+      <b>cspice_conics</b>, elts, et, state
+   
+   returns
+   
+      state   a double precision Cartesian 6-vector representing the state 
+              (position and velocity) of the body at time 'et' 
+              in kilometers and kilometers-per-second  (the first
+              three components of 'state' represent the x-, y- and 
+              z-components of the body's position; the last three 
+              components form the corresponding velocity vector) 
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;; 
+      ;; Calculate the difference between the
+      ;; state elements of the Moon at some time as determined
+      ;; from SPK data and the corresponding state elements 
+      ;; determined from propagation of osculating elements.
+      ;;
+      ;; Load the meta kernel listing the needed SPK, PCK, LSK
+      ;; kernels.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+   
+      ;;
+      ;; Convert the time of interest, provides as a string, to ephemeris time
+      ;;
+      <a href="cspice_str2et.html">cspice_str2et</a>, 'Dec 25, 2007', et
+   
+      ;;
+      ;; Make the <a href="cspice_spkezr.html">cspice_spkezr</a> call to retrieve the state of the
+      ;; Moon w.r.t. the Earth in J2000. Use 'NONE' as aberration
+      ;; correction since we are comparing geometric states.
+      ;;
+      <a href="cspice_spkezr.html">cspice_spkezr</a>, 'Moon', et, 'J2000', 'NONE', 'EARTH', state, ltime    
+   
+      ;;
+      ;; <a href="cspice_oscelt.html">cspice_oscelt</a> requires body mass information, so load a
+      ;; mass PCK kernel that contains gravitation constants.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '/kernels/gen/pck/masses3.tpc'
+   
+      ;;
+      ;; Read the gravitational parameter for Earth.
+      ;;
+      <a href="cspice_bodvrd.html">cspice_bodvrd</a>, 'EARTH', 'GM', 1, mu
+   
+      ;;
+      ;; Execute the <a href="cspice_oscelt.html">cspice_oscelt</a> call to convert the state 6-vector
+      ;; to the osculating elements 8-vector, 'elts', at 'et'. The osculating 
+      ;; elements are relative to the same frame as 'state'.
+      ;; 
+      ;; The elements describe the nominal orbit the Moon would follow 
+      ;; in the absence of all other bodies in the solar system and
+      ;; and all non-gravitational forces.
+      ;;
+      ;; Note: the <a href="cspice_bodvrd.html">cspice_bodvrd</a> call returns data as arrays, so 
+      ;; to access the gravitational parameter (the only value in 
+      ;; the array), we use 'mu[0]'.
+      ;;
+      <a href="cspice_oscelt.html">cspice_oscelt</a>, state, et, mu[0], elts
+   
+      ;;
+      ;; Now, select a time one week from the initial epoch.
+      ;;
+      later = et + 7.d * <a href="cspice_spd.html">cspice_spd</a>()
+   
+      ;;
+      ;; Use the osculating elements to calculate the state vector 
+      ;; of the Moon at the 'later' epoch.
+      ;;
+      <b>cspice_conics</b>, elts, later, later_state
+   
+      ;;
+      ;; Now retrieve the Moon's state at time 'later' from SPK
+      ;; data.
+      ;;
+      <a href="cspice_spkezr.html">cspice_spkezr</a>, 'Moon', later, 'J2000', 'NONE', 'EARTH', state, ltime    
+   
+      ;;
+      ;; Display the absolute diff between the vector output by 
+      ;; <b>cspice_conics</b> and the state vector returned by <a href="cspice_spkezr.html">cspice_spkezr</a>.
+      ;;
+      pert = later_state - state
+      
+      print, &quot;Perturbation in     x: &quot;, pert[0]
+      print, &quot;Perturbation in     y: &quot;, pert[1]
+      print, &quot;Perturbation in     z: &quot;, pert[2]
+      print, &quot;Perturbation in dx/dt: &quot;, pert[3]
+      print, &quot;Perturbation in dy/dt: &quot;, pert[4]
+      print, &quot;Perturbation in dz/dt: &quot;, pert[5]
+   
+   IDL outputs:
+   
+      Perturbation in     x:       -7488.8162
+      Perturbation in     y:        397.60470
+      Perturbation in     z:        195.74585
+      Perturbation in dx/dt:     -0.036152592
+      Perturbation in dy/dt:    -0.0012792366
+      Perturbation in dz/dt:    -0.0020145613
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.1.0, 16-MAY-2005, EDW (JPL)
+
+       Added capability to process 8xN array 'elts' and
+       N-vector 'et' input returning a 6xN 'state' array.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   state from conic elements
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

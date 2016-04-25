@@ -1,0 +1,260 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dtpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dtpool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DTPOOL queries the kernel pool for the existence of a kernel
+   variable, if found, the routine returns the size and type of
+   pool variable.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/dtpool_c.html">dtpool_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      name   the scalar string name of a pool variable
+
+   the call:
+
+      <b>cspice_dtpool</b>, name, found, n, type
+
+   returns:
+
+      found   a scalar boolean that returns TRUE if variable 'name'
+              exists in the pool
+
+      n       the integer count of values assigned to 'name', note a value
+              greater than one indicates an array
+
+      type    a character marker indicating the type of values
+              assigned to 'name':
+
+                 'C'   character values (strings)
+                 'N'   numerical values (integers or doubles)
+                 'X'   variable name does not exist in pool
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+         KPL/MK
+
+         File name: <a href= "standard.html">standard.tm</a>
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00009.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00009.tpc',
+                                'naif0009.tls'  )
+
+         \begintext
+
+   Example:
+
+      ;;
+      ;; Load a leapsecond kernel.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, 'standard.ker'
+
+      ;;
+      ;; Check for the variables defined in the leapseconds kernel.
+      ;;
+      lmpoolNames  = [                       $
+                    &quot;DELTET/DELTA_T_A&quot;,      $
+                    &quot;DELTET/K&quot;,              $
+                    &quot;DELTET/EB&quot;,             $
+                    &quot;DELTET/M&quot;,              $
+                    &quot;DELTET/DELTA_AT&quot;,       $
+                    &quot;EVERLASTING_GOBSTOPPER&quot; $
+                     ]
+
+      for i = 0, n_elements(lmpoolNames)-1 do begin
+
+         <b>cspice_dtpool</b>, lmpoolNames[i], found, n, dtype
+
+         if (found) then begin
+            print, &quot;Variable name : &quot; + lmpoolNames[i]
+            print, &quot;Variable size : &quot; + string(n)
+            print, &quot;Variable type : &quot; + dtype
+            print
+         endif else begin
+            print, &quot;Unable to find variable name : &quot; + lmpoolNames[i]
+            print
+        endelse
+
+      endfor
+
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_kclear.html">cspice_kclear</a>
+
+   IDL outputs:
+
+      Variable name : DELTET/DELTA_T_A
+      Variable size :            1
+      Variable type : N
+
+      Variable name : DELTET/K
+      Variable size :            1
+      Variable type : N
+
+      Variable name : DELTET/EB
+      Variable size :            1
+      Variable type : N
+
+      Variable name : DELTET/M
+      Variable size :            2
+      Variable type : N
+
+      Variable name : DELTET/DELTA_AT
+      Variable size :           46
+      Variable type : N
+
+      Unable to find variable name : EVERLASTING_GOBSTOPPER
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 05-JAN-2012, EDW (JPL)
+
+      Edits to Example section, proper description of &quot;<a href= "standard.html">standard.tm</a>&quot;
+      meta kernel.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   return summary information about a kernel pool variable
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

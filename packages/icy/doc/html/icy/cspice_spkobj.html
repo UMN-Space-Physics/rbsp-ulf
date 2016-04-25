@@ -1,0 +1,290 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkobj</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkobj</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKOBJ finds the set of ID codes of all objects in a
+   specified SPK file.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/spkobj_c.html">spkobj_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+
+      spk   the scalar string name of an SPK file. 
+
+      ids   is an initialized Icy set data structure. 
+            'ids' optionally may contain a set of ID codes on 
+            input; on output, the data already present in 
+            'ids' will be combined with ID code set found for the 
+            file 'spk'. 
+
+   the call:
+
+      <b>cspice_spkobj</b>, spk, ids
+   
+   returns:
+
+      ids   an Icy set data structure which contains 
+            the union of its contents upon input with the set 
+            of ID codes of each object for which ephemeris 
+            data are present in the indicated SPK file. The 
+            elements of Icy sets are unique; hence each 
+            ID code in `ids' appears only once, even if the SPK 
+            file contains multiple segments for that ID code. 
+
+            The user must create 'ids' using <a href="cspice_celli.html">cspice_celli</a>. (Note:
+            a set is a type of cell).
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+      ;;
+      ;; From a given SPK file, retrieve the list of objects listed
+      ;; in the file then retrieve the time coverage for each object.
+      ;;
+      ;; Local parameters...
+      ;;
+      MAXIV  = 1000
+      WINSIZ = 2 * MAXIV
+      TIMLEN = 51
+      MAXOBJ = 1000
+      
+      ;;
+      ;; ...and a kernel from the Cassini mission.
+      ;;
+      SPK = '/kernels/cassini/spk/041210AP_OPK_04329_08189.bsp'
+
+      ;;
+      ;; Local variables
+      ;;
+      cover = <a href="cspice_celld.html">cspice_celld</a>( WINSIZ )
+      ids   = <a href="cspice_celli.html">cspice_celli</a>( MAXOBJ )
+
+      ;;
+      ;; Load a standard kernel set.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '<a href= "standard.html">standard.tm</a>'
+
+      ;;
+      ;; Find the set of objects in the SPK file. 
+      ;;
+      <b>cspice_spkobj</b>, SPK, ids
+
+      ;;
+      ;; We want to display the coverage for each object. Loop over
+      ;; the contents of the ID code set, find the coverage for
+      ;; each item in the set, and display the coverage.
+      ;;
+      for i=0, <a href="cspice_card.html">cspice_card</a>( ids ) - 1 do begin
+      
+         ;;
+         ;;  Find the coverage window for the current object, 'i'.
+         ;;  Empty the coverage window each time 
+         ;;  so we don't include data for the previous object.
+         ;;
+         obj = ids.base[ ids.data + i ]
+         <a href="cspice_scard.html">cspice_scard</a>, 0L, cover
+         <a href="cspice_spkcov.html">cspice_spkcov</a>, SPK, obj, cover
+
+
+         ;;
+         ;; Get the number of intervals in the coverage window.
+         ;;
+         niv = <a href="cspice_wncard.html">cspice_wncard</a>( cover )
+
+         ;;
+         ;; Display a simple banner.
+         ;;
+         print, &quot;========================================&quot;
+         print, &quot;Coverage for object:&quot;, obj
+
+         ;;
+         ;; Convert the coverage interval start and stop times to TDB
+         ;; calendar strings.
+         ;;
+         for j=0, niv-1 do begin
+         
+            ;;
+            ;; Get the endpoints of the jth interval.
+            ;;
+            <a href="cspice_wnfetd.html">cspice_wnfetd</a>, cover, j, b, e
+
+            ;;
+            ;; Convert the endpoints to TDB calendar
+            ;; format time strings and display them.
+            ;; Pass the endpoints in an array, [b,e],
+            ;; so <a href="cspice_timout.html">cspice_timout</a> returns an array of time 
+            ;; strings.
+            ;;
+            <a href="cspice_timout.html">cspice_timout</a>, [b,e], $ 
+                           &quot;YYYY MON DD HR:MN:SC.### (TDB) ::TDB&quot;,  $
+                           TIMLEN ,$
+                           timstr 
+
+            print, &quot;Interval: &quot;, j
+            print, &quot;Start   : &quot;, timstr[0]
+            print, &quot;Stop    : &quot;, timstr[1]
+            print
+
+         
+         endfor
+
+      endfor
+      
+      ;;
+      ;; It's always good form to unload kernels after use,
+      ;; particularly in IDL due to data persistence.
+      ;;
+      <a href="cspice_unload.html">cspice_unload</a>, '<a href= "standard.html">standard.tm</a>'
+
+   IDL outputs:
+   
+      ========================================
+      Coverage for object:        -150
+      Interval:        0
+      Start   : 2004 DEC 25 02:01:04.182 (TDB)
+      Stop    : 2005 JAN 14 09:07:00.000 (TDB)
+
+      ========================================
+      Coverage for object:         -82
+      Interval:        0
+      Start   : 2004 NOV 24 00:00:00.000 (TDB)
+      Stop    : 2008 JUL 07 17:08:04.000 (TDB)
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine provides an API via which applications can determine 
+   the set of objects for which there are ephemeris data in a 
+   specified SPK file. 
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a> 
+   <a href="../req/cells.html">CELLS.REQ</a> 
+   <a href="../req/daf.html">DAF.REQ</a> 
+   <a href="../req/sets.html">SETS.REQ</a>
+   <a href="../req/naif_ids.html">NAIF_IDS.REQ</a>
+   <a href="../req/windows.html">WINDOWS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+
+   -Icy Version 1.0.2, 30-NOV-2007, NJB, EDW (JPL)
+
+        Corrected bug in the Examples section program:
+        program now empties the coverage window prior to collecting
+        data for the current object. Updated example to
+        use <a href="cspice_wncard.html">cspice_wncard</a> rather than <a href="cspice_card.html">cspice_card</a>.
+
+   -Icy Version 1.0.1, 26-JAN-2006, EDW (JPL)
+
+      Corrected minor typo in description of 'ids' variable
+
+   -Icy Version 1.0.0, 30-DEC-2004, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   find id codes in spk file
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:32 2014</pre>
+
+</body>
+</html>
+

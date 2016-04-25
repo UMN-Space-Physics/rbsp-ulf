@@ -1,0 +1,201 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_prop2b</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_prop2b</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_PROP2B uses the two-body force model to propagate the
+   state of a massless body orbiting a primary at time t0 to
+   the body state at time t0 + dt.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/prop2b_c.html">prop2b_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      gm       a scalar double precision defining the gravitational constant
+               of the primary.
+
+      pvinit   the double precision state 6-vector describing the initial
+               state of the massless body (secondary) at some epoch.
+
+      dt       the double precision scalar time step in TDB seconds from
+               the epoch.
+
+   the call:
+
+      <b>cspice_prop2b</b>, gm, pvinit, dt, pvprop
+
+   returns:
+
+      pvprop   a double precision 6-vector defining the state of the body at a
+               time 'dt' from the epoch as determined by the classical two-body
+               force model.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+
+      ;;
+      ;; In circular two-body motion, the orbital speed 's' is
+      ;; sqrt(mu/r), where mu is the central mass. After
+      ;; tau/2 = pi*r/s seconds (half period), the state
+      ;; should equal the negative of the original state.
+      ;;
+      mu    =  398600.45d
+      r     =  1.d08
+      speed =  sqrt( mu / r )
+      t     =  <a href="cspice_pi.html">cspice_pi</a>()*r/speed
+
+      pvinit= [  0.d, r/sqrt(2.d),      r/sqrt(2.d)   , $
+                 0.d, -speed/sqrt(2.d), speed/sqrt(2.d) ]
+
+      ;;
+      ;; Calculate the state of the body at 0.5 period
+      ;; after the epoch.
+      ;;
+      <b>cspice_prop2b</b>, mu, pvinit, t, state
+
+      ;;
+      ;; The 'state' vector should equal '-pvinit'
+      ;;
+      ;; Check position...
+      ;;
+      print, pvinit[0:2]
+      print, state[0:2]
+
+      ;;
+      ;; ... and velocity.
+      ;;
+      print, pvinit[3:5]
+      print, state[3:5]
+
+   IDL outputs for pvinit[0:2], state[0:2]:
+
+          0.0000000       70710678.       70710678.
+          0.0000000      -70710678.      -70710678.
+
+   IDL outputs for pvinit[3:5], state[3:5]:
+
+          0.0000000    -0.044643054     0.044643054
+          0.0000000     0.044643054    -0.044643054
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.1, 15-AUG-2011, EDW (JPL)
+
+      Edits to comply with NAIF standard for Icy headers.
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+    Propagate state vector using two-body force model
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:31 2014</pre>
+
+</body>
+</html>
+

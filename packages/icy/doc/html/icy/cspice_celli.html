@@ -1,0 +1,237 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_celli</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_celli</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CELLI creates an integer Icy data cell of defined
+   size.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      size   a scalar integer describing the number of elements in the
+             cell's integer data array.
+
+   the call:
+
+      cell = <b>cspice_celli</b>( size )
+
+   returns:
+
+      cell   a scalar IDL structure composed of fields
+             corresponding to a CSPICE cell.
+
+             OFFSET     A 9-vector of IDL_MEMINT offsets for each of the 
+                        structure fields with respect to the beginning of the 
+                        structure.
+           
+                        Element 0 of the array contains the offset to the DTYPE
+                        field; element 1 of the array contains the offset to 
+                        the LENGTH field, etc.
+                        
+                        This array has no function in a cell sense.
+                        The Icy cell implementation uses the 'OFFSET' 
+                        values to locate data fields within the IDL structure.
+          
+             DTYPE      Data type of cell: an integer scalar defining the type  
+                        of data stored in the cell data array.
+          
+             LENGTH     For character cells, the integer scalar declared length 
+                        of the cell's string array.
+          
+             SIZE       An integer scalar defining the maximum number of data
+                        items that can be stored in the cell's data array.
+          
+             CARD       The cell's &quot;cardinality&quot;: the integer scalar defining
+                        the number of data items currently present in the cell 
+                        
+                        Note CARD &lt;= SIZE.
+          
+                        This field has value 0 after cell creation.
+          
+             ISSET      A boolean scalar flag indicating whether the cell is a 
+                        SPICE set. Sets have no duplicate data items, and their
+                        data items are stored in increasing order.
+          
+             ADJUST     A boolean scalar flag indicating whether the cell's 
+                        data area has adjustable size.  Adjustable size cell 
+                        data areas are not currently implemented.
+          
+             INIT       A boolean scalar flag indicating whether the cell is 
+                        initialized.
+             
+             BASE       The array of type DTYPE with 'SIZE' + 'DATA' elements 
+                        (an N-vector, N = SIZE + DATA)
+          
+             DATA       The offset from the first element of the 'BASE' array
+                        to the cell data. This field has value 
+                        SPICE_CELL_CTRLSZ (defined in SpiceCel.h), referred to 
+                        as the control segment size.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+      ;; 
+      ;; Create a cell containing an integer 8-vector.
+      ;;
+      cell = <b>cspice_celli</b>( 8 )
+      help, cell, /struct
+
+   IDL outputs:
+   
+      ** Structure &lt;304fa10&gt;, 10 tags, length=116, data length=115, refs=1:
+         OFFSET          LONG      Array[9]
+         DTYPE           LONG                 2
+         LENGTH          LONG                 0
+         SIZE            LONG                 8
+         CARD            LONG                 0
+         ISSET           BYTE         1
+         ADJUST          BYTE         0
+         INIT            BYTE         0
+         BASE            LONG      Array[14]
+         DATA            LONG                 6
+
+      Note the length of the BASE field equals the defined SIZE, 8,
+      plus the value of the DATA offset, 6.
+      
+      Access to the cell data array is best done using the Icy calls, but
+      if necessary a user can directly manipulate the data.
+      
+      Extract the data array:
+
+         ;;
+         ;; Where 'array' has cardinality 'CARD', assumed as non-zero
+         ;; for this example.
+         ;;
+         data_start = cell.data
+         data_end   = data_start + cell.card - 1
+         array      = cell.base[ data_start:data_end]
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A cell as used in Icy is a structure similar to the CSPICE expression
+   of a cell; all fields present in the CSPICE cell exist in the Icy version.
+   
+   The DATA field defines the offset from the start of the BASE array to
+   the beginning of the cell array data. The first DATA elements of BASE
+   serve as control information.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/cells.html">CELLS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.2, 19-JAN-2009, EDW (JPL)
+
+      Edited Examples sections to show use of the cardinality field,
+      &quot;.card,&quot; (correct) instead of the size field, &quot;.size,&quot; (incorrect).
+      Eliminated the code showing direct writes to the cell data field. 
+      Users should call Icy routines to change cell data.
+   
+   -Icy Version 1.0.1, 12-SEP-2006, EDW (JPL)
+
+      Correct Required Reading citation CELL.REQ to <a href="../req/cells.html">CELLS.REQ</a>.
+
+   -Icy Version 1.0.0, 01-AUG-2004, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   create an integer cell
+
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+

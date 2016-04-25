@@ -1,0 +1,193 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_bodvrd</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_bodvrd</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Examples">Examples<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Particulars">Particulars<br></a>
+              <a href="#Required Reading">Required Reading<br></a>
+              <a href="#Version">Version<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Index_Entries">Index_Entries<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+
+<PRE>
+
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_BODVRD returns from the kernel pool the double precision values  
+   of an item associated with a body.
+
+   For important details concerning this module's function, please refer to
+   the CSPICE routine <a href="../cspice/bodvrd_c.html">bodvrd_c</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+   
+   Given:
+   
+      body   the scalar string name of the body for which the data 'item'
+             is requested, the string lacks case sensitivity
+   
+      item   the scalar string naming the property of 'body' to return,
+             e.g. RADII, GM, POLE_RA
+   
+                 Note: 'item' *is* case-sensitive.  This attribute 
+                 is inherited from the case-sensitivity of kernel 
+                 variable names. 
+   
+      maxn   the scalar integer maximum number of values to return, this value
+             must equal or exceed the size of requested kernel variable 'item'
+    
+    returns:
+   
+      values   an array of the double precision values associated with
+               the variable
+               
+                  Note: 'values' returns a vector even when 'item' refers 
+                  to a scalar, i.e. a scalar returns in 'values[0]'.
+   
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   
+      ;;
+      ;; Load a SPICE PCK file containing body data.
+      ;;
+      <a href="cspice_furnsh.html">cspice_furnsh</a>, '/kernels/gen/pck/pck00007.tpc'
+   
+      ;;
+      ;; Retrieve the radius vector of Saturn.
+      ;;
+      <b>cspice_bodvrd</b>, 'SATURN', &quot;RADII&quot;, 5, radii
+      print, radii
+   
+   IDL outputs:
+   
+      60268.000       60268.000       54364.000
+   
+   The radii vector of Saturn expressed in kilometers as 
+   recorded in pck00007.tpc.
+   
+   Note: <b>cspice_bodvrd</b> signals an error if the kernel pool
+   lacks the necessary data. Either initiate a catch handler:
+   
+      catch, err
+         if err eq 0 then <b>cspice_bodvrd</b>, 'SATURN', &quot;RADII&quot;, 5, radii
+      catch, /cancel
+   
+   or test for the existence of the kernel data with <a href="cspice_bodfnd.html">cspice_bodfnd</a>
+   (the NAIF ID for Saturn has the value 699):
+   
+      ;;
+      ;; A clunky test, based on body ID.
+      ;;
+      found = <a href="cspice_bodfnd.html">cspice_bodfnd</a>( 699, &quot;RADII&quot; )
+
+      if (found) then begin
+         <b>cspice_bodvrd</b>, 'SATURN', &quot;RADII&quot;, 3, radii
+      endif
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required Reading">Required Reading</a></h4><pre>
+
+   <a href="../req/icy.html">ICY.REQ</a>
+   <a href="../req/naif_ids.html">NAIF_IDS.REQ</a>
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Icy Version 1.0.0, 16-JUN-2003, EDW (JPL)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+ 
+   fetch constants for a body from the kernel pool 
+   physical constants for a body 
+ 
+
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:34:29 2014</pre>
+
+</body>
+</html>
+
