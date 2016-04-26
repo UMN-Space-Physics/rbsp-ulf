@@ -46,8 +46,8 @@ label = ('_sharp' if 'sharp' in argv else '') + ('_nothresh' if 'nothresh' in ar
 
 def main():
 
-  # Find an event from the list and plot it. 
-  return showevent(amp_ge=0.1)
+#  # Find an event from the list and plot it. 
+#  return showevent(amp_ge=0.1)
 
 #  # Sketch of the Dungey Cycle. 
 #  dungey(save='-i' in argv)
@@ -62,6 +62,10 @@ def main():
 #  count()
 
   # Here are the plots we actually use. 
+
+#  flatmodesbyparam(name='amp', save='-i' in argv)
+#  flatmodesbyparam(name='f', save='-i' in argv)
+  flatmodesbyparam(name='phase', save='-i' in argv)
 
 #  posplot(storm=None, save='-i' in argv)
 #  allplot(storm=None, save='-i' in argv)
@@ -139,6 +143,67 @@ def meanrate(arr):
     print 'UNRECOGNIZED ARRAY SIZE'
     exit()
   return tdp( 100.*np.mean(warr) ) + '\\%'
+
+
+
+# #############################################################################
+# ################################################### Modes by Param, Condensed
+# #############################################################################
+
+def flatmodesbyparam(name, save=False):
+  global pargs, plotdir
+  # Grab the position histogram for normalization. Ignore DST. 
+  pos = getpos(**pargs)
+  x, y, z, hargs = [ pos[key] for key in ('x', 'y', 'z', 'hargs') ]
+  clabs = ( notex('Odd Poloidal'), 
+            notex('Even Poloidal'), 
+            notex('Odd Toroidal'), 
+            notex('Even Toroidal') )
+  funit, aunit, to = notex('mHz'), notex('\\frac{mW}{m^2}'), notex('--')
+  deg = '^\\circ'
+
+  if name=='amp':
+    a0 = 0.02
+    filters = [ {'amp_ge':a0}, {'amp_lt':a0} ]
+    rlabs = [ notex('Above\n') + str(a0) + aunit, notex('Below\n') + str(a0) + aunit ]
+    nrows = 2
+  elif name=='f':
+    fs = (7, 9, 15, 25)
+    filters = [ {'f_lt':fs[1]}, {'f_ge':fs[1], 'f_lt':fs[2]}, {'f_ge':fs[2]} ]
+    rlabs = [ str( fs[0] ) + funit + notex('\nto\n') + str( fs[1] ) + funit, 
+              str( fs[1] ) + funit + notex('\nto\n') + str( fs[2] ) + funit, 
+              str( fs[2] ) + funit + notex('\nto\n') + str( fs[3] ) + funit ]
+    nrows = 3
+  elif name=='phase':
+    q0 = 80
+    filters = [ {'phase':q0}, {'antiphase':q0} ]
+    rlabs = [ notex( str(q0) + deg + '\nto\n' + str(180 - q0) + deg ), notex('Other') ]
+    nrows = 2
+
+  PW = plotWindow( ncols=4, nrows=nrows, **bep() )
+
+  title = notex( 'Distribution of Pc4 Events by Mode and ' + {'amp':'Amplitude', 'f':'Frequency', 'phase':'Phase'}[name] )
+
+  PW.setParams(collabels=clabs, rowlabels=rlabs, title=title)
+
+  # Modes, for iterating over the rows. 
+  modes = ('P1', 'P2', 'T1', 'T2')
+  for col, mode in enumerate(modes):
+    for row, filt in enumerate(filters):
+      # Grab the event histogram, filtered appropriately. 
+      eh = eventhist(hargs, mode=mode, **filt)
+      # Indicate event count and overall rate in the corners. 
+      eventcount = np.sum(eh)
+      pct = meanrate(eh/z)
+      count = znt(eventcount)
+      PW[row, col].setParams(lcorner=count, rcorner=pct)
+      # Add the mesh to the plot. 
+      PW[row, col].setMesh(x, y, 100*zmask(eh)/z)
+  # Show or save the plot. 
+  if save is True:
+    return PW.render(plotdir + 'mode_' +  name + '.pdf')
+  else:
+    return PW.render()
 
 # #############################################################################
 # ######################################################### Show a Single Event
@@ -244,15 +309,6 @@ def plotevent(ev):
   else:
     return PW.render()
 
-
-
-
-
-
-
-
-
-
 # #############################################################################
 # ########################################################## Position Histogram
 # #############################################################################
@@ -324,11 +380,12 @@ def getparam(name, **kargs):
   # Figure out the appropriate range for the histogram. 
   rang = {'probe':None, 'date':None, 'time':None, 'lshell':(1, 7),
           'mlt':(0, 24), 'mlat':(-20, 20), 'lpp':(3, 7), 'mode':None, 
-          'f':(7, 25), 'fwhm':(0, 5), 'phase':(0, 180), 'amp':(-2, 1), 
+          'f':(7, 25), 'fwhm':(0, 5), 'phase':(0, 180), 
+          'amp':( np.log10(0.005), np.log10(5) ), 
           'comp':(0, 1), 'dst':(-150, 150)}[name]
   # Figure out an appropriate number of bins. 
   bins = {'probe':None, 'date':None, 'time':None, 'lshell':6, 'mlt':12,
-          'mlat':10, 'lpp':4, 'mode':None, 'f':18, 'fwhm':20, 'phase':18, 
+          'mlat':10, 'lpp':4, 'mode':None, 'f':9, 'fwhm':20, 'phase':18, 
           'amp':12, 'comp':10, 'dst':30}[name]
   # We want the absolute value of the phase, and we want to plot amplitude on
   # a log scale. Make sure we do this in the right order. 
@@ -375,19 +432,25 @@ def pcoords(name):
   xlabel = { 'f':notex('Frequency (mHz)'), 'fwhm':notex('FWHM (mHz)'), 'phase':notex('|Phase|'), 
              'amp':tex('S') + notex(' (\\frac{mW}{m^2})'), 
              'dst':notex('DST (nT)') }[name]
-  xlims = { 'f':(7, 25), 'fwhm':(0, 5), 'phase':(0, 180), 'amp':(-2, 1), 
+  xlims = { 'f':(7, 25), 'fwhm':(0, 5), 'phase':(0, 180), 
+            'amp':( np.log10(0.005), np.log10(5.) ), 
             'dst':(-150, 150) }[name]
   xticks = { 'f':np.mgrid[7:25:7j], 'fwhm':np.mgrid[0:5:11j], 'phase':np.mgrid[0:180:5j], 
-             'amp':np.mgrid[-2:1:7j], 'dst':np.mgrid[-150:150:7j] }[name]
+             'amp':np.mgrid[np.log10(0.005):np.log10(5.):7j], 'dst':np.mgrid[-150:150:7j] }[name]
   xticklabels = g2a( '$' + str( int(t) ) + '$' for t in xticks )
   if name=='amp':
     xticklabels = g2a( '$' + tdp(10**t) + '$' for t in xticks )
+
   if name=='phase':
     xticklabels = g2a( '$' + str( int(t) ) + '^\\circ$' for t in xticks )
 
   xticklabels[1::2] = ''
+
+  print xticklabels
+
+
   ylabel = notex('Events')
-  ylims = (0, 140)
+  ylims = (0, 100)
   yticks = np.mgrid[ylims[0]:ylims[1]:5j]
   yticklabels = g2a( '$' + str( int(t) ) + '$' for t in yticks )
   yticklabels[1::2] = ''
