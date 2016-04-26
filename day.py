@@ -269,8 +269,8 @@ class event:
   # Poynting flux in Fourier space, scaled to show values at the atmosphere. 
   def sfft(self, mode):
     # Scale by (r/RE)**3 to get values at the ionosphere. 
-    atmfac = ( self.avg('lshell')*np.cos( self.avg('mlat') )**2 )**3 / phys.mu0
-    return self.fft('e' + mode)*np.conj( self.fft('b' + mode) )*atmfac
+    atmfac = ( self.avg('lshell')*np.cos( np.pi*self.avg('mlat')/180. )**2 )**3
+    return self.fft('e' + mode)*np.conj( self.fft('b' + mode) )*atmfac/phys.mu0
 
   # Phase offset -- at each frequency, for each mode, what's the phase lag
   # between of the electric field relative to the magnetic field? 
@@ -439,7 +439,7 @@ class event:
     mltname = self.lbl('mlt') + notex('MLT')
     mlatname = self.lbl('mlat') + notex('MLAT')
     lppname = 'L_{PP}\\!=\\!' + format(self.lpp, '.1f')
-    dstname = notex('DST') + '\\!=\\!' + format(self.dst, '.0f') + notex('nT')
+    dstname = notex('Dst') + '\\!=\\!' + format(self.dst, '.0f') + notex('nT')
     t0name = timestr(self.t0)[1][:5]
     t1name = timestr(self.t1)[1][:5]
     return '\\quad{}'.join( (probename, notex(self.date), lname, mltname, mlatname, lppname, dstname) )
