@@ -31,7 +31,7 @@ else:
   plotdir = '/home/user1/mceachern/Desktop/plots/' + now() + '/'
 
 # What should the minimum amplitude be? Anything below there is noise. 
-thresh = 0.005
+thresh = 0.01
 
 # Bin all position plots the same way. 
 pargs = {'dl':1, 'dm':1} if 'sharp' in argv else {'dl':4, 'dm':2, 'lmin':3, 'lmax':7}
@@ -47,26 +47,24 @@ label = ('_sharp' if 'sharp' in argv else '') + ('_nothresh' if 'nothresh' in ar
 def main():
 
 #  # Find an event from the list and plot it. 
-#  return showevent(amp_ge=0.1)
+#  return showevent(amp_ge=1.)
 
 #  # Sketch of the Dungey Cycle. 
 #  dungey(save='-i' in argv)
-
 #  return innermag(save='-i' in argv)
-
 #  return azm(save='-i' in argv)
-
-#  return paramplot(name='phase', save='-i' in argv)
 
 #  # Just tell me how many there are of each mode. 
 #  count()
 
   # Here are the plots we actually use. 
 
-#  flatmodesbyparam(name='amp', save='-i' in argv)
-#  flatmodesbyparam(name='f', save='-i' in argv)
-  flatmodesbyparam(name='phase', save='-i' in argv)
+#  plotevent( day(probe='a', date='2014-02-24').getslice('09:30:00', duration=1800) )
+#  plotevent( day(probe='b', date='2014-09-26').getslice('07:30:00', duration=1800) )
 
+#  flatmodesbyparam(name='amp', save='-i' in argv)
+  flatmodesbyparam(name='f', save='-i' in argv)
+#  flatmodesbyparam(name='phase', save='-i' in argv)
 #  posplot(storm=None, save='-i' in argv)
 #  allplot(storm=None, save='-i' in argv)
 #  modeplot(storm=None, save='-i' in argv)
@@ -168,7 +166,7 @@ def flatmodesbyparam(name, save=False):
     rlabs = [ notex('Above\n') + str(a0) + aunit, notex('Below\n') + str(a0) + aunit ]
     nrows = 2
   elif name=='f':
-    fs = (7, 9, 15, 25)
+    fs = (7, 10, 16, 25)
     filters = [ {'f_lt':fs[1]}, {'f_ge':fs[1], 'f_lt':fs[2]}, {'f_ge':fs[2]} ]
     rlabs = [ str( fs[0] ) + funit + notex('\nto\n') + str( fs[1] ) + funit, 
               str( fs[1] ) + funit + notex('\nto\n') + str( fs[2] ) + funit, 
@@ -275,7 +273,7 @@ def plotevent(ev):
   # Plot waveforms as a function of time. 
   PW[:, 0].setParams( **ev.coords('waveform', cramped=True) )
   [ PW[i, 0].setLine(ev.get('B' + m), 'r') for i, m in enumerate(modes) ]
-  [ PW[i, 0].setLine(ev.get('E' + m), 'b') for i, m in enumerate(modes) ]
+  [ PW[i, 0].setLine(ev.get('E' + m), 'b') for i, m in enumerate( modes[:-1] ) ]
   # Grab the Fourier-domain Poynting flux. It's scaled by L^3 to give values at
   # the ionosphere. 
   scomplex = [ ev.sfft(m) for m in modes ]
@@ -287,8 +285,13 @@ def plotevent(ev):
   [ PW[i, 1].setParams( toptext=evtop(w) ) for i, w in enumerate(waves) ]
   # Plot the spectra. 
   PW[:, 1].setParams( **ev.coords('spectra', cramped=True) )
-  [ PW[i, 1].setLine(log10(s), 'm') for i, s in enumerate(simag) ]
-  [ PW[i, 1].setLine(log10(s), 'g') for i, s in enumerate(sreal) ]
+  [ PW[i, 1].setLine(log10(s), 'm') for i, s in enumerate( simag[:-1] ) ]
+  [ PW[i, 1].setLine(log10(s), 'g') for i, s in enumerate( sreal[:-1] ) ]
+
+  PW[2, :].setParams( ylabel=notex('B  (nT)') )
+  PW[2, 1].setParams( text=notex('Not Applicable') )
+
+
   # Plot the Gaussian fit of the total Poynting flux. 
   f = np.linspace(0, 50, 1000)
   for i, w in enumerate(waves):
@@ -373,20 +376,24 @@ def getparam(name, **kargs):
   events = loadevents(**kargs)
   # Match name to column. 
   i = {'probe':0, 'date':1, 'time':2, 'lshell':3, 'mlt':4, 'mlat':5, 'lpp':6, 
-       'mode':7, 'f':8, 'fwhm':9, 'phase':10, 'amp':11, 'comp':12,
-       'dst':13}[name]
+       'mode':7, 'f':8, 'fwhm':9, 'phase':10, 'amp':11, 'comp':12, 'dst':13}[name]
   # Grab the list of values. 
   arr = g2a( float( l.split()[i] ) for l in events )
   # Figure out the appropriate range for the histogram. 
+  ampmin, ampmax = (0.005, 5.) if thresh==0.005 else (0.01, 1.)
   rang = {'probe':None, 'date':None, 'time':None, 'lshell':(1, 7),
           'mlt':(0, 24), 'mlat':(-20, 20), 'lpp':(3, 7), 'mode':None, 
           'f':(7, 25), 'fwhm':(0, 5), 'phase':(0, 180), 
-          'amp':( np.log10(0.005), np.log10(5) ), 
+          'amp':( np.log10(ampmin), np.log10(ampmax) ), 
           'comp':(0, 1), 'dst':(-150, 150)}[name]
   # Figure out an appropriate number of bins. 
   bins = {'probe':None, 'date':None, 'time':None, 'lshell':6, 'mlt':12,
-          'mlat':10, 'lpp':4, 'mode':None, 'f':9, 'fwhm':20, 'phase':18, 
-          'amp':12, 'comp':10, 'dst':30}[name]
+          'mlat':10, 'lpp':4, 'mode':None, 'f':18, 'fwhm':20, 'phase':18, 
+          'amp':6, 'comp':10, 'dst':30}[name]
+
+  if name=='f' and 'mode' in kargs and kargs['mode']=='T1':
+    bins = 18
+
   # We want the absolute value of the phase, and we want to plot amplitude on
   # a log scale. Make sure we do this in the right order. 
   if name=='phase':
@@ -432,11 +439,13 @@ def pcoords(name):
   xlabel = { 'f':notex('Frequency (mHz)'), 'fwhm':notex('FWHM (mHz)'), 'phase':notex('|Phase|'), 
              'amp':tex('S') + notex(' (\\frac{mW}{m^2})'), 
              'dst':notex('DST (nT)') }[name]
+  ampmin, ampmax, ampbins = (0.005, 5., 7j) if thresh==0.005 else (0.01, 1., 5j)
   xlims = { 'f':(7, 25), 'fwhm':(0, 5), 'phase':(0, 180), 
-            'amp':( np.log10(0.005), np.log10(5.) ), 
+            'amp':( np.log10(ampmin), np.log10(ampmax) ), 
             'dst':(-150, 150) }[name]
   xticks = { 'f':np.mgrid[7:25:7j], 'fwhm':np.mgrid[0:5:11j], 'phase':np.mgrid[0:180:5j], 
-             'amp':np.mgrid[np.log10(0.005):np.log10(5.):7j], 'dst':np.mgrid[-150:150:7j] }[name]
+             'amp':np.mgrid[np.log10(ampmin):np.log10(ampmax):ampbins], 
+             'dst':np.mgrid[-150:150:7j] }[name]
   xticklabels = g2a( '$' + str( int(t) ) + '$' for t in xticks )
   if name=='amp':
     xticklabels = g2a( '$' + tdp(10**t) + '$' for t in xticks )
@@ -450,7 +459,7 @@ def pcoords(name):
 
 
   ylabel = notex('Events')
-  ylims = (0, 100)
+  ylims = (0, 160)
   yticks = np.mgrid[ylims[0]:ylims[1]:5j]
   yticklabels = g2a( '$' + str( int(t) ) + '$' for t in yticks )
   yticklabels[1::2] = ''
@@ -490,7 +499,8 @@ def paramplot(name, save=False, flat=False):
   unit = {'probe':'', 'date':'', 'time':'', 'lshell':'', 'mlt':notex('hours'),
          'mlat':'^\\circ', 'lpp':'', 'mode':'', 'f':notex('mHz'), 
          'fwhm':notex('mHz'), 'phase':'^\\circ', 
-         'amp':notex('\\frac{mW}{m^2}'), 'comp':'', 'dst':notex('nT')}[name]
+         'amp':notex('\\frac{mW}{m^2}'), 
+         'comp':'', 'dst':notex('nT')}[name]
   # Title and labels. 
   title = ttl + notex(' Distribution of Pc4 Events by Mode')
   PW.setParams(title=title, **pcoords(name) )
@@ -499,9 +509,16 @@ def paramplot(name, save=False, flat=False):
   xy = [ getparam(name, mode=mode, phase=60) for mode in modes ]
   # The bin width is needed because bins are listed at their center but plotted
   # from the left edge. 
-  dx = xy[0][0][1] - xy[0][0][0]
 
-  [ PW[i].setBars(x - dx/2, y, width=dx, alpha=0.5, error_kw={'ecolor':'k'}, yerr=np.sqrt(y)) for i, (x, y, s) in enumerate(xy) ]
+#  dx = xy[0][0][1] - xy[0][0][0]
+
+  for i, (x, y, s) in enumerate(xy):
+
+    dx = x[1] - x[0]
+
+    PW[i].setBars(x - dx/2, y, width=dx, alpha=0.5, error_kw={'ecolor':'k'}, yerr=np.sqrt(y))
+
+#  [ PW[i].setBars(x - dx/2, y, width=dx, alpha=0.5, error_kw={'ecolor':'k'}, yerr=np.sqrt(y)) for i, (x, y, s) in enumerate(xy) ]
 
   # For the phase, do a Gaussian fit. 
   if name in ('phase', 'fwhm'):
@@ -534,12 +551,6 @@ def paramplot(name, save=False, flat=False):
     return PW.render(plotdir + name + '.pdf')
   else:
     return PW.render()
-
-
-
-
-
-
 
 # =============================================================================
 # ============================================ Events Sliced by Parameter Value
@@ -1194,8 +1205,8 @@ def doublehist(hargs, pmode=None, tmode=None, **kargs):
 
   dates = g2a( d[3:13] for d in doubles )
 
-#  for d in sorted( set(dates) ):
-#    print '\t' + d + '\t', len( list(p for p in doubles if d in p ) )
+  for d in sorted( set(dates) ):
+    print '\t' + d + '\t', len( list(p for p in doubles if d in p ) )
 
 
   # Tally up the days. 
