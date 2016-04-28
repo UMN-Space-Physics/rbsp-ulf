@@ -601,14 +601,12 @@ class plotWindow:
   unit = ''
 
 
-  fontfactor = 1.
-
 
   # ---------------------------------------------------------------------------
   # --------------------------------- Initialize Plot Window and Space Out Axes
   # ---------------------------------------------------------------------------
 
-  def __init__(self, ncols=1, nrows=1, cells=None, square=False, joinlabel=None, footlabel=False, landscape=False, fontfactor=1., **kargs):
+  def __init__(self, ncols=1, nrows=1, cells=None, square=False, joinlabel=None, footlabel=False, ff=1., landscape=False, **kargs):
     # If initialized with an array of cells, this isn't a real Plot Window... 
     # it's a temporary object that allows the access of a slice of cells. 
     if cells is not None:
@@ -619,16 +617,16 @@ class plotWindow:
     plt.close('all')
     # Set the font to match LaTeX. 
 
-    self.fontfactor = fontfactor
+    self.ff = ff
 
     if not landscape:
       self.landscape = False
       rc('font', **{'family':'sans-serif', 'sans-serif':['Helvetica'], 
-                    'size':str(9*self.fontfactor)})
+                    'size':str(9*self.ff)})
     else:
       self.landscape = True
       rc('font', **{'family':'sans-serif', 'sans-serif':['Helvetica'], 
-                    'size':str(12*self.fontfactor)})
+                    'size':str(12*self.ff)})
     rc('text', usetex=True)
     rc('text.latex', preamble='\usepackage{amsmath}, \usepackage{amssymb}, ' + 
                               '\usepackage{color}')
@@ -642,10 +640,10 @@ class plotWindow:
     # That's the unit we use to specify the relative sizes of plot elements. 
     sideMargin = 40
     cellPadding = 5
-    titleMargin = int(15*self.fontfactor)
+    titleMargin = int(15*self.ff)
     headMargin = 1 if ncols<2 and joinlabel is None else 10
     unitMargin = 10
-    footMargin = int( ( 30 if footlabel is True else 20 )*self.fontfactor )
+    footMargin = int( ( 30 if footlabel is True else 20 )*self.ff )
     # The size of each subplot depends on how many columns there are. The total
     # width of the subplot area (including padding) will always be the same.
     # No more than four columns are allowed. 
@@ -673,13 +671,13 @@ class plotWindow:
       bot = top + cellHeight
       if ncols<0:
         ax = plt.subplot( tiles[top:bot, sideMargin:-sideMargin] )
-        self.cells[row, 0] = plotCell(ax)
+        self.cells[row, 0] = plotCell(ax, self.ff)
       else:
         for col in range(ncols):
           left = sideMargin + col*(cellWidth + cellPadding)
           right = left + cellWidth
           ax = plt.subplot( tiles[top:bot, left:right] )
-          self.cells[row, col] = plotCell(ax)
+          self.cells[row, col] = plotCell(ax, self.ff)
     # Space out the title axis. 
     self.tax = plt.subplot( tiles[:titleMargin, sideMargin:-sideMargin] )
     # Space out an array of side axes to hold row labels. 
@@ -739,6 +737,7 @@ class plotWindow:
   # ---------------------------------------------------------------------------
 
   def setParams(self, **kargs):
+
     # Keyword parameters used for centering text in axes. 
     targs = {'x':0.5, 'y':0.5, 'horizontalalignment':'center', 
              'verticalalignment':'center'}
@@ -749,7 +748,8 @@ class plotWindow:
       # Accept a list of strings as column labels. 
       if key=='collabels':
         for col, label in enumerate(val):
-          self.hax[col].text(s='$' + label + '$', **targs)
+          fontsize = ( 9 if not self.landscape else 12 )*self.ff
+          self.hax[col].text(s='$' + label + '$', fontsize=fontsize, **targs)
       # Turn on the color bar, and specify its scale. 
       elif key=='colorbar':
         self.colorbar = val
@@ -766,7 +766,8 @@ class plotWindow:
       # Accept a list of strings as row labels. 
       elif key=='rowlabels':
         for row, label in enumerate(val):
-          self.sax[row].text(s='$' + label + '$', **targs)
+          fontsize = ( 9 if not self.landscape else 12 )*self.ff
+          self.sax[row].text(s='$' + label + '$', fontsize=fontsize, **targs)
       # Sometimes, we may want to label the row labels. 
       elif key=='rowlabellabel':
         self.shax.text(s='$' + val + '$', **targs)
@@ -780,14 +781,15 @@ class plotWindow:
         targs['horizontalalignment'] = 'center'
       # Accept a string as the window supertitle. 
       elif key=='title':
-        fontsize = ( 12 if not self.landscape else 24 )*self.fontfactor
+        fontsize = ( 12 if not self.landscape else 24 )*self.ff
         self.tax.text(s='$' + val + '$', fontsize=fontsize, **targs)
       # In case we want to put units on the color bar tick labels. 
       elif key=='unit':
         self.unit = val
       # Put a little label over the color bar indicating units. 
       elif key=='unitlabel':
-        self.uax.text(s='$' + val + '$', **targs)
+        fontsize = ( 9 if not self.landscape else 12 )*self.ff
+        self.uax.text(s='$' + val + '$', fontsize=fontsize, **targs)
       # Overwrite the automatically-determined color bar range. 
       elif key=='zmax':
         self.zmaxManual = val
@@ -957,8 +959,9 @@ class plotCell:
   # ----------------------------------------------------------- Initialize Cell
   # ---------------------------------------------------------------------------
 
-  def __init__(self, ax):
+  def __init__(self, ax, ff=1.):
     self.ax = ax
+    self.ff = ff
     return
 
   # ---------------------------------------------------------------------------
@@ -989,14 +992,14 @@ class plotCell:
       elif key=='lcorner':
         targs = {'x':0.03, 'y':0.03, 'horizontalalignment':'left', 
                  'verticalalignment':'bottom', 'transform':self.ax.transAxes,
-                 'fontsize':10}
+                 'fontsize':10*self.ff}
         self.ax.text(s='$' + val + '$', **targs)
 
       # Put some text in the corner. 
       elif key=='rcorner':
         targs = {'x':0.97, 'y':0.03, 'horizontalalignment':'right', 
                  'verticalalignment':'bottom', 'transform':self.ax.transAxes,
-                 'fontsize':10}
+                 'fontsize':10*self.ff}
         self.ax.text(s='$' + val + '$', **targs)
 
       # Draw the grid. 
@@ -1014,12 +1017,12 @@ class plotCell:
       # sophisticated with text, like control its position or rotation or
       # color or size, we'll probably need to add a setText method. 
       elif key=='text':
-        targs = {'x':0.5, 'y':0.5, 'horizontalalignment':'center', 
+        targs = {'x':0.5, 'y':0.5, 'horizontalalignment':'center', 'fontsize':10*self.ff,
                  'verticalalignment':'center', 'transform':self.ax.transAxes}
         self.ax.text(s='$' + val + '$', **targs)
 
       elif key=='toptext':
-        targs = {'x':0.5, 'y':0.90, 'horizontalalignment':'center', 
+        targs = {'x':0.5, 'y':0.90, 'horizontalalignment':'center', 'fontsize':10*self.ff,
                  'verticalalignment':'top', 'transform':self.ax.transAxes}
         self.ax.text(s='$' + val + '$', **targs)
 

@@ -63,14 +63,18 @@ def main():
 #  plotevent( day(probe='b', date='2014-09-26').getslice('07:30:00', duration=1800) )
 
 #  flatmodesbyparam(name='amp', save='-i' in argv)
-  flatmodesbyparam(name='f', save='-i' in argv)
+#  flatmodesbyparam(name='f', save='-i' in argv)
 #  flatmodesbyparam(name='phase', save='-i' in argv)
-#  posplot(storm=None, save='-i' in argv)
-#  allplot(storm=None, save='-i' in argv)
+
+  dstplot(save='-i' in argv)
+
+
+#  posplot(storm=None, save='-i' in argv, ff=1.5)
+#  allplot(storm=None, save='-i' in argv, ff=1.5)
 #  modeplot(storm=None, save='-i' in argv)
 #  paramplot(name='amp', save='-i' in argv)
 #  paramplot(name='f', save='-i' in argv)
-#  paramplot(name='phase', save='-i' in argv)
+#  paramplot(name='phase', save='-i' in argv, ff=1.5)
 #  modesbyparam(name='amp', save='-i' in argv)
 #  modesbyparam(name='f', save='-i' in argv)
 #  modesbyparam(name='phase', save='-i' in argv)
@@ -316,7 +320,7 @@ def plotevent(ev):
 # ########################################################## Position Histogram
 # #############################################################################
 
-def posplot(storm=None, save=False):
+def posplot(storm=None, save=False, ff=1.):
   global pargs, plotdir
 
   if storm is None:
@@ -334,7 +338,7 @@ def posplot(storm=None, save=False):
   dt = np.sum(z)/48.
   # Create the plot window using the bullseye params helper function. 
 #  PW = plotWindow( fontfactor=1.5, **bep(rate=False) )
-  PW = plotWindow( **bep(rate=False) )
+  PW = plotWindow( ff=ff, **bep(rate=False) )
 
   status = {True:'Storm ', False:'Quiet ', None:''}[storm]
   title = notex('Distribution of Usable ' + status + 'Data: ' + date0 + ' to ' + date1)
@@ -472,17 +476,17 @@ def pcoords(name):
 
 
 # Let's take a look at a plot of how FWHM, etc, depends on mode. 
-def paramplot(name, save=False, flat=False):
+def paramplot(name, save=False, flat=False, ff=1.):
   global plotdir
   # Set up the window. 
 
   if flat is True:
-    PW = plotWindow(ncols=4, nrows=1, colorbar=None, landscape=True)
+    PW = plotWindow(ncols=4, nrows=1, colorbar=None, ff=ff, landscape=True)
     clabs = ( notex('Odd Poloidal'), notex('Odd Toroidal'), notex('Even Poloidal'), notex('Even Toroidal') )
     PW.setParams(collabels=clabs)
   else:
 #    PW = plotWindow(ncols=2, nrows=2, colorbar=None, square=True, fontfactor=1.5)
-    PW = plotWindow(ncols=2, nrows=2, colorbar=None, square=True)
+    PW = plotWindow(ncols=2, nrows=2, colorbar=None, square=True, ff=ff)
     rlabs = ( notex('Odd'), notex('Even') )
 #    rlabs = ( notex('1^{st}'), notex('2^{nd}') )
     clabs = ( notex('Poloidal'), notex('Toroidal') )
@@ -625,7 +629,7 @@ def modesbyparam(name, save=False):
 # ================================================================== All Events
 # =============================================================================
 
-def allplot(storm=None, save=False):
+def allplot(storm=None, save=False, ff=1.):
   global pargs, plotdir
   # Set up the grid and 2D histogram based on probe position. 
   if storm is None:
@@ -640,7 +644,7 @@ def allplot(storm=None, save=False):
   x, y, z, hargs = [ pos[key] for key in ('x', 'y', 'z', 'hargs') ]
   # Create a plot window to show different subsets of the events. 
 #  PW = plotWindow(fontfactor=1.5, **bep() )
-  PW = plotWindow( **bep() )
+  PW = plotWindow( ff=ff, **bep() )
   # Title and labels. 
   status = {True:'Storm ', False:'Quiet ', None:''}[storm]
 #  title = notex( status + 'Pc4 Observation Rate: All Modes, All Phases, 0.01\\frac{mW}{m^2} and Larger')
@@ -671,7 +675,7 @@ def allplot(storm=None, save=False):
 # ========================================================== All Events by Mode
 # =============================================================================
 
-def modeplot(storm=None, save=False):
+def modeplot(storm=None, save=False, ff=1.):
   global pargs, plotdir
 
   # Set up the grid and 2D histogram based on probe position. 
@@ -689,13 +693,13 @@ def modeplot(storm=None, save=False):
 
   # Create a plot window to show different subsets of the events. 
 #  PW = plotWindow( ncols=2, nrows=2, fontfactor=1.5, **bep() )
-  PW = plotWindow( ncols=2, nrows=2, **bep() )
+  PW = plotWindow( ncols=2, nrows=2, ff=ff, **bep() )
   # Title and labels. 
   status = {True:'Storm ', False:'Quiet ', None:''}[storm]
 #  title = notex(status + 'Pc4 Observation Rate by Mode: All Phases, 0.01\\frac{mW}{m^2} and Larger')
   title = notex(status + 'Pc4 Observation Rate by Mode')
   collabels = ( notex('Poloidal'), notex('Toroidal') )
-  rowlabels = ( notex('Odd\nHarmonic'), notex('Even\nHarmonic') )
+  rowlabels = ( notex('Odd'), notex('Even') )
 #  rowlabels = ( notex('1^{st}'), notex('2^{nd}') )
   PW.setParams(collabels=collabels, rowlabels=rowlabels, title=title)
   # Iterate over the filters. 
@@ -900,38 +904,41 @@ def fwhmplot(mode, split=1., storm=None, save=False):
 # =============================================================================
 
 # Let's take a look at a plot of how FWHM depends on mode. 
-def dstplot(mode, split=-30., save=False):
+def dstplot(split=-30., save=False, ff=1.):
   global pargs, plotdir
-  # Set up the window. 
-  PW = plotWindow( ncols=2, nrows=2, **bep() )
-  modename = 'Poloidal' if mode=='p' else 'Toroidal'
-  title = notex(modename + ' Pc4 by Dst: ' + titlehelper )
-  rowlabels = ( notex('Odd\nHarmonic'), notex('Even\nHarmonic') )
-  collabels = ( notex('Dst') + ' \\geq ' + znt(split) + notex('nT'), 
-                notex('Dst') + ' < ' + znt(split) + notex('nT') )
-  PW.setParams(collabels=collabels, rowlabels=rowlabels, title=title)
-  # Iterate over the filters. 
-  for row, mname in enumerate( ('P1', 'P2') if mode=='p' else ('T1', 'T2') ):
-    # Calm and storm. 
-    for col, key in enumerate( ('dst_ge', 'dst_lt') ):
-      # Set up the grid and 2D histogram based on probe position. 
-      pos = getpos( **dict( pargs.items() + {key:split}.items() ) )
-      x, y, z, hargs = [ pos[k] for k in ('x', 'y', 'z', 'hargs') ]
-      # Get a histogram of events which are the desired mode and storm phase. 
-      eh = eventhist( hargs, mode=mname, **{key:split} )
 
-      eventcount = np.sum(eh)
-      pct = meanrate(eh/z)
-      count = znt(eventcount)
-      PW[row, col].setParams(lcorner=count, rcorner=pct)
+  pos_all = getpos( **pargs )
+  xa, ya, za = [ pos_all[key] for key in ('x', 'y', 'z') ]
+  dta = np.sum(za)/48.
+  labela = notex('All Dst')
 
-      # Normalize the event count based on sample time. 
-      rate  = 100*zmask(eh)/z
-      # Add the mesh to the plot. 
-      PW[row, col].setMesh(x, y, rate)
-  # Show or save the plot. 
+  pos_calm = getpos(dst_ge=split, **pargs)
+  xc, yc, zc = [ pos_calm[key] for key in ('x', 'y', 'z') ]
+  dtc = np.sum(zc)/48.
+  labelc = notex('Sampling at Dst') + ' \\geq -30' + notex('nT')
+
+  pos_storm = getpos(dst_lt=split, **pargs)
+  xs, ys, zs = [ pos_storm[key] for key in ('x', 'y', 'z') ]
+  dts = np.sum(zs)/48.
+  scalefac = 8.45
+  zs = zs*scalefac
+  facname = '' if scalefac == 1. else str(scalefac) + '\\times\;'
+  labels = facname + notex('Sampling at Dst') + ' < -30' + notex('nT')
+
+  PW = plotWindow(ncols=2, ff=ff, **bep(rate=False) )
+  title = notex('Dst Sampling Bias')
+  clabs = (labelc, labels)
+  PW.setParams(title=title, unitlabel=notex('days'), zmax=26, collabels=clabs)
+
+  PW[0].setMesh( xc, yc, zmask(zc/48.) )
+  PW[0].setParams( lcorner=format(dtc, '.0f') + notex(' days') )
+
+  PW[1].setMesh( xs, ys, zmask(zs/48.) )
+  PW[1].setParams( lcorner=format(dts, '.0f') + notex(' days') )
+
+  # Show the plot, or save it as an image. 
   if save is True:
-    return PW.render(plotdir + 'dst_rate_' + mode + label + '.pdf')
+    return PW.render(plotdir + 'dst_pos.pdf')
   else:
     return PW.render()
 
